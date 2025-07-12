@@ -1,4 +1,5 @@
-﻿using EverythingToolbar.Data;
+﻿using EverythingToolbar.Controls;
+using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Properties;
 using NLog;
@@ -461,7 +462,7 @@ namespace EverythingToolbar.Search
         {
             if (!File.Exists(ToolbarSettings.User.EverythingPath))
             {
-                MessageBox.Show(Resources.MessageBoxSelectEverythingExe);
+                FluentMessageBox.CreateRegular(Resources.MessageBoxSelectEverythingExe, string.Empty).ShowDialogAsync();
 
                 using var openFileDialog = new OpenFileDialog();
                 openFileDialog.InitialDirectory = "c:\\";

@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Internal;
+using EverythingToolbar.Controls;
 using EverythingToolbar.Data;
 using EverythingToolbar.Properties;
 using EverythingToolbar.Search;
@@ -167,10 +168,8 @@ namespace EverythingToolbar.Helpers
             {
                 Logger.Info("Filters.csv could not be found at " + ToolbarSettings.User.FiltersPath);
 
-                MessageBox.Show(Resources.MessageBoxSelectFiltersCsv,
-                                Resources.MessageBoxSelectFiltersCsvTitle,
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                FluentMessageBox.CreateRegular(Resources.MessageBoxSelectFiltersCsv,
+                                Resources.MessageBoxSelectFiltersCsvTitle).ShowDialogAsync();
                 using (var openFileDialog = new OpenFileDialog())
                 {
                     openFileDialog.InitialDirectory = Path.Combine(ToolbarSettings.User.FiltersPath, "..");

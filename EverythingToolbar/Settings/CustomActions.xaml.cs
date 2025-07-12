@@ -1,4 +1,5 @@
-﻿using EverythingToolbar.Data;
+﻿using EverythingToolbar.Controls;
+using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -52,22 +53,18 @@ namespace EverythingToolbar.Settings
             return new List<Rule>();
         }
 
-        public static bool SaveCustomActions(List<Rule> newActions, bool isAutoApplyCustomActions)
+        private static bool SaveCustomActions(List<Rule> newActions, bool isAutoApplyCustomActions)
         {
             if (newActions.Any(r => string.IsNullOrEmpty(r.Name)))
             {
-                MessageBox.Show(Properties.Resources.MessageBoxCustomActionsNameEmpty,
-                                Properties.Resources.MessageBoxErrorTitle,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Properties.Resources.MessageBoxCustomActionsNameEmpty,
+                                Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
                 return false;
             }
             if (isAutoApplyCustomActions && newActions.Any(r => !r.ExpressionValid))
             {
-                MessageBox.Show(Properties.Resources.MessageBoxRegExInvalid,
-                                Properties.Resources.MessageBoxErrorTitle,
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Properties.Resources.MessageBoxRegExInvalid,
+                                Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
                 return false;
             }
 
@@ -191,7 +188,8 @@ namespace EverythingToolbar.Settings
                 }
                 catch (Win32Exception)
                 {
-                    MessageBox.Show(Properties.Resources.MessageBoxFailedToRunCommand + " " + command);
+                    FluentMessageBox.CreateError(Properties.Resources.MessageBoxFailedToRunCommand + " " + command,
+                        Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
                 }
             }
 

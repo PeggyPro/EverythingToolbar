@@ -1,4 +1,5 @@
-﻿using EverythingToolbar.Helpers;
+﻿using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
 using EverythingToolbar.Properties;
 using EverythingToolbar.Search;
 using NLog;
@@ -14,13 +15,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Clipboard = System.Windows.Clipboard;
 using DataObject = System.Windows.DataObject;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
-using MessageBox = System.Windows.MessageBox;
 
 namespace EverythingToolbar.Data
 {
@@ -129,7 +128,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open search result.");
-                MessageBox.Show(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 
@@ -147,7 +146,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open search result.");
-                MessageBox.Show(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 
@@ -161,7 +160,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open path.");
-                MessageBox.Show(Resources.MessageBoxFailedToOpenPath, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpenPath, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 
@@ -174,7 +173,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open dialog.");
-                MessageBox.Show(Resources.MessageBoxFailedToOpenDialog, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpenDialog, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 
@@ -189,7 +188,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to copy file.");
-                MessageBox.Show(Resources.MessageBoxFailedToCopyFile, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToCopyFile, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 
@@ -204,7 +203,7 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to copy path.");
-                MessageBox.Show(Resources.MessageBoxFailedToCopyPath, Resources.MessageBoxErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                FluentMessageBox.CreateError(Resources.MessageBoxFailedToCopyPath, Resources.MessageBoxErrorTitle).ShowDialogAsync();
             }
         }
 

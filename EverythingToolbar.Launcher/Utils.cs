@@ -15,6 +15,12 @@ namespace EverythingToolbar.Launcher
     {
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<Utils>();
 
+        public static bool IsTaskbarPinned()
+        {
+            var taskBarPath = GetTaskbarShortcutPath();
+            return File.Exists(taskBarPath);
+        }
+
         public static string GetTaskbarShortcutPath()
         {
             const string relativeTaskBarPath = @"Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar";

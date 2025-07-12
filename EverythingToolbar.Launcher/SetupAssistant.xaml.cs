@@ -1,4 +1,5 @@
-﻿using EverythingToolbar.Helpers;
+﻿using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
 using NLog;
 using System;
 using System.ComponentModel;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using MessageBox = System.Windows.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace EverythingToolbar.Launcher
 {
@@ -18,7 +19,7 @@ namespace EverythingToolbar.Launcher
     {
         private readonly string _taskbarShortcutPath = Utils.GetTaskbarShortcutPath();
         private readonly NotifyIcon _icon;
-        private bool _iconUpdateRequired = false;
+        private bool _iconUpdateRequired;
         private FileSystemWatcher? _watcher;
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<SetupAssistant>();
 
@@ -146,16 +147,14 @@ namespace EverythingToolbar.Launcher
             }
         }
 
-        private void OnClosing(object sender, CancelEventArgs e)
+        private async void OnClosing(object sender, CancelEventArgs e)
         {
             if (CurrentStep == 0)
             {
-                var disableSetupAssistant = MessageBox.Show(
+                var result = await FluentMessageBox.CreateYesNo(
                     Properties.Resources.SetupAssistantDisableWarningText,
-                    Properties.Resources.SetupAssistantDisableWarningTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Exclamation
-                ) == MessageBoxResult.Yes;
+                    Properties.Resources.SetupAssistantDisableWarningTitle).ShowDialogAsync();
+                var disableSetupAssistant = result == MessageBoxResult.Primary;
                 if (disableSetupAssistant)
                 {
                     ToolbarSettings.User.IsSetupAssistantDisabled = disableSetupAssistant;

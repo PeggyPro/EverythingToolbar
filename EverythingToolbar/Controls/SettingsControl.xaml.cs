@@ -38,10 +38,8 @@ namespace EverythingToolbar.Controls
             }
             else
             {
-                MessageBox.Show(Properties.Resources.MessageBoxFastSortUnavailable,
-                    Properties.Resources.MessageBoxFastSortUnavailableTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Asterisk);
+                FluentMessageBox.CreateRegular(Properties.Resources.MessageBoxFastSortUnavailable,
+                    Properties.Resources.MessageBoxFastSortUnavailableTitle).ShowDialogAsync();
             }
 
             SelectSortType();

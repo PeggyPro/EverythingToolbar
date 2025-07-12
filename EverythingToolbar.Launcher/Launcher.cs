@@ -1,17 +1,17 @@
+using EverythingToolbar.Controls;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Launcher.Properties;
 using Microsoft.Xaml.Behaviors;
 using NHotkey;
 using System;
 using System.Drawing;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Shell;
 using Application = System.Windows.Application;
-using MessageBox = System.Windows.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using Timer = System.Timers.Timer;
 
 namespace EverythingToolbar.Launcher
@@ -52,7 +52,7 @@ namespace EverythingToolbar.Launcher
 
                 StartToggleListener();
 
-                if (!ToolbarSettings.User.IsSetupAssistantDisabled && !File.Exists(Utils.GetTaskbarShortcutPath()))
+                if (!Utils.IsTaskbarPinned() && (!ToolbarSettings.User.IsSetupAssistantDisabled || !ToolbarSettings.User.IsTrayIconEnabled))
                     new SetupAssistant(icon).Show();
 
                 ShortcutManager.Initialize(FocusSearchBox);
@@ -62,7 +62,7 @@ namespace EverythingToolbar.Launcher
 
                 SearchWindow.Instance.Hiding += OnSearchWindowHiding;
 
-                ToolbarSettings.User.PropertyChanged += (sender, e) =>
+                ToolbarSettings.User.PropertyChanged += async (sender, e) =>
                 {
                     if (e.PropertyName == nameof(ToolbarSettings.User.IsTrayIconEnabled))
                     {
@@ -70,11 +70,10 @@ namespace EverythingToolbar.Launcher
                     }
                     else if (e.PropertyName == nameof(ToolbarSettings.User.IconName))
                     {
-                        var restartExplorer = MessageBox.Show(
+                        var restartExplorer = await FluentMessageBox.CreateYesNo(
                             Properties.Resources.SetupAssistantRestartExplorerDialogText,
-                            Properties.Resources.SetupAssistantRestartExplorerDialogTitle,
-                            MessageBoxButton.YesNo
-                            ) == MessageBoxResult.Yes;
+                            Properties.Resources.SetupAssistantRestartExplorerDialogTitle
+                            ).ShowDialogAsync() == MessageBoxResult.Primary;
                         Utils.ChangeTaskbarPinIcon(ToolbarSettings.User.IconName, restartExplorer);
                     }
                 };
@@ -190,7 +189,7 @@ namespace EverythingToolbar.Launcher
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        FluentMessageBox.CreateError(ex.Message, "Error").ShowDialogAsync();
                     }
                 }
             }
