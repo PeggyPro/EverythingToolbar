@@ -3,6 +3,8 @@ using EverythingToolbar.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
@@ -17,6 +19,13 @@ namespace EverythingToolbar.Settings
         }
     }
 
+    public class IconItem
+    {
+        public string DisplayName { get; set; }
+        public string IconPath { get; set; }
+        public string Value { get; set; }
+    }
+
     public class UserInterfaceViewModel : INotifyPropertyChanged
     {
         public List<KeyValuePair<string, string>> ItemTemplates { get; } =
@@ -27,7 +36,29 @@ namespace EverythingToolbar.Settings
             new(Resources.ItemTemplateNormalDetailed, "NormalDetailed")
         ];
 
+        public List<IconItem> IconItems { get; } =
+        [
+            new IconItem { DisplayName = "Light", IconPath = "pack://siteoforigin:,,,/Icons/Dark.ico", Value = "Icons/Dark.ico" },
+            new IconItem { DisplayName = "Dark", IconPath = "pack://siteoforigin:,,,/Icons/Light.ico", Value = "Icons/Light.ico" },
+            new IconItem { DisplayName = "Blue", IconPath = "pack://siteoforigin:,,,/Icons/Medium.ico", Value = "Icons/Medium.ico" }
+        ];
+
         public SearchResult SampleSearchResult { get; }
+
+        public IconItem SelectedIconItem
+        {
+            get => IconItems.FirstOrDefault(item => item.Value == ToolbarSettings.User.IconName);
+            set
+            {
+                if (value != null)
+                {
+                    ToolbarSettings.User.IconName = value.Value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedIconItem)));
+                }
+            }
+        }
+
+        public bool IsLauncher => Application.Current != null;
 
         public UserInterfaceViewModel()
         {

@@ -1,4 +1,5 @@
 ﻿using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
 using EverythingToolbar.Search;
 using System;
 using System.ComponentModel;
@@ -16,6 +17,8 @@ namespace EverythingToolbar.Settings
         private string _latestVersionUrl;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public bool IsLauncher => Application.Current != null;
 
         public bool CheckingForUpdatesVisible
         {
@@ -40,6 +43,21 @@ namespace EverythingToolbar.Settings
 
                 _noUpdatesBannerOpen = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private bool _isWindowsSearchHidden = !Utils.GetWindowsSearchEnabledState();
+        public bool IsWindowsSearchHidden
+        {
+            get => _isWindowsSearchHidden;
+            set
+            {
+                if (_isWindowsSearchHidden != value)
+                {
+                    _isWindowsSearchHidden = value;
+                    Utils.SetWindowsSearchEnabledState(!value);
+                    OnPropertyChanged();
+                }
             }
         }
 

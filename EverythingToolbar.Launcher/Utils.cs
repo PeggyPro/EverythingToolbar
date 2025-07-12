@@ -6,6 +6,7 @@ using Shell32;
 using System;
 using System.Diagnostics;
 using System.IO;
+using Wpf.Ui.Appearance;
 using File = System.IO.File;
 
 namespace EverythingToolbar.Launcher
@@ -65,30 +66,6 @@ namespace EverythingToolbar.Launcher
             }
         }
 
-        public static bool GetWindowsSearchEnabledState()
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search"))
-            {
-                var searchboxTaskbarMode = key?.GetValue("SearchboxTaskbarMode");
-                return searchboxTaskbarMode != null && (int)searchboxTaskbarMode > 0;
-            }
-        }
-
-        public static void SetWindowsSearchEnabledState(bool enabled)
-        {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search", RegistryKeyPermissionCheck.ReadWriteSubTree))
-            {
-                try
-                {
-                    key?.SetValue("SearchboxTaskbarMode", enabled ? 1 : 0);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Failed to set taskbar search icon mode.");
-                }
-            }
-        }
-
         public static bool GetAutostartState()
         {
             using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run"))
@@ -115,7 +92,7 @@ namespace EverythingToolbar.Launcher
             }
         }
 
-        public static void ChangeTaskbarPinIcon(string iconName)
+        public static void ChangeTaskbarPinIcon(string iconName, bool restartExplorer)
         {
             var taskbarShortcutPath = GetTaskbarShortcutPath();
 
@@ -128,9 +105,23 @@ namespace EverythingToolbar.Launcher
             shortcut.IconLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, iconName);
             shortcut.Save();
 
+            if (!restartExplorer)
+                return;
+
             foreach (var process in Process.GetProcessesByName("explorer"))
-            {
                 process.Kill();
+        }
+
+        public static string GetThemedAppIconName()
+        {
+            switch (SystemThemeManager.GetCachedSystemTheme())
+            {
+                case SystemTheme.Light:
+                    return "Icons/Light.ico";
+                case SystemTheme.Dark:
+                    return "Icons/Dark.ico";
+                default:
+                    return "Icons/Medium.ico";
             }
         }
     }

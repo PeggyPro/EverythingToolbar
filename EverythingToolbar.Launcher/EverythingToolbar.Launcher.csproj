@@ -36,12 +36,6 @@
     <Resource Include="Images\PinToTaskbar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <None Remove="Images\WinUIGallery\IconElement.png" />
-    <None Remove="Images\WinUIGallery\ScratchPad.png" />
-    <None Remove="Images\WinUIGallery\TabView.png" />
-    <None Remove="Images\WinUIGallery\TextBox.png" />
-    <None Remove="Images\AboutBannerBackground.png" />
-    <None Remove="Images\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">

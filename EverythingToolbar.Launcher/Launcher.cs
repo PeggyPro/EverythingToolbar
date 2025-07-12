@@ -2,7 +2,6 @@ using EverythingToolbar.Helpers;
 using Microsoft.Xaml.Behaviors;
 using NHotkey;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -61,6 +60,23 @@ namespace EverythingToolbar.Launcher
                     StartMenuIntegration.Instance.Enable();
 
                 SearchWindow.Instance.Hiding += OnSearchWindowHiding;
+
+                ToolbarSettings.User.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == nameof(ToolbarSettings.User.IsTrayIconEnabled))
+                    {
+                        _notifyIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;
+                    }
+                    else if (e.PropertyName == nameof(ToolbarSettings.User.IconName))
+                    {
+                        var restartExplorer = MessageBox.Show(
+                            Properties.Resources.SetupAssistantRestartExplorerDialogText,
+                            Properties.Resources.SetupAssistantRestartExplorerDialogTitle,
+                            MessageBoxButton.YesNo
+                            ) == MessageBoxResult.Yes;
+                        Utils.ChangeTaskbarPinIcon(ToolbarSettings.User.IconName, restartExplorer);
+                    }
+                };
             }
 
             private void SetupJumpList()
@@ -130,16 +146,6 @@ namespace EverythingToolbar.Launcher
             }
         }
 
-        private static string GetIconPath()
-        {
-            var processPath = Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
-
-            if (string.IsNullOrEmpty(ToolbarSettings.User.IconName))
-                return Path.Combine(processPath, "..", "Icons", "Medium.ico");
-
-            return Path.Combine(processPath, "..", ToolbarSettings.User.IconName);
-        }
-
         [STAThread]
         private static void Main(string[] args)
         {
@@ -150,7 +156,7 @@ namespace EverythingToolbar.Launcher
                     using (var trayIcon = new NotifyIcon())
                     {
                         var app = new Application();
-                        trayIcon.Icon = Icon.ExtractAssociatedIcon(GetIconPath());
+                        trayIcon.Icon = new Icon(Utils.GetThemedAppIconName());
                         trayIcon.ContextMenuStrip = new ContextMenuStrip();
                         var setupItem = new ToolStripMenuItem(
                             "Setup Assistant",

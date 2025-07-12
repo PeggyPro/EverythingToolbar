@@ -206,9 +206,6 @@
       <Resource Include="Images\AppIcon.ico">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Images\PinToTaskbar.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Resource>
       <Resource Include="Images\WinUIGallery\FilePicker.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Resource>

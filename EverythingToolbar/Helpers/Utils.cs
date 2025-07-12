@@ -1,14 +1,42 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using NLog;
+using System;
 using System.IO;
 
 namespace EverythingToolbar.Helpers
 {
     public static class Utils
     {
+        private static readonly ILogger Logger = ToolbarLogger.GetLogger(nameof(Utils));
+
         public static string GetConfigDirectory()
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "EverythingToolbar");
+        }
+
+        public static bool GetWindowsSearchEnabledState()
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search"))
+            {
+                var searchboxTaskbarMode = key?.GetValue("SearchboxTaskbarMode");
+                return searchboxTaskbarMode != null && (int)searchboxTaskbarMode > 0;
+            }
+        }
+
+        public static void SetWindowsSearchEnabledState(bool enabled)
+        {
+            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search", RegistryKeyPermissionCheck.ReadWriteSubTree))
+            {
+                try
+                {
+                    key?.SetValue("SearchboxTaskbarMode", enabled ? 1 : 0);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Failed to set taskbar search icon mode.");
+                }
+            }
         }
 
         public static Version GetWindowsVersion()

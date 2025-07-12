@@ -463,11 +463,8 @@ namespace EverythingToolbar
             get => _settings.IconName;
             set
             {
-                if (_settings.IconName != value)
-                {
-                    _settings.IconName = value;
-                    OnPropertyChanged();
-                }
+                _settings.IconName = value;
+                OnPropertyChanged();
             }
         }
 

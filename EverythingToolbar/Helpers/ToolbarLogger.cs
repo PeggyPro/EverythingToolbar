@@ -13,7 +13,7 @@ namespace EverythingToolbar.Helpers
         private static readonly string DebugFlagFileName = Path.Combine(Utils.GetConfigDirectory(), "debug.txt");
         private static readonly LogFactory LogFactory = new LogFactory();
 
-        private static ILogger GetLogger(string name)
+        public static ILogger GetLogger(string name)
         {
             return LogFactory.GetLogger(name);
         }

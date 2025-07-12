@@ -4,14 +4,14 @@
   <Bundle Name="!(bind.packageName.EverythingToolbarMsi)"
           Manufacturer="!(bind.packageManufacturer.EverythingToolbarMsi)"
           Version="!(bind.packageVersion.EverythingToolbarMsi)"
-          IconSourceFile="..\..\EverythingToolbar.Launcher\Icons\Medium.ico"
+          IconSourceFile="..\..\EverythingToolbar\Images\AppIcon.ico"
           UpgradeCode="b39468f1-25f4-4450-b752-2d07e4c562c9">
     <BootstrapperApplication>
       <bal:WixStandardBootstrapperApplication LicenseUrl="https://github.com/srwi/EverythingToolbar/blob/master/LICENSE"
                                               SuppressOptionsUI="yes"
                                               SuppressRepair="yes"
                                               ShowVersion="yes"
-                                              LogoFile="..\..\EverythingToolbar.Launcher\Icons\Medium.ico"
+                                              LogoFile="..\..\EverythingToolbar\Images\AppIcon.ico"
                                               Theme="hyperlinkLargeLicense" />
     </BootstrapperApplication>
     <nx:DotNetCoreSearch RuntimeType="desktop"
