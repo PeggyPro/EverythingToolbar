@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>تشغيل مساعد الإعداد...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>لتثبيت EverythingToolbar على شريط المهام، انقر بالزر الأيمن على أيقونة الأداة وحدّد "تثبيت إلى شريط المهام".</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

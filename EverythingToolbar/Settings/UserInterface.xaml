@@ -72,8 +72,8 @@
                     BorderThickness="1,1,1,0"
                     CornerRadius="0,0,0,0"
                     Visibility="{Binding IsLauncher, Converter={c:BoolToVisibilityConverter}}">
-                <controls:SettingItem Title="Search icon"
-                                      HelpText="Changes the style of the taskbar icon (requires explorer restart)">
+                <controls:SettingItem Title="{x:Static properties:Resources.SettingsSearchIcon}"
+                                      HelpText="{x:Static properties:Resources.SettingsSearchIconHelp}">
                     <controls:SettingItem.SettingContent>
                         <ComboBox HorizontalAlignment="Right"
                                   MinWidth="150"

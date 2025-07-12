@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Futtassa a beállítás asszisztenst...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Az EverythingToolbar tálcára rögzítéséhez kattintson jobb gombbal az ikonjára, és válassza a 'Tálcára rögzítés' lehetőséget.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

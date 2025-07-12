@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>執行設置助手……</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>要將 EverythingToobar 釘選至工作列，請在圖示上點擊右鍵並選擇「釘選到工作列」。</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

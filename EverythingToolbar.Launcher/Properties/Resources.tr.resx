@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Kurulum yardımcısını çalıştır...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>EverythingToolbar'ı görev çubuğuna sabitlemek için simgesine sağ tıklayıp 'Görev çubuğuna sabitle'yi seçin.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

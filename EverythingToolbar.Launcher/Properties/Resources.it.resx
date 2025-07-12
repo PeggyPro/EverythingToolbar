@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Esegui assistente installazione...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Per aggiungere EverythingToolbar alla barra delle applicazioni fare click destro sulla sua icona e seleziona 'Aggiungi alla barra delle applicazioni'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

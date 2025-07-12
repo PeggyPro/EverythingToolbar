@@ -1,4 +1,5 @@
 using EverythingToolbar.Helpers;
+using EverythingToolbar.Launcher.Properties;
 using Microsoft.Xaml.Behaviors;
 using NHotkey;
 using System;
@@ -159,13 +160,13 @@ namespace EverythingToolbar.Launcher
                         trayIcon.Icon = new Icon(Utils.GetThemedAppIconName());
                         trayIcon.ContextMenuStrip = new ContextMenuStrip();
                         var setupItem = new ToolStripMenuItem(
-                            "Setup Assistant",
+                            Resources.ContextMenuRunSetupAssistant,
                             null,
                             (s, e) => { new SetupAssistant(trayIcon).Show(); }
                         );
                         trayIcon.ContextMenuStrip.Items.Add(setupItem);
                         var quitItem = new ToolStripMenuItem(
-                            "Quit",
+                            Resources.ContextMenuQuit,
                             null,
                             (s, e) => { app.Shutdown(); }
                         );

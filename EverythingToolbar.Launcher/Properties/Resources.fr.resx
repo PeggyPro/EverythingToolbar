@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Démarrer l'assistant d'installation...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Pour épingler EverythingToolbar dans la barre des tâches, faites un clic droit sur son icône et sélectionnez 'Épingler à la barre des tâches'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

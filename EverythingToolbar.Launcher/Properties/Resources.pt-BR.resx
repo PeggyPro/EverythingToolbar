@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Executar assistente de configuração...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Para fixar o EverythingToolbar na barra de tarefas, clique com o botão direito no ícone do programa e selecione 'Fixar na barra de tarefas'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

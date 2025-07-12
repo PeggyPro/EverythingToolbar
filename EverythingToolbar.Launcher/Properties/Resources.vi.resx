@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Chạy trình trợ giúp thiết lập...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Để ghim EverythingToolbar vào thanh tác vụ, hãy nhấp chuột phải vào biểu tượng và chọn 'Ghim vào thanh tác vụ'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

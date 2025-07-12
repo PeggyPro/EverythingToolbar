@@ -64,7 +64,7 @@
                 <TranslateTransform x:Name="WiggleTransform" />
             </StackPanel.RenderTransform>
             <ui:TextBlock FontTypography="BodyStrong"
-                          Text="Pin to taskbar"
+                          Text="{x:Static properties:Resources.SetupAssistantPinToTaskbar}"
                           Margin="0, 0, 0, 7"/>
             <Border Padding="16"
                     Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -72,7 +72,7 @@
                     BorderThickness="1,1,1,1"
                     CornerRadius="8,8,8,8">
                 <StackPanel>
-                    <TextBlock TextWrapping="Wrap" Text="{x:Static properties:Resources.SetupAssistantSecondStepText}" />
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static properties:Resources.SetupAssistantPinToTaskbarHelp}" />
                     <Grid Margin="0, 16, 0, 0">
                         <Image Source="Images/PinToTaskbar.png">
                             <Image.Style>
@@ -124,15 +124,15 @@
                     </Style>
                 </StackPanel.Style>
                 <ui:TextBlock FontTypography="BodyStrong"
-                              Text="Preferences"
+                              Text="{x:Static properties:Resources.SetupAssistantPreferences}"
                               Margin="0, 0, 0, 7"/>
                 <Border Padding="16"
                         Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1,1,1,0"
                         CornerRadius="8,8,0,0">
-                    <controls:SettingItem Title="Hide Windows search icon"
-                                          HelpText="Hides the original Windows search icon from the taskbar">
+                    <controls:SettingItem Title="{x:Static properties:Resources.SetupAssistantHideWindowsSearch}"
+                                          HelpText="{x:Static properties:Resources.SetupAssistantHideWindowsSearchHelp}">
                         <controls:SettingItem.SettingContent>
                             <ui:ToggleSwitch IsChecked="{Binding WindowsSearchHidden, Mode=TwoWay}" />
                         </controls:SettingItem.SettingContent>
@@ -143,8 +143,8 @@
                         BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1,1,1,1"
                         CornerRadius="0,0,8,8">
-                    <controls:SettingItem Title="Enable system tray icon"
-                                          HelpText="Enables the system tray icon for quick access to settings">
+                    <controls:SettingItem Title="{x:Static properties:Resources.SetupAssistantEnableSystemTray}"
+                                          HelpText="{x:Static properties:Resources.SetupAssistantEnableSystemTrayHelp}">
                         <controls:SettingItem.SettingContent>
                             <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsTrayIconEnabled, Mode=TwoWay}" />
                         </controls:SettingItem.SettingContent>
@@ -156,15 +156,15 @@
                         BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1,1,1,1"
                         CornerRadius="8,8,8,8">
-                    <controls:SettingItem Title="Enable autostart"
-                                          HelpText="Automatically starts EverythingToolbar when Windows starts">
+                    <controls:SettingItem Title="{x:Static properties:Resources.SetupAssistantEnableAutostart}"
+                                          HelpText="{x:Static properties:Resources.SetupAssistantEnableAutostartHelp}">
                         <controls:SettingItem.SettingContent>
                             <ui:ToggleSwitch IsChecked="{Binding AutostartEnabled, Mode=TwoWay}"/>
                         </controls:SettingItem.SettingContent>
                     </controls:SettingItem>
                 </Border>
 
-                <ui:Button HorizontalAlignment="Center" Content="Done" Height="40" Margin="0, 20, 0, 0" Click="Close" />
+                <ui:Button HorizontalAlignment="Center" Content="{x:Static properties:Resources.SetupAssistantDone}" Height="40" Margin="0, 20, 0, 0" Click="Close" />
             </StackPanel>
         </Border>
     </Grid>

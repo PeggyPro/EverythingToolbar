@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Asistente de configuración...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Para anclar haga clic derecho en el icono y seleccione 'Anclar a la barra de tareas'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

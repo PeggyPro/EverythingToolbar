@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>セットアップアシスタントを実行...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>EverythingToolbar をタスクバーに固定するには、アイコンを右クリックし「タスクバーにピン留めする」を選択します。</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

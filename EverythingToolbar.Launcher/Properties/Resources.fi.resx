@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Run setup assistant...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>To pin EverythingToolbar to the taskbar right click its icon and select 'Pin to taskbar'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

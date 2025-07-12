@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Setup assistent uitvoeren...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Om EverythingToolbar aan de taakbalk vast te pinnen, klikt u met de rechtermuisknop op het pictogram en selecteert u 'Vastmaken aan taakbalk'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

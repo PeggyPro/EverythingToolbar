@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Uruchom asystenta konfiguracji...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Aby przypiąć EverythingToolbar do paska zadań, kliknij prawym przyciskiem myszy na ikonę i wybierz 'Przypnij do paska zadań'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

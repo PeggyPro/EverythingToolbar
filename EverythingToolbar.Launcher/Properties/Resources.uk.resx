@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Запустити установку...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Щоб закріпити EverythingToolbar в панелі завдань, натисніть правою кнопкою миші по його значку, і виберіть "Закріпити на панелі завдань".</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

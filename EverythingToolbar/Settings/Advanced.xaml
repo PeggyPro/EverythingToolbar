@@ -24,15 +24,15 @@
 
             <StackPanel Visibility="{Binding IsLauncher, Converter={c:BoolToVisibilityConverter}}">
                 <ui:TextBlock FontTypography="BodyStrong"
-                              Text="Taskbar integration"
+                              Text="{x:Static properties:Resources.SettingsTaskbarIntegration}"
                               Margin="0, 25, 0, 7"/>
                 <Border Padding="16"
                         Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                         BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1,1,1,0"
                         CornerRadius="8,8,0,0">
-                    <controls:SettingItem Title="Hide Windows search icon"
-                                          HelpText="Hides the original Windows search icon from the taskbar">
+                    <controls:SettingItem Title="{x:Static properties:Resources.SettingsHideWindowsSearchIcon}"
+                                          HelpText="{x:Static properties:Resources.SettingsHideWindowsSearchIconHelp}">
                         <controls:SettingItem.SettingContent>
                             <ui:ToggleSwitch IsChecked="{Binding IsWindowsSearchHidden, Mode=TwoWay}" />
                         </controls:SettingItem.SettingContent>
@@ -43,8 +43,8 @@
                         BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1,1,1,1"
                         CornerRadius="0,0,8,8">
-                    <controls:SettingItem Title="Enable system tray icon"
-                                          HelpText="Enables the system tray icon for quick access to settings">
+                    <controls:SettingItem Title="{x:Static properties:Resources.SettingsEnableSystemTrayIcon}"
+                                          HelpText="{x:Static properties:Resources.SettingsEnableSystemTrayIconHelp}">
                         <controls:SettingItem.SettingContent>
                             <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsTrayIconEnabled, Mode=TwoWay}" />
                         </controls:SettingItem.SettingContent>

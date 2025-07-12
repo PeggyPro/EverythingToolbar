@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>설정 도우미 실행...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>EverythingToolbar를 작업 표시줄에 고정하려면 해당 아이콘을 마우스 오른쪽 버튼으로 클릭하고 '작업 표시줄에 고정'을 선택합니다.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Kör installationsassistenten...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>För att fästa EverythingToolbar till aktivitetsfältet högerklicka på ikonen och välj "Fäst till aktivitetsfältet".</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

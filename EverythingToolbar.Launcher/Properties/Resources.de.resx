@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Einrichtungsassistenten öffnen...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Um EverythingToolbar an die Taskleiste anzuheften, öffnen Sie das Kontextmenü des Icons und wählen Sie 'An Taskleiste anheften'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

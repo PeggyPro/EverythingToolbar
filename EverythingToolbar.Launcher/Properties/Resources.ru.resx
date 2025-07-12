@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>Запустить с помощью...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Чтобы закрепить EverythingToolbar на панели задач, щёлкните правой кнопкой мыши и выберите 'Закрепить на панели задач'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">

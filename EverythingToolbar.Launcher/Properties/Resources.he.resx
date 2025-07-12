@@ -132,7 +132,7 @@
   <data name="ContextMenuRunSetupAssistant" xml:space="preserve">
     <value>הפעלת מסייע ההגדרה...</value>
   </data>
-  <data name="SetupAssistantSecondStepText" xml:space="preserve">
+  <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>כדי להצמיד את EverythingToolbar לשורת המשימות, לחצו לחיצה ימנית על הסמל של היישום ובחרו 'הצמד לשורת המשימות'.</value>
   </data>
   <data name="SetupAssistantSecondStepTitle" xml:space="preserve">
