@@ -46,6 +46,14 @@ namespace EverythingToolbar.Helpers
             }
         }
 
+        public ObservableCollection<Filter> AllFilters
+        {
+            get
+            {
+                return new ObservableCollection<Filter>(DefaultFilters.Concat(UserFilters));
+            }
+        }
+
         public readonly ObservableCollection<Filter> DefaultUserFilters = new ObservableCollection<Filter>
         {
             new Filter {

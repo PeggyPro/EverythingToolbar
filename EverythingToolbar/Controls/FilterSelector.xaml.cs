@@ -14,23 +14,36 @@ namespace EverythingToolbar.Controls
                 typeof(FilterSelector),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedFilterChanged));
 
+        public static readonly DependencyProperty MaxTabItemsProperty =
+            DependencyProperty.Register(
+                nameof(MaxTabItems),
+                typeof(int),
+                typeof(FilterSelector),
+                new FrameworkPropertyMetadata(4, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
         private static void OnSelectedFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (FilterSelector)d;
             control.UpdateSelectedItems();
         }
 
-        public Filter SelectedFilter
+        public Filter? SelectedFilter
         {
             get => (Filter)GetValue(SelectedFilterProperty);
             set => SetValue(SelectedFilterProperty, value);
+        }
+
+        public int MaxTabItems
+        {
+            get => (int)GetValue(MaxTabItemsProperty);
+            set => SetValue(MaxTabItemsProperty, value);
         }
 
         public FilterSelector()
         {
             InitializeComponent();
 
-            Loaded += (s, e) => UpdateSelectedItems();
+            Loaded += (_, _) => UpdateSelectedItems();
         }
 
         private void UpdateSelectedItems()
@@ -40,8 +53,10 @@ namespace EverythingToolbar.Controls
             TabControl.SelectionChanged -= OnTabItemSelected;
             ComboBox.SelectionChanged -= OnComboBoxItemSelected;
 
-            TabControl.SelectedIndex = FilterLoader.Instance.DefaultFilters.IndexOf(SelectedFilter);
-            ComboBox.SelectedIndex = FilterLoader.Instance.UserFilters.IndexOf(SelectedFilter);
+            int filterIndex = FilterLoader.Instance.AllFilters.IndexOf(SelectedFilter);
+
+            TabControl.SelectedIndex = filterIndex < MaxTabItems ? filterIndex : -1;
+            ComboBox.SelectedIndex = filterIndex >= MaxTabItems ? filterIndex - MaxTabItems : -1;
 
             TabControl.SelectionChanged += OnTabItemSelected;
             ComboBox.SelectionChanged += OnComboBoxItemSelected;

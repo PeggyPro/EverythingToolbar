@@ -2,20 +2,34 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:helpers="clr-namespace:EverythingToolbar.Helpers"
+             xmlns:converters="clr-namespace:EverythingToolbar.Converters"
+             x:Name="Root"
              DataContext="{Binding Source={x:Static helpers:FilterLoader.Instance}}">
     <Border BorderBrush="{DynamicResource TabBarBorder}"
             BorderThickness="0, 0, 0, 1">
         <StackPanel Orientation="Horizontal">
             <TabControl x:Name="TabControl"
-                        ItemsSource="{Binding DefaultFilters}"
                         SelectedIndex="-1"
-                        FocusVisualStyle="{x:Null}" />
+                        FocusVisualStyle="{x:Null}">
+                <TabControl.ItemsSource>
+                    <MultiBinding Converter="{converters:TakeItemsMultiConverter}">
+                        <Binding Path="AllFilters" />
+                        <Binding ElementName="Root" Path="MaxTabItems" />
+                    </MultiBinding>
+                </TabControl.ItemsSource>
+            </TabControl>
 
             <ComboBox Name="ComboBox"
-                      ItemsSource="{Binding UserFilters}"
                       DisplayMemberPath="Name"
                       SelectedIndex="-1"
-                      FocusVisualStyle="{x:Null}" />
+                      FocusVisualStyle="{x:Null}">
+                <ComboBox.ItemsSource>
+                    <MultiBinding Converter="{converters:SkipItemsMultiConverter}">
+                        <Binding Path="AllFilters" />
+                        <Binding ElementName="Root" Path="MaxTabItems" />
+                    </MultiBinding>
+                </ComboBox.ItemsSource>
+            </ComboBox>
         </StackPanel>
     </Border>
 </UserControl>
