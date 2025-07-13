@@ -41,6 +41,12 @@ namespace EverythingToolbar
         [Option(DefaultValue = false)]
         bool IsAutoApplyCustomActions { get; set; }
 
+        [Option(DefaultValue = 3)]
+        int MaxTabItems { get; set; }
+
+        [Option(DefaultValue = "")]
+        string FilterOrder { get; set; }
+
         [Option(DefaultValue = "")]
         string FiltersPath { get; set; }
 
@@ -128,7 +134,7 @@ namespace EverythingToolbar
             _settings = settings;
         }
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -271,6 +277,32 @@ namespace EverythingToolbar
                 if (_settings.IsAutoApplyCustomActions != value)
                 {
                     _settings.IsAutoApplyCustomActions = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int MaxTabItems
+        {
+            get => _settings.MaxTabItems;
+            set
+            {
+                if (_settings.MaxTabItems != value)
+                {
+                    _settings.MaxTabItems = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string FilterOrder
+        {
+            get => _settings.FilterOrder;
+            set
+            {
+                if (_settings.FilterOrder != value)
+                {
+                    _settings.FilterOrder = value;
                     OnPropertyChanged();
                 }
             }

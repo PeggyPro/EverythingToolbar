@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:helpers="clr-namespace:EverythingToolbar.Helpers"
              xmlns:converters="clr-namespace:EverythingToolbar.Converters"
+             xmlns:local="clr-namespace:EverythingToolbar"
              x:Name="Root"
              DataContext="{Binding Source={x:Static helpers:FilterLoader.Instance}}">
     <Border BorderBrush="{DynamicResource TabBarBorder}"
@@ -10,11 +11,12 @@
         <StackPanel Orientation="Horizontal">
             <TabControl x:Name="TabControl"
                         SelectedIndex="-1"
+                        SelectionChanged="OnTabItemSelected"
                         FocusVisualStyle="{x:Null}">
                 <TabControl.ItemsSource>
                     <MultiBinding Converter="{converters:TakeItemsMultiConverter}">
-                        <Binding Path="AllFilters" />
-                        <Binding ElementName="Root" Path="MaxTabItems" />
+                        <Binding Path="Filters" />
+                        <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
                     </MultiBinding>
                 </TabControl.ItemsSource>
             </TabControl>
@@ -22,11 +24,12 @@
             <ComboBox Name="ComboBox"
                       DisplayMemberPath="Name"
                       SelectedIndex="-1"
+                      SelectionChanged="OnComboBoxItemSelected"
                       FocusVisualStyle="{x:Null}">
                 <ComboBox.ItemsSource>
                     <MultiBinding Converter="{converters:SkipItemsMultiConverter}">
-                        <Binding Path="AllFilters" />
-                        <Binding ElementName="Root" Path="MaxTabItems" />
+                        <Binding Path="Filters" />
+                        <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
                     </MultiBinding>
                 </ComboBox.ItemsSource>
             </ComboBox>

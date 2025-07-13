@@ -14,13 +14,6 @@ namespace EverythingToolbar.Controls
                 typeof(FilterSelector),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedFilterChanged));
 
-        public static readonly DependencyProperty MaxTabItemsProperty =
-            DependencyProperty.Register(
-                nameof(MaxTabItems),
-                typeof(int),
-                typeof(FilterSelector),
-                new FrameworkPropertyMetadata(4, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
         private static void OnSelectedFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (FilterSelector)d;
@@ -31,12 +24,6 @@ namespace EverythingToolbar.Controls
         {
             get => (Filter)GetValue(SelectedFilterProperty);
             set => SetValue(SelectedFilterProperty, value);
-        }
-
-        public int MaxTabItems
-        {
-            get => (int)GetValue(MaxTabItemsProperty);
-            set => SetValue(MaxTabItemsProperty, value);
         }
 
         public FilterSelector()
@@ -53,10 +40,11 @@ namespace EverythingToolbar.Controls
             TabControl.SelectionChanged -= OnTabItemSelected;
             ComboBox.SelectionChanged -= OnComboBoxItemSelected;
 
-            int filterIndex = FilterLoader.Instance.AllFilters.IndexOf(SelectedFilter);
+            int filterIndex = FilterLoader.Instance.Filters.IndexOf(SelectedFilter);
+            int maxTabItems = ToolbarSettings.User.MaxTabItems;
 
-            TabControl.SelectedIndex = filterIndex < MaxTabItems ? filterIndex : -1;
-            ComboBox.SelectedIndex = filterIndex >= MaxTabItems ? filterIndex - MaxTabItems : -1;
+            TabControl.SelectedIndex = filterIndex < maxTabItems ? filterIndex : -1;
+            ComboBox.SelectedIndex = filterIndex >= maxTabItems ? filterIndex - maxTabItems : -1;
 
             TabControl.SelectionChanged += OnTabItemSelected;
             ComboBox.SelectionChanged += OnComboBoxItemSelected;

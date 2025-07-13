@@ -15,8 +15,11 @@ namespace EverythingToolbar.Search
             get
             {
                 var searchTermWithReplacedMacros = _searchTerm;
-                foreach (var f in FilterLoader.Instance.DefaultUserFilters)
+                foreach (var f in FilterLoader.Instance.Filters)
                 {
+                    if (string.IsNullOrEmpty(f.Macro))
+                        continue;
+
                     searchTermWithReplacedMacros = searchTermWithReplacedMacros.Replace(f.Macro + ":", f.Search + " ");
                 }
                 return searchTermWithReplacedMacros;
@@ -147,33 +150,18 @@ namespace EverythingToolbar.Search
 
         public void CycleFilters(int offset = 1)
         {
-            var defaultSize = FilterLoader.Instance.DefaultFilters.Count;
-            var userSize = FilterLoader.Instance.UserFilters.Count;
-            var defaultIndex = FilterLoader.Instance.DefaultFilters.IndexOf(Filter);
-            var userIndex = FilterLoader.Instance.UserFilters.IndexOf(Filter);
-
-            var d = defaultIndex >= 0 ? defaultIndex : defaultSize;
-            var u = userIndex >= 0 ? userIndex : 0;
-            var i = (d + u + offset + defaultSize + userSize) % (defaultSize + userSize);
-
-            if (i < defaultSize)
-                Filter = FilterLoader.Instance.DefaultFilters[i];
-            else
-                Filter = FilterLoader.Instance.UserFilters[i - defaultSize];
+            var filterCount = FilterLoader.Instance.Filters.Count;
+            var currentIndex = FilterLoader.Instance.Filters.IndexOf(Filter);
+            var newIndex = (currentIndex + offset + filterCount) % filterCount;
+            Filter = FilterLoader.Instance.Filters[newIndex];
         }
 
         public void SelectFilterFromIndex(int index)
         {
-            var defaultCount = FilterLoader.Instance.DefaultFilters.Count;
-            var userCount = FilterLoader.Instance.UserFilters.Count;
-
-            if (index < defaultCount)
-                Filter = FilterLoader.Instance.DefaultFilters[index];
-            else if (index - defaultCount < userCount)
-                Filter = FilterLoader.Instance.UserFilters[index - defaultCount];
+            Filter = FilterLoader.Instance.Filters[index];
         }
 
-        private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -202,9 +190,9 @@ namespace EverythingToolbar.Search
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -61,6 +61,10 @@
                     Icon="{ui:SymbolIcon WindowSettings20}"
                     TargetPageType="{x:Type settings:UserInterface}" />
                 <ui:NavigationViewItem
+                    Content="{x:Static properties:Resources.SettingsFilters}"
+                    Icon="{ui:SymbolIcon DataFunnel24}"
+                    TargetPageType="{x:Type settings:Filters}" />
+                <ui:NavigationViewItem
                     Content="{x:Static properties:Resources.SettingsCustomActions}"
                     Icon="{ui:SymbolIcon Open24}"
                     TargetPageType="{x:Type settings:CustomActions}" />

@@ -3,6 +3,9 @@
 // VERSION 3.1
 // LICENSE: https://raw.githubusercontent.com/dsafa/CSDeskBand/master/LICENSE
 
+using EverythingToolbar.Helpers;
+using Microsoft.Win32;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +16,6 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Interop;
 using System.Windows.Media;
-using EverythingToolbar.Helpers;
-using Microsoft.Win32;
-using NLog;
 
 namespace EverythingToolbar.Deskband
 {
@@ -740,7 +740,7 @@ namespace EverythingToolbar.Deskband
             }
         }
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -1331,7 +1331,7 @@ namespace CSDeskBand
             }
         }
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

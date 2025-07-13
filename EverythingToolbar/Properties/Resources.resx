@@ -565,7 +565,7 @@
     <value>Synchronize Everything's custom filters</value>
   </data>
   <data name="SettingsRememberFilterHelp" xml:space="preserve">
-    <value>Remember the last used filter for future searches</value>
+    <value>Remember the most recently used filter for future searches</value>
   </data>
   <data name="SettingsUpdatesHelp" xml:space="preserve">
     <value>Notify when a new version is available</value>
@@ -605,5 +605,14 @@
   </data>
   <data name="SettingsSearchIconHelp" xml:space="preserve">
     <value>Changes the style of the taskbar icon (requires explorer restart)</value>
+  </data>
+  <data name="SettingsFilterOrder" xml:space="preserve">
+    <value>Filter order</value>
+  </data>
+  <data name="SettingsMaxTabItems" xml:space="preserve">
+    <value>Number of filter tabs</value>
+  </data>
+  <data name="SettingsMaxTabItemsHelp" xml:space="preserve">
+    <value>Controls the number of visible filter tabs</value>
   </data>
 </root>
