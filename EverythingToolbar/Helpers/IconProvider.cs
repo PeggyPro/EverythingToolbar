@@ -17,17 +17,15 @@ namespace EverythingToolbar.Helpers
             [MarshalAs(UnmanagedType.LPWStr)] string pszPath,
             IntPtr pbc,
             [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
-            [MarshalAs(UnmanagedType.Interface)] out IShellItemImageFactory shellItem);
+            [MarshalAs(UnmanagedType.Interface)] out IShellItemImageFactory shellItem
+        );
 
         [ComImport]
         [Guid("BCC18B79-BA16-442F-80C4-8A59C30C463B")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         private interface IShellItemImageFactory
         {
-            void GetImage(
-                [In] Size size,
-                [In] int flags,
-                [Out] out IntPtr phbm);
+            void GetImage([In] Size size, [In] int flags, [Out] out IntPtr phbm);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -44,7 +42,12 @@ namespace EverythingToolbar.Helpers
             try
             {
                 Guid shellItemImageFactoryGuid = new("BCC18B79-BA16-442F-80C4-8A59C30C463B");
-                SHCreateItemFromParsingName(filePath, IntPtr.Zero, shellItemImageFactoryGuid, out IShellItemImageFactory imageFactory);
+                SHCreateItemFromParsingName(
+                    filePath,
+                    IntPtr.Zero,
+                    shellItemImageFactoryGuid,
+                    out IShellItemImageFactory imageFactory
+                );
 
                 Size size = new() { cx = 32, cy = 32 };
                 imageFactory.GetImage(size, SiigbfResizetofit, out IntPtr hBitmap);
@@ -55,7 +58,8 @@ namespace EverythingToolbar.Helpers
                         hBitmap,
                         IntPtr.Zero,
                         Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
+                        BitmapSizeOptions.FromEmptyOptions()
+                    );
                     imageSource.Freeze();
                     return imageSource;
                 }
@@ -85,15 +89,22 @@ namespace EverythingToolbar.Helpers
             public IntPtr hIcon;
             public int iIcon;
             public uint dwAttributes;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
             public string szDisplayName;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
             public string szTypeName;
         }
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
-            ref Shfileinfo psfi, uint cbSizeFileInfo, uint uFlags);
+        private static extern IntPtr SHGetFileInfo(
+            string pszPath,
+            uint dwFileAttributes,
+            ref Shfileinfo psfi,
+            uint cbSizeFileInfo,
+            uint uFlags
+        );
 
         [DllImport("user32.dll")]
         private static extern bool DestroyIcon(IntPtr hIcon);
@@ -160,7 +171,8 @@ namespace EverythingToolbar.Helpers
                 var imageSource = Imaging.CreateBitmapSourceFromHIcon(
                     shfi.hIcon,
                     Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
+                    BitmapSizeOptions.FromEmptyOptions()
+                );
                 imageSource.Freeze();
                 return imageSource;
             }

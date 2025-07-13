@@ -1,5 +1,4 @@
-﻿using EverythingToolbar.Helpers;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Settings
 {
@@ -49,11 +49,7 @@ namespace EverythingToolbar.Settings
             var validOrder = DefaultFilterLoader.Instance.GetValidFilterOrder();
 
             FilterOrderItems = new ObservableCollection<FilterOrderItem>(
-                validOrder.Select(i => new FilterOrderItem
-                {
-                    Name = defaultFilters[i].Name,
-                    OriginalIndex = i
-                })
+                validOrder.Select(i => new FilterOrderItem { Name = defaultFilters[i].Name, OriginalIndex = i })
             );
         }
 
@@ -75,8 +71,10 @@ namespace EverythingToolbar.Settings
                 Point mousePos = e.GetPosition(null);
                 Vector diff = _startPoint - mousePos;
 
-                if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
+                if (
+                    Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance
+                    || Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance
+                )
                 {
                     _isDragging = true;
                     ListBoxItem? listBoxItem = sender as ListBoxItem;

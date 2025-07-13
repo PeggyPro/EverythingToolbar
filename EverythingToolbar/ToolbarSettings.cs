@@ -1,8 +1,8 @@
-﻿using Config.Net;
-using EverythingToolbar.Helpers;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Config.Net;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar
 {

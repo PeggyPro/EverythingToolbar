@@ -1,9 +1,9 @@
-﻿using EverythingToolbar.Behaviors;
-using EverythingToolbar.Helpers;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EverythingToolbar.Behaviors;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Controls
 {
@@ -51,7 +51,10 @@ namespace EverythingToolbar.Controls
             if (IsLoaded)
                 UpdateTheme(e.NewTheme);
             else
-                Loaded += (s, e_) => { UpdateTheme(e.NewTheme); };
+                Loaded += (s, e_) =>
+                {
+                    UpdateTheme(e.NewTheme);
+                };
         }
 
         private void OnClick(object sender, RoutedEventArgs e)

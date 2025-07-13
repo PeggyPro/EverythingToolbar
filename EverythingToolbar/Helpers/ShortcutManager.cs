@@ -1,10 +1,10 @@
+using System;
+using System.Windows.Input;
 using EverythingToolbar.Controls;
 using EverythingToolbar.Properties;
 using NHotkey;
 using NHotkey.Wpf;
 using NLog;
-using System;
-using System.Windows.Input;
 
 namespace EverythingToolbar.Helpers
 {
@@ -39,7 +39,9 @@ namespace EverythingToolbar.Helpers
                 UpdateSettings(Key.None, ModifierKeys.None);
 
                 Logger.Error(e, "Failed to register hotkey {0} with modifiers {1}", key, modifiers);
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToRegisterHotkey, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToRegisterHotkey, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 

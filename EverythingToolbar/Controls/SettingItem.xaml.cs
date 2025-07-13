@@ -9,8 +9,12 @@ namespace EverythingToolbar.Controls
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SettingContentProperty =
-            DependencyProperty.Register(nameof(SettingContent), typeof(object), typeof(SettingItem), new PropertyMetadata(null));
+        public static readonly DependencyProperty SettingContentProperty = DependencyProperty.Register(
+            nameof(SettingContent),
+            typeof(object),
+            typeof(SettingItem),
+            new PropertyMetadata(null)
+        );
 
         public object SettingContent
         {
@@ -18,8 +22,12 @@ namespace EverythingToolbar.Controls
             set => SetValue(SettingContentProperty, value);
         }
 
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register(nameof(Title), typeof(string), typeof(SettingItem), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title),
+            typeof(string),
+            typeof(SettingItem),
+            new PropertyMetadata(string.Empty)
+        );
 
         public string Title
         {
@@ -27,8 +35,12 @@ namespace EverythingToolbar.Controls
             set => SetValue(TitleProperty, value);
         }
 
-        public static readonly DependencyProperty HelpTextProperty =
-            DependencyProperty.Register(nameof(HelpText), typeof(string), typeof(SettingItem), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty HelpTextProperty = DependencyProperty.Register(
+            nameof(HelpText),
+            typeof(string),
+            typeof(SettingItem),
+            new PropertyMetadata(string.Empty)
+        );
 
         public string HelpText
         {
@@ -36,5 +48,4 @@ namespace EverythingToolbar.Controls
             set => SetValue(HelpTextProperty, value);
         }
     }
-
 }

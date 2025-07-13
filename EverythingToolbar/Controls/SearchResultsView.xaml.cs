@@ -1,7 +1,3 @@
-using EverythingToolbar.Data;
-using EverythingToolbar.Helpers;
-using EverythingToolbar.Search;
-using EverythingToolbar.Settings;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,18 +9,22 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using EverythingToolbar.Data;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Search;
+using EverythingToolbar.Settings;
 using SearchResult = EverythingToolbar.Data.SearchResult;
 
 namespace EverythingToolbar.Controls
 {
     public partial class SearchResultsView
     {
-        public static readonly DependencyProperty TotalResultsCountProperty =
-            DependencyProperty.Register(
-                nameof(TotalResultsCount),
-                typeof(int),
-                typeof(SearchResultsView),
-                new PropertyMetadata(0));
+        public static readonly DependencyProperty TotalResultsCountProperty = DependencyProperty.Register(
+            nameof(TotalResultsCount),
+            typeof(int),
+            typeof(SearchResultsView),
+            new PropertyMetadata(0)
+        );
 
         public int TotalResultsCount
         {
@@ -50,7 +50,7 @@ namespace EverythingToolbar.Controls
 
             _busyIndicatorTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(BusyIndicatorDelayMilliseconds)
+                Interval = TimeSpan.FromMilliseconds(BusyIndicatorDelayMilliseconds),
             };
             _busyIndicatorTimer.Tick += BusyIndicatorTimerElapsed;
         }
@@ -140,7 +140,10 @@ namespace EverythingToolbar.Controls
             if (scrollViewer == null)
                 return;
 
-            var verticalScrollBar = FindVisualChild<ScrollBar>(scrollViewer, s => s.Orientation == Orientation.Vertical);
+            var verticalScrollBar = FindVisualChild<ScrollBar>(
+                scrollViewer,
+                s => s.Orientation == Orientation.Vertical
+            );
             if (verticalScrollBar == null)
                 return;
 
@@ -177,7 +180,8 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private static T? FindVisualChild<T>(DependencyObject parent, Func<T, bool>? condition = null) where T : DependencyObject
+        private static T? FindVisualChild<T>(DependencyObject parent, Func<T, bool>? condition = null)
+            where T : DependencyObject
         {
             for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {
@@ -197,31 +201,37 @@ namespace EverythingToolbar.Controls
             SearchResultsListView.ItemContainerStyle ??= new Style(typeof(ListViewItem));
 
             var newStyle = new Style(typeof(ListViewItem), SearchResultsListView.ItemContainerStyle);
-            newStyle.Setters.Add(new EventSetter
-            {
-                Event = PreviewMouseLeftButtonUpEvent,
-                Handler = new MouseButtonEventHandler(SingleClickSearchResult)
-            });
-            newStyle.Setters.Add(new EventSetter
-            {
-                Event = PreviewMouseDoubleClickEvent,
-                Handler = new MouseButtonEventHandler(DoubleClickSearchResult)
-            });
-            newStyle.Setters.Add(new EventSetter
-            {
-                Event = PreviewMouseDownEvent,
-                Handler = new MouseButtonEventHandler(OnListViewItemMouseDown)
-            });
-            newStyle.Setters.Add(new EventSetter
-            {
-                Event = MouseMoveEvent,
-                Handler = new MouseEventHandler(OnListViewItemMouseMove)
-            });
-            newStyle.Setters.Add(new Setter
-            {
-                Property = ContextMenuProperty,
-                Value = new Binding { Source = Resources["ListViewItemContextMenu"] }
-            });
+            newStyle.Setters.Add(
+                new EventSetter
+                {
+                    Event = PreviewMouseLeftButtonUpEvent,
+                    Handler = new MouseButtonEventHandler(SingleClickSearchResult),
+                }
+            );
+            newStyle.Setters.Add(
+                new EventSetter
+                {
+                    Event = PreviewMouseDoubleClickEvent,
+                    Handler = new MouseButtonEventHandler(DoubleClickSearchResult),
+                }
+            );
+            newStyle.Setters.Add(
+                new EventSetter
+                {
+                    Event = PreviewMouseDownEvent,
+                    Handler = new MouseButtonEventHandler(OnListViewItemMouseDown),
+                }
+            );
+            newStyle.Setters.Add(
+                new EventSetter { Event = MouseMoveEvent, Handler = new MouseEventHandler(OnListViewItemMouseMove) }
+            );
+            newStyle.Setters.Add(
+                new Setter
+                {
+                    Property = ContextMenuProperty,
+                    Value = new Binding { Source = Resources["ListViewItemContextMenu"] },
+                }
+            );
             SearchResultsListView.ItemContainerStyle = newStyle;
         }
 
@@ -271,8 +281,10 @@ namespace EverythingToolbar.Controls
             }
             else if (e.Key == Key.Up)
             {
-                if (SearchResultsListView.SelectedIndex == 0 &&
-                    (!ToolbarSettings.User.IsAutoSelectFirstResult || !ToolbarSettings.User.IsSearchAsYouType))
+                if (
+                    SearchResultsListView.SelectedIndex == 0
+                    && (!ToolbarSettings.User.IsAutoSelectFirstResult || !ToolbarSettings.User.IsSearchAsYouType)
+                )
                 {
                     SearchResultsListView.SelectedIndex = -1;
                     EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
@@ -352,19 +364,29 @@ namespace EverythingToolbar.Controls
             var currentFocus = Keyboard.FocusedElement;
             var caretIndex = currentFocus is TextBox textBox ? textBox.CaretIndex : -1;
 
-            var args = new KeyEventArgs(Keyboard.PrimaryDevice, presentationSource, 0, key) { RoutedEvent = Keyboard.KeyDownEvent };
+            var args = new KeyEventArgs(Keyboard.PrimaryDevice, presentationSource, 0, key)
+            {
+                RoutedEvent = Keyboard.KeyDownEvent,
+            };
             control.RaiseEvent(args);
 
             // Restore focus to text box
-            if (ToolbarSettings.User.IsAutoSelectFirstResult &&
-                currentFocus is TextBox restoredTextBox &&
-                caretIndex >= 0)
+            if (
+                ToolbarSettings.User.IsAutoSelectFirstResult
+                && currentFocus is TextBox restoredTextBox
+                && caretIndex >= 0
+            )
             {
-                Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    currentFocus.Focus();
-                    restoredTextBox.CaretIndex = Math.Min(caretIndex, restoredTextBox.Text.Length);
-                }), DispatcherPriority.Send);
+                Dispatcher.BeginInvoke(
+                    (Action)(
+                        () =>
+                        {
+                            currentFocus.Focus();
+                            restoredTextBox.CaretIndex = Math.Min(caretIndex, restoredTextBox.Text.Length);
+                        }
+                    ),
+                    DispatcherPriority.Send
+                );
             }
 
             return args.Handled;
@@ -484,11 +506,10 @@ namespace EverythingToolbar.Controls
 
             if (actions.Count == 0)
             {
-                menuItem.Items.Insert(0, new MenuItem
-                {
-                    Header = Properties.Resources.ContextMenuOpenWithNoCustomActions,
-                    IsEnabled = false
-                });
+                menuItem.Items.Insert(
+                    0,
+                    new MenuItem { Header = Properties.Resources.ContextMenuOpenWithNoCustomActions, IsEnabled = false }
+                );
                 return;
             }
 
@@ -522,8 +543,10 @@ namespace EverythingToolbar.Controls
 
             var diff = _dragStart - PointToScreen(Mouse.GetPosition(this));
 
-            if (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)
+            if (
+                Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance
+                || Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance
+            )
             {
                 string[] files = [SelectedItem.FullPathAndFileName];
                 var data = new DataObject(DataFormats.FileDrop, files);
@@ -543,14 +566,16 @@ namespace EverythingToolbar.Controls
                 return;
 
             string[] extensions = [".exe", ".bat", ".cmd"];
-            var isExecutable = SelectedItem.IsFile && extensions.Any(ext => SelectedItem.FullPathAndFileName.EndsWith(ext));
+            var isExecutable =
+                SelectedItem.IsFile && extensions.Any(ext => SelectedItem.FullPathAndFileName.EndsWith(ext));
 
             mi.Visibility = isExecutable ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void FocusSelectedItem()
         {
-            var selectedItem = (ListViewItem)SearchResultsListView.ItemContainerGenerator.ContainerFromItem(SelectedItem);
+            var selectedItem = (ListViewItem)
+                SearchResultsListView.ItemContainerGenerator.ContainerFromItem(SelectedItem);
             if (selectedItem != null)
                 Keyboard.Focus(selectedItem);
         }

@@ -1,11 +1,11 @@
-﻿using EverythingToolbar.Data;
-using EverythingToolbar.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using EverythingToolbar.Data;
+using EverythingToolbar.Properties;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace EverythingToolbar.Settings
@@ -29,19 +29,34 @@ namespace EverythingToolbar.Settings
     public class UserInterfaceViewModel : INotifyPropertyChanged
     {
         public List<KeyValuePair<string, string>> ItemTemplates { get; } =
-        [
-            new(Resources.ItemTemplateCompact, "Compact"),
-            new(Resources.ItemTemplateCompactDetailed, "CompactDetailed"),
-            new(Resources.ItemTemplateNormal, "Normal"),
-            new(Resources.ItemTemplateNormalDetailed, "NormalDetailed")
-        ];
+            [
+                new(Resources.ItemTemplateCompact, "Compact"),
+                new(Resources.ItemTemplateCompactDetailed, "CompactDetailed"),
+                new(Resources.ItemTemplateNormal, "Normal"),
+                new(Resources.ItemTemplateNormalDetailed, "NormalDetailed"),
+            ];
 
         public List<IconItem> IconItems { get; } =
-        [
-            new IconItem { DisplayName = "Light", IconPath = "pack://siteoforigin:,,,/Icons/Dark.ico", Value = "Icons/Dark.ico" },
-            new IconItem { DisplayName = "Dark", IconPath = "pack://siteoforigin:,,,/Icons/Light.ico", Value = "Icons/Light.ico" },
-            new IconItem { DisplayName = "Blue", IconPath = "pack://siteoforigin:,,,/Icons/Medium.ico", Value = "Icons/Medium.ico" }
-        ];
+            [
+                new IconItem
+                {
+                    DisplayName = "Light",
+                    IconPath = "pack://siteoforigin:,,,/Icons/Dark.ico",
+                    Value = "Icons/Dark.ico",
+                },
+                new IconItem
+                {
+                    DisplayName = "Dark",
+                    IconPath = "pack://siteoforigin:,,,/Icons/Light.ico",
+                    Value = "Icons/Light.ico",
+                },
+                new IconItem
+                {
+                    DisplayName = "Blue",
+                    IconPath = "pack://siteoforigin:,,,/Icons/Medium.ico",
+                    Value = "Icons/Medium.ico",
+                },
+            ];
 
         public SearchResult SampleSearchResult { get; }
 
@@ -62,7 +77,9 @@ namespace EverythingToolbar.Settings
 
         public UserInterfaceViewModel()
         {
-            BitmapImage imageSource = new(new Uri("pack://application:,,,/EverythingToolbar;component/Images/AppIcon.ico"));
+            BitmapImage imageSource = new(
+                new Uri("pack://application:,,,/EverythingToolbar;component/Images/AppIcon.ico")
+            );
             SampleSearchResult = new SearchResult
             {
                 HighlightedPath = @"C:\Program Files\EverythingToolbar\Everything*Toolbar*.exe",
@@ -73,7 +90,7 @@ namespace EverythingToolbar.Settings
                 DateModified = new FILETIME
                 {
                     dwHighDateTime = DateTimeToFileTime(DateTime.Now).dwHighDateTime,
-                    dwLowDateTime = DateTimeToFileTime(DateTime.Now).dwLowDateTime
+                    dwLowDateTime = DateTimeToFileTime(DateTime.Now).dwLowDateTime,
                 },
             };
         }
@@ -84,7 +101,7 @@ namespace EverythingToolbar.Settings
             return new FILETIME
             {
                 dwLowDateTime = (int)(fileTime & 0xFFFFFFFF),
-                dwHighDateTime = (int)(fileTime >> 32)
+                dwHighDateTime = (int)(fileTime >> 32),
             };
         }
 

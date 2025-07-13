@@ -1,8 +1,3 @@
-using EverythingToolbar.Controls;
-using EverythingToolbar.Helpers;
-using EverythingToolbar.Launcher.Properties;
-using Microsoft.Xaml.Behaviors;
-using NHotkey;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -10,6 +5,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Shell;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Launcher.Properties;
+using Microsoft.Xaml.Behaviors;
+using NHotkey;
 using Application = System.Windows.Application;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using Timer = System.Timers.Timer;
@@ -36,7 +36,10 @@ namespace EverythingToolbar.Launcher
 
                 _searchWindowRecentlyClosedTimer = new Timer(500);
                 _searchWindowRecentlyClosedTimer.AutoReset = false;
-                _searchWindowRecentlyClosedTimer.Elapsed += (s, e) => { _searchWindowRecentlyClosed = false; };
+                _searchWindowRecentlyClosedTimer.Elapsed += (s, e) =>
+                {
+                    _searchWindowRecentlyClosed = false;
+                };
 
                 Width = 0;
                 Height = 0;
@@ -52,7 +55,10 @@ namespace EverythingToolbar.Launcher
 
                 StartToggleListener();
 
-                if (!Utils.IsTaskbarPinned() && (!ToolbarSettings.User.IsSetupAssistantDisabled || !ToolbarSettings.User.IsTrayIconEnabled))
+                if (
+                    !Utils.IsTaskbarPinned()
+                    && (!ToolbarSettings.User.IsSetupAssistantDisabled || !ToolbarSettings.User.IsTrayIconEnabled)
+                )
                     new SetupAssistant(icon).Show();
 
                 ShortcutManager.Initialize(FocusSearchBox);
@@ -70,10 +76,13 @@ namespace EverythingToolbar.Launcher
                     }
                     else if (e.PropertyName == nameof(ToolbarSettings.User.IconName))
                     {
-                        var restartExplorer = await FluentMessageBox.CreateYesNo(
-                            Properties.Resources.SetupAssistantRestartExplorerDialogText,
-                            Properties.Resources.SetupAssistantRestartExplorerDialogTitle
-                            ).ShowDialogAsync() == MessageBoxResult.Primary;
+                        var restartExplorer =
+                            await FluentMessageBox
+                                .CreateYesNo(
+                                    Properties.Resources.SetupAssistantRestartExplorerDialogText,
+                                    Properties.Resources.SetupAssistantRestartExplorerDialogTitle
+                                )
+                                .ShowDialogAsync() == MessageBoxResult.Primary;
                         Utils.ChangeTaskbarPinIcon(ToolbarSettings.User.IconName, restartExplorer);
                     }
                 };
@@ -82,13 +91,15 @@ namespace EverythingToolbar.Launcher
             private void SetupJumpList()
             {
                 var jumpList = new JumpList();
-                jumpList.JumpItems.Add(new JumpTask
-                {
-                    Title = Properties.Resources.ContextMenuRunSetupAssistant,
-                    Description = Properties.Resources.ContextMenuRunSetupAssistant,
-                    ApplicationPath = Environment.ProcessPath,
-                    Arguments = "--run-setup-assistant"
-                });
+                jumpList.JumpItems.Add(
+                    new JumpTask
+                    {
+                        Title = Properties.Resources.ContextMenuRunSetupAssistant,
+                        Description = Properties.Resources.ContextMenuRunSetupAssistant,
+                        ApplicationPath = Environment.ProcessPath,
+                        Arguments = "--run-setup-assistant",
+                    }
+                );
                 JumpList.SetJumpList(Application.Current, jumpList);
             }
 
@@ -161,13 +172,19 @@ namespace EverythingToolbar.Launcher
                         var setupItem = new ToolStripMenuItem(
                             Resources.ContextMenuRunSetupAssistant,
                             null,
-                            (s, e) => { new SetupAssistant(trayIcon).Show(); }
+                            (s, e) =>
+                            {
+                                new SetupAssistant(trayIcon).Show();
+                            }
                         );
                         trayIcon.ContextMenuStrip.Items.Add(setupItem);
                         var quitItem = new ToolStripMenuItem(
                             Resources.ContextMenuQuit,
                             null,
-                            (s, e) => { app.Shutdown(); }
+                            (s, e) =>
+                            {
+                                app.Shutdown();
+                            }
                         );
                         trayIcon.ContextMenuStrip.Items.Add(quitItem);
                         trayIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;

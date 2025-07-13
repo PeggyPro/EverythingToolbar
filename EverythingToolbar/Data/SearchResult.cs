@@ -1,10 +1,4 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Helpers;
-using EverythingToolbar.Properties;
-using EverythingToolbar.Search;
-using NLog;
-using Peter;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -17,6 +11,12 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Properties;
+using EverythingToolbar.Search;
+using NLog;
+using Peter;
 using Clipboard = System.Windows.Clipboard;
 using DataObject = System.Windows.DataObject;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
@@ -71,18 +71,13 @@ namespace EverythingToolbar.Data
                 if (_icon != null)
                     return _icon;
 
-                string[] imageExtensions =
-                {
-                    ".png",
-                    ".jpg",
-                    ".jpeg",
-                    ".gif",
-                    ".bmp",
-                    ".tiff",
-                    ".ico"
-                };
+                string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico" };
                 string ext = System.IO.Path.GetExtension(FullPathAndFileName).ToLowerInvariant();
-                if (ToolbarSettings.User.IsThumbnailsEnabled && imageExtensions.Contains(ext) && File.Exists(FullPathAndFileName))
+                if (
+                    ToolbarSettings.User.IsThumbnailsEnabled
+                    && imageExtensions.Contains(ext)
+                    && File.Exists(FullPathAndFileName)
+                )
                 {
                     _icon = IconProvider.GetImage(FullPathAndFileName);
                     Task.Run(() =>
@@ -92,10 +87,13 @@ namespace EverythingToolbar.Data
                 }
                 else
                 {
-                    _icon = IconProvider.GetImage(FullPathAndFileName, source =>
-                    {
-                        Icon = source;
-                    });
+                    _icon = IconProvider.GetImage(
+                        FullPathAndFileName,
+                        source =>
+                        {
+                            Icon = source;
+                        }
+                    );
                 }
 
                 return _icon;
@@ -118,17 +116,15 @@ namespace EverythingToolbar.Data
                     // might be executed instead due to how Process.Start prioritizes executables when resolving filenames.
                     path += "\\";
                 }
-                Process.Start(new ProcessStartInfo(path)
-                {
-                    WorkingDirectory = Path,
-                    UseShellExecute = true
-                });
+                Process.Start(new ProcessStartInfo(path) { WorkingDirectory = Path, UseShellExecute = true });
                 SearchResultProvider.IncrementRunCount(FullPathAndFileName);
             }
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open search result.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -136,17 +132,15 @@ namespace EverythingToolbar.Data
         {
             try
             {
-                Process.Start(new ProcessStartInfo(FullPathAndFileName)
-                {
-                    Verb = "runas",
-                    UseShellExecute = true
-                });
+                Process.Start(new ProcessStartInfo(FullPathAndFileName) { Verb = "runas", UseShellExecute = true });
                 SearchResultProvider.IncrementRunCount(FullPathAndFileName);
             }
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open search result.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToOpen, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -160,7 +154,9 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open path.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpenPath, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToOpenPath, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -173,7 +169,9 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to open dialog.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToOpenDialog, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToOpenDialog, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -183,12 +181,14 @@ namespace EverythingToolbar.Data
             {
                 var dataObj = new DataObject();
                 dataObj.SetFileDropList(new StringCollection { FullPathAndFileName });
-                Clipboard.SetDataObject(dataObj, copy: false);  // Fixes #362
+                Clipboard.SetDataObject(dataObj, copy: false); // Fixes #362
             }
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to copy file.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToCopyFile, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToCopyFile, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -203,7 +203,9 @@ namespace EverythingToolbar.Data
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to copy path.");
-                FluentMessageBox.CreateError(Resources.MessageBoxFailedToCopyPath, Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Resources.MessageBoxFailedToCopyPath, Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
             }
         }
 
@@ -231,7 +233,13 @@ namespace EverythingToolbar.Data
             {
                 try
                 {
-                    using (var client = new NamedPipeClientStream(".", "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value, PipeDirection.Out))
+                    using (
+                        var client = new NamedPipeClientStream(
+                            ".",
+                            "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value,
+                            PipeDirection.Out
+                        )
+                    )
                     {
                         client.Connect(1000);
 
@@ -268,7 +276,7 @@ namespace EverythingToolbar.Data
                     {
                         cbData = (FullPathAndFileName.Length + 1) * 2,
                         lpData = Marshal.StringToHGlobalUni(FullPathAndFileName),
-                        dwData = new IntPtr(SEER_INVOKE_W32)
+                        dwData = new IntPtr(SEER_INVOKE_W32),
                     };
 
                     NativeMethods.SendMessage(seer, WM_COPYDATA, IntPtr.Zero, ref cd);

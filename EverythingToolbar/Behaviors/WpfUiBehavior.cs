@@ -1,13 +1,17 @@
+using System.Windows;
 using EverythingToolbar.Helpers;
 using Microsoft.Xaml.Behaviors;
-using System.Windows;
 using Wpf.Ui.Appearance;
 
 namespace EverythingToolbar.Behaviors
 {
     public class WpfUiBehavior : Behavior<FrameworkElement>
     {
-        private static readonly RegistryEntry SystemThemeRegistryEntry = new("HKEY_CURRENT_USER", @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme");
+        private static readonly RegistryEntry SystemThemeRegistryEntry = new(
+            "HKEY_CURRENT_USER",
+            @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+            "SystemUsesLightTheme"
+        );
 
         public WpfUiBehavior()
         {
@@ -33,7 +37,10 @@ namespace EverythingToolbar.Behaviors
             if (AssociatedObject.IsLoaded)
                 AutoApplyTheme();
             else
-                AssociatedObject.Loaded += (_, _) => { AutoApplyTheme(); };
+                AssociatedObject.Loaded += (_, _) =>
+                {
+                    AutoApplyTheme();
+                };
         }
 
         private void ApplyTheme(Theme theme)

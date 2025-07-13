@@ -1,9 +1,9 @@
-﻿using EverythingToolbar.Search;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Web;
 using System.Windows;
+using EverythingToolbar.Search;
 
 namespace EverythingToolbar.Settings
 {
@@ -22,16 +22,13 @@ namespace EverythingToolbar.Settings
             string everythingVersion = SearchResultProvider.GetEverythingVersion().ToString();
             string osVersion = Environment.OSVersion.ToString();
 
-            string url = $"https://github.com/srwi/EverythingToolbar/issues/new?template=bug_report.yml" +
-                         $"&version={HttpUtility.UrlEncode(version)}" +
-                         $"&et_version={HttpUtility.UrlEncode(everythingVersion)}" +
-                         $"&windows_version={HttpUtility.UrlEncode(osVersion)}";
+            string url =
+                $"https://github.com/srwi/EverythingToolbar/issues/new?template=bug_report.yml"
+                + $"&version={HttpUtility.UrlEncode(version)}"
+                + $"&et_version={HttpUtility.UrlEncode(everythingVersion)}"
+                + $"&windows_version={HttpUtility.UrlEncode(osVersion)}";
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true
-            });
+            Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
         }
     }
 }

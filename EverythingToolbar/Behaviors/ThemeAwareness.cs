@@ -1,13 +1,13 @@
-﻿using EverythingToolbar.Helpers;
-using Microsoft.Xaml.Behaviors;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using EverythingToolbar.Helpers;
+using Microsoft.Xaml.Behaviors;
+using NLog;
 using Windows.UI.ViewManagement;
 using Color = Windows.UI.Color;
 
@@ -16,7 +16,7 @@ namespace EverythingToolbar.Behaviors
     public enum Theme
     {
         Dark,
-        Light
+        Light,
     }
 
     public class ResourcesChangedEventArgs : EventArgs
@@ -30,7 +30,11 @@ namespace EverythingToolbar.Behaviors
 
         private readonly List<ResourceDictionary> _addedDictionaries = new();
         private UISettings _settings;
-        private static readonly RegistryEntry SystemThemeRegistryEntry = new("HKEY_CURRENT_USER", @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "SystemUsesLightTheme");
+        private static readonly RegistryEntry SystemThemeRegistryEntry = new(
+            "HKEY_CURRENT_USER",
+            @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+            "SystemUsesLightTheme"
+        );
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<ThemeAwareness>();
 
         protected override void OnAttached()
@@ -133,8 +137,15 @@ namespace EverythingToolbar.Behaviors
             AddResource(Path.Combine(themeLocation, themeFileName));
 
             // Apply ItemTemplate style
-            var dataTemplateLocation = Path.Combine(assemblyLocation, "ItemTemplates", ToolbarSettings.User.ItemTemplate + ".xaml");
-            AddResource(dataTemplateLocation, fallbackPath: Path.Combine(assemblyLocation, "ItemTemplates", "Normal.xaml"));
+            var dataTemplateLocation = Path.Combine(
+                assemblyLocation,
+                "ItemTemplates",
+                ToolbarSettings.User.ItemTemplate + ".xaml"
+            );
+            AddResource(
+                dataTemplateLocation,
+                fallbackPath: Path.Combine(assemblyLocation, "ItemTemplates", "Normal.xaml")
+            );
 
             // Apply accent color
             if (_settings != null)
@@ -150,10 +161,7 @@ namespace EverythingToolbar.Behaviors
             }
 
             // Notify resource change
-            ResourceChanged?.Invoke(this, new ResourcesChangedEventArgs
-            {
-                NewTheme = theme
-            });
+            ResourceChanged?.Invoke(this, new ResourcesChangedEventArgs { NewTheme = theme });
         }
 
         private void AddResource(string path, string fallbackPath = null)

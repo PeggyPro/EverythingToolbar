@@ -15,13 +15,15 @@ namespace EverythingToolbar.Controls
             {
                 Title = title,
                 IsCloseButtonEnabled = true,
-                MinWidth = 300
+                MinWidth = 300,
             };
 
             // We need to apply resources before setting the content on the base message box
-            ApplicationThemeManager.Apply(SystemThemeManager.GetCachedSystemTheme() == SystemTheme.Light
-                ? ApplicationTheme.Light
-                : ApplicationTheme.Dark);
+            ApplicationThemeManager.Apply(
+                SystemThemeManager.GetCachedSystemTheme() == SystemTheme.Light
+                    ? ApplicationTheme.Light
+                    : ApplicationTheme.Dark
+            );
             ApplicationThemeManager.Apply(messageBox);
 
             return messageBox;
@@ -35,7 +37,7 @@ namespace EverythingToolbar.Controls
                 FontSize = 14,
                 Margin = new Thickness(20),
                 TextWrapping = TextWrapping.Wrap,
-                VerticalAlignment = VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center,
             };
         }
 
@@ -75,10 +77,10 @@ namespace EverythingToolbar.Controls
                         Symbol = SymbolRegular.Warning28,
                         FontSize = 32,
                         VerticalAlignment = VerticalAlignment.Center,
-                        Margin = new Thickness(0, 0, 12, 0)
+                        Margin = new Thickness(0, 0, 12, 0),
                     },
-                    CreateTextBlock(content)
-                }
+                    CreateTextBlock(content),
+                },
             };
             return messageBox;
         }

@@ -1,9 +1,9 @@
-using EverythingToolbar.Helpers;
-using Microsoft.Xaml.Behaviors;
-using NHotkey;
 using System;
 using System.Windows;
 using System.Windows.Input;
+using EverythingToolbar.Helpers;
+using Microsoft.Xaml.Behaviors;
+using NHotkey;
 
 namespace EverythingToolbar.Deskband
 {
@@ -13,10 +13,7 @@ namespace EverythingToolbar.Deskband
         {
             InitializeComponent();
 
-            var behavior = new SearchWindowPlacement
-            {
-                PlacementTarget = this
-            };
+            var behavior = new SearchWindowPlacement { PlacementTarget = this };
             Interaction.GetBehaviors(SearchWindow.Instance).Add(behavior);
 
             SearchWindow.Instance.Hiding += OnSearchWindowHiding;
@@ -36,7 +33,7 @@ namespace EverythingToolbar.Deskband
         {
             EventDispatcher.Instance.InvokeUnfocusRequested(sender, e);
 
-            if (e.NewFocus == null)  // New focus outside application
+            if (e.NewFocus == null) // New focus outside application
             {
                 // Focus an invisible text box to prevent Windows from randomly focusing the search box
                 // and causing visual distraction

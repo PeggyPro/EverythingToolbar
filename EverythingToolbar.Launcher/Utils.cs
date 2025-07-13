@@ -1,11 +1,11 @@
-﻿using EverythingToolbar.Helpers;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using EverythingToolbar.Helpers;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using NLog;
 using Shell32;
-using System;
-using System.Diagnostics;
-using System.IO;
 using Wpf.Ui.Appearance;
 using File = System.IO.File;
 
@@ -24,7 +24,10 @@ namespace EverythingToolbar.Launcher
         public static string GetTaskbarShortcutPath()
         {
             const string relativeTaskBarPath = @"Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar";
-            var taskBarPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), relativeTaskBarPath);
+            var taskBarPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                relativeTaskBarPath
+            );
 
             if (Directory.Exists(taskBarPath))
             {
@@ -64,7 +67,11 @@ namespace EverythingToolbar.Launcher
             if (Helpers.Utils.GetWindowsVersion() < Helpers.Utils.WindowsVersion.Windows11)
                 return false;
 
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"))
+            using (
+                var key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+                )
+            )
             {
                 var taskbarAlignment = key?.GetValue("TaskbarAl");
                 var leftAligned = taskbarAlignment != null && (int)taskbarAlignment == 0;
@@ -82,12 +89,20 @@ namespace EverythingToolbar.Launcher
 
         public static void SetAutostartState(bool enabled)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using (
+                var key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Run",
+                    RegistryKeyPermissionCheck.ReadWriteSubTree
+                )
+            )
             {
                 try
                 {
                     if (enabled)
-                        key?.SetValue("EverythingToolbar", "\"" + Process.GetCurrentProcess().MainModule.FileName + "\"");
+                        key?.SetValue(
+                            "EverythingToolbar",
+                            "\"" + Process.GetCurrentProcess().MainModule.FileName + "\""
+                        );
                     else
                         key?.DeleteValue("EverythingToolbar", false);
                 }

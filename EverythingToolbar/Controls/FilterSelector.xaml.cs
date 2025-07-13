@@ -1,18 +1,22 @@
-﻿using EverythingToolbar.Data;
-using EverythingToolbar.Helpers;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using EverythingToolbar.Data;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Controls
 {
     public partial class FilterSelector
     {
-        public static readonly DependencyProperty SelectedFilterProperty =
-            DependencyProperty.Register(
-                nameof(SelectedFilter),
-                typeof(Filter),
-                typeof(FilterSelector),
-                new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedFilterChanged));
+        public static readonly DependencyProperty SelectedFilterProperty = DependencyProperty.Register(
+            nameof(SelectedFilter),
+            typeof(Filter),
+            typeof(FilterSelector),
+            new FrameworkPropertyMetadata(
+                null,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                OnSelectedFilterChanged
+            )
+        );
 
         private static void OnSelectedFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -35,7 +39,8 @@ namespace EverythingToolbar.Controls
 
         private void UpdateSelectedItems()
         {
-            if (SelectedFilter == null) return;
+            if (SelectedFilter == null)
+                return;
 
             TabControl.SelectionChanged -= OnTabItemSelected;
             ComboBox.SelectionChanged -= OnComboBoxItemSelected;
@@ -52,7 +57,8 @@ namespace EverythingToolbar.Controls
 
         private void OnTabItemSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (TabControl.SelectedIndex < 0) return;
+            if (TabControl.SelectedIndex < 0)
+                return;
 
             if (!TabControl.IsFocused && !TabControl.IsMouseOver)
             {
@@ -66,7 +72,8 @@ namespace EverythingToolbar.Controls
 
         private void OnComboBoxItemSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBox.SelectedIndex < 0) return;
+            if (ComboBox.SelectedIndex < 0)
+                return;
 
             if (!ComboBox.IsFocused && !ComboBox.IsMouseOver)
             {

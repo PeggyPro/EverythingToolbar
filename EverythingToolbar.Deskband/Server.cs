@@ -1,9 +1,9 @@
-﻿using EverythingToolbar.Helpers;
-using EverythingToolbar.Properties;
-using NLog;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Properties;
+using NLog;
 
 namespace EverythingToolbar.Deskband
 {
@@ -12,7 +12,7 @@ namespace EverythingToolbar.Deskband
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IServer
     {
-        void Dummy();  // Dummy method to allow COM registration
+        void Dummy(); // Dummy method to allow COM registration
     }
 
     [ComVisible(true)]
@@ -43,10 +43,14 @@ namespace EverythingToolbar.Deskband
             catch (Exception e)
             {
                 _logger.Error(e, "Unhandled exception");
-                if (MessageBox.Show(e + "\n\n" + Resources.MessageBoxCopyException,
-                    Resources.MessageBoxUnhandledExceptionTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Error) == MessageBoxResult.Yes)
+                if (
+                    MessageBox.Show(
+                        e + "\n\n" + Resources.MessageBoxCopyException,
+                        Resources.MessageBoxUnhandledExceptionTitle,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Error
+                    ) == MessageBoxResult.Yes
+                )
                 {
                     Clipboard.SetText(e.ToString());
                 }

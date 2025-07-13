@@ -1,6 +1,4 @@
-﻿using EverythingToolbar.Helpers;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +9,8 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using EverythingToolbar.Helpers;
+using NLog;
 
 namespace EverythingToolbar.Controls
 {
@@ -87,10 +87,7 @@ namespace EverythingToolbar.Controls
 
         private void OnDownloadClicked(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(LatestReleaseUrl)
-            {
-                UseShellExecute = true
-            });
+            Process.Start(new ProcessStartInfo(LatestReleaseUrl) { UseShellExecute = true });
         }
 
         private void OnSkipUpdateClicked(object sender, RoutedEventArgs e)

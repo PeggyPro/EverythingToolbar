@@ -9,7 +9,7 @@ namespace EverythingToolbar.Data
     {
         Any,
         File,
-        Folder
+        Folder,
     }
 
     [Serializable]

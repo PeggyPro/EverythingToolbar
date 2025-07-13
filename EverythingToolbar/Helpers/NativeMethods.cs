@@ -1,6 +1,6 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -48,7 +48,12 @@ namespace EverythingToolbar.Helpers
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
+        public static extern IntPtr FindWindowEx(
+            IntPtr parentHandle,
+            IntPtr childAfter,
+            string className,
+            string windowTitle
+        );
 
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -67,7 +72,15 @@ namespace EverythingToolbar.Helpers
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+        public static extern bool SetWindowPos(
+            IntPtr hWnd,
+            IntPtr hWndInsertAfter,
+            int X,
+            int Y,
+            int cx,
+            int cy,
+            uint uFlags
+        );
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmFlush();
@@ -86,12 +99,15 @@ namespace EverythingToolbar.Helpers
             [MarshalAs(UnmanagedType.LPStr)] string lpClassName,
             [MarshalAs(UnmanagedType.LPStr)] string lpWindowName,
             uint dwStyle,
-            int x, int y,
-            int nWidth, int nHeight,
+            int x,
+            int y,
+            int nWidth,
+            int nHeight,
             IntPtr hWndParent,
             IntPtr hMenu,
             IntPtr hInstance,
-            IntPtr lpParam);
+            IntPtr lpParam
+        );
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
         public static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);

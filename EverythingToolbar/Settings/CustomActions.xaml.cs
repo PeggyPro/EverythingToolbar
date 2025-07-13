@@ -1,7 +1,4 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Data;
-using EverythingToolbar.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -10,13 +7,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
 using System.Xml.Serialization;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Data;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Settings
 {
     public partial class CustomActions
     {
         private static List<Rule> _actions = new();
-        private static string CustomActionsPath => Path.Combine(Utils.GetConfigDirectory(), "rules.xml");  // TODO: Rename to actions.xml and add compatibility handling
+        private static string CustomActionsPath => Path.Combine(Utils.GetConfigDirectory(), "rules.xml"); // TODO: Rename to actions.xml and add compatibility handling
 
         public CustomActions()
         {
@@ -57,14 +57,19 @@ namespace EverythingToolbar.Settings
         {
             if (newActions.Any(r => string.IsNullOrEmpty(r.Name)))
             {
-                FluentMessageBox.CreateError(Properties.Resources.MessageBoxCustomActionsNameEmpty,
-                                Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(
+                        Properties.Resources.MessageBoxCustomActionsNameEmpty,
+                        Properties.Resources.MessageBoxErrorTitle
+                    )
+                    .ShowDialogAsync();
                 return false;
             }
             if (isAutoApplyCustomActions && newActions.Any(r => !r.ExpressionValid))
             {
-                FluentMessageBox.CreateError(Properties.Resources.MessageBoxRegExInvalid,
-                                Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateError(Properties.Resources.MessageBoxRegExInvalid, Properties.Resources.MessageBoxErrorTitle)
+                    .ShowDialogAsync();
                 return false;
             }
 
@@ -80,7 +85,16 @@ namespace EverythingToolbar.Settings
 
         private void AddItem(object sender, RoutedEventArgs e)
         {
-            _actions.Insert(_actions.Count, new Rule { Name = "", Type = FileType.Any, Expression = "", Command = "" });
+            _actions.Insert(
+                _actions.Count,
+                new Rule
+                {
+                    Name = "",
+                    Type = FileType.Any,
+                    Expression = "",
+                    Command = "",
+                }
+            );
             RefreshList();
             DataGrid.SelectedIndex = _actions.Count - 1;
         }
@@ -137,7 +151,9 @@ namespace EverythingToolbar.Settings
             MoveDownButton.IsEnabled = DataGrid.SelectedIndex + 1 < _actions.Count && DataGrid.SelectedIndex >= 0;
             MoveUpButton.IsEnabled = DataGrid.SelectedIndex > 0;
 
-            var typeColumn = DataGrid.Columns.FirstOrDefault(c => c.Header.ToString() == Properties.Resources.CustomActionsType);
+            var typeColumn = DataGrid.Columns.FirstOrDefault(c =>
+                c.Header.ToString() == Properties.Resources.CustomActionsType
+            );
             if (typeColumn is null)
                 return;
 
@@ -167,8 +183,12 @@ namespace EverythingToolbar.Settings
             {
                 foreach (var r in LoadCustomActions())
                 {
-                    var regexCond = !string.IsNullOrEmpty(r.Expression) && Regex.IsMatch(searchResult.FullPathAndFileName, r.Expression);
-                    var typeCond = searchResult.IsFile && r.Type != FileType.Folder || !searchResult.IsFile && r.Type != FileType.File;
+                    var regexCond =
+                        !string.IsNullOrEmpty(r.Expression)
+                        && Regex.IsMatch(searchResult.FullPathAndFileName, r.Expression);
+                    var typeCond =
+                        searchResult.IsFile && r.Type != FileType.Folder
+                        || !searchResult.IsFile && r.Type != FileType.File;
                     if (regexCond && typeCond)
                     {
                         command = r.Command;
@@ -188,8 +208,12 @@ namespace EverythingToolbar.Settings
                 }
                 catch (Win32Exception)
                 {
-                    FluentMessageBox.CreateError(Properties.Resources.MessageBoxFailedToRunCommand + " " + command,
-                        Properties.Resources.MessageBoxErrorTitle).ShowDialogAsync();
+                    FluentMessageBox
+                        .CreateError(
+                            Properties.Resources.MessageBoxFailedToRunCommand + " " + command,
+                            Properties.Resources.MessageBoxErrorTitle
+                        )
+                        .ShowDialogAsync();
                 }
             }
 

@@ -1,9 +1,4 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Data;
-using EverythingToolbar.Properties;
-using Microsoft.VisualBasic.FileIO;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,6 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Data;
+using EverythingToolbar.Properties;
+using Microsoft.VisualBasic.FileIO;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -78,7 +78,9 @@ namespace EverythingToolbar.Helpers
             {
                 Logger.Info("Filters.csv could not be found at " + ToolbarSettings.User.FiltersPath);
 
-                FluentMessageBox.CreateRegular(Resources.MessageBoxSelectFiltersCsv, Resources.MessageBoxSelectFiltersCsvTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateRegular(Resources.MessageBoxSelectFiltersCsv, Resources.MessageBoxSelectFiltersCsvTitle)
+                    .ShowDialogAsync();
                 using var openFileDialog = new OpenFileDialog();
                 openFileDialog.InitialDirectory = Path.Combine(ToolbarSettings.User.FiltersPath, "..");
                 openFileDialog.Filter = "Filters.csv|Filters.csv|All files (*.*)|*.*";
@@ -111,14 +113,12 @@ namespace EverythingToolbar.Helpers
                     if (header == null || fields == null)
                         continue;
 
-                    var filterDict = header
-                        .Zip(fields, (h, f) => new { h, f })
-                        .ToDictionary(x => x.h, x => x.f);
+                    var filterDict = header.Zip(fields, (h, f) => new { h, f }).ToDictionary(x => x.h, x => x.f);
                     var filter = ParseFilterFromDict(filterDict);
 
                     // Everything's default filters are uppercase and can be localized
-                    filter.Name = filter.Name
-                        .Replace("EVERYTHING", Resources.DefaultFilterAll)
+                    filter.Name = filter
+                        .Name.Replace("EVERYTHING", Resources.DefaultFilterAll)
                         .Replace("FOLDER", Resources.DefaultFilterFolder)
                         .Replace("FILE", Resources.DefaultFilterFile)
                         .Replace("AUDIO", Resources.UserFilterAudio)
@@ -150,7 +150,7 @@ namespace EverythingToolbar.Helpers
                 IsMatchPath = dict["Path"] == "1",
                 IsRegExEnabled = dict["Regex"] == "1",
                 Search = dict["Search"],
-                Macro = dict["Macro"]
+                Macro = dict["Macro"],
             };
         }
 
@@ -175,7 +175,7 @@ namespace EverythingToolbar.Helpers
             {
                 Path = Path.GetDirectoryName(ToolbarSettings.User.FiltersPath)!,
                 Filter = Path.GetFileName(ToolbarSettings.User.FiltersPath),
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite,
             };
 
             _watcher.Changed += OnFileChanged;
@@ -204,4 +204,3 @@ namespace EverythingToolbar.Helpers
         }
     }
 }
-

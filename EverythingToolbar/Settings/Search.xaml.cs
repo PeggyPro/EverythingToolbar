@@ -1,5 +1,5 @@
-﻿using EverythingToolbar.Helpers;
-using System.Windows;
+﻿using System.Windows;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Settings
 {

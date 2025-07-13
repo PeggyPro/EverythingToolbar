@@ -1,9 +1,4 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Data;
-using EverythingToolbar.Helpers;
-using EverythingToolbar.Properties;
-using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,6 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Data;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Properties;
+using NLog;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace EverythingToolbar.Search
@@ -92,16 +92,23 @@ namespace EverythingToolbar.Search
                     "STATIC",
                     null!,
                     0,
-                    0, 0, 0, 0,
+                    0,
+                    0,
+                    0,
+                    0,
                     hwndMessage,
                     IntPtr.Zero,
                     IntPtr.Zero,
-                    IntPtr.Zero);
+                    IntPtr.Zero
+                );
 
                 if (_responseWindowHandle != IntPtr.Zero)
                 {
-                    NativeMethods.SetWindowLongPtr(_responseWindowHandle, gwlpWndproc,
-                        Marshal.GetFunctionPointerForDelegate<NativeMethods.WndProcDelegate>(HandleWindowMessage));
+                    NativeMethods.SetWindowLongPtr(
+                        _responseWindowHandle,
+                        gwlpWndproc,
+                        Marshal.GetFunctionPointerForDelegate<NativeMethods.WndProcDelegate>(HandleWindowMessage)
+                    );
                 }
                 else
                 {
@@ -221,15 +228,17 @@ namespace EverythingToolbar.Search
                 Everything_GetResultFullPathNameW(i, fullPathAndFilename.Clear(), 4096);
                 Everything_GetResultSize(i, out var fileSize);
                 Everything_GetResultDateModified(i, out var dateModified);
-                results.Add(new SearchResult
-                {
-                    HighlightedPath = highlightedPath ?? "<invalid>",
-                    HighlightedFileName = highlightedFileName ?? "<invalid>",
-                    FullPathAndFileName = fullPathAndFilename.ToString(),
-                    IsFile = isFile,
-                    DateModified = dateModified,
-                    FileSize = fileSize
-                });
+                results.Add(
+                    new SearchResult
+                    {
+                        HighlightedPath = highlightedPath ?? "<invalid>",
+                        HighlightedFileName = highlightedFileName ?? "<invalid>",
+                        FullPathAndFileName = fullPathAndFilename.ToString(),
+                        IsFile = isFile,
+                        DateModified = dateModified,
+                        FileSize = fileSize,
+                    }
+                );
             }
             return results;
         }
@@ -240,9 +249,15 @@ namespace EverythingToolbar.Search
             {
                 var search = _searchState.Filter.GetSearchPrefix() + _searchState.SearchTerm;
                 Everything_SetSearchW(search);
-                Everything_SetRequestFlags((uint)(Flags.FullPathAndFileName | Flags.HighlightedPath |
-                                                  Flags.HighlightedFileName | Flags.RequestSize |
-                                                  Flags.RequestDateModified));
+                Everything_SetRequestFlags(
+                    (uint)(
+                        Flags.FullPathAndFileName
+                        | Flags.HighlightedPath
+                        | Flags.HighlightedFileName
+                        | Flags.RequestSize
+                        | Flags.RequestDateModified
+                    )
+                );
                 SetSortType(_searchState.SortBy, _searchState.IsSortDescending);
                 Everything_SetMatchCase(_searchState.IsMatchCase);
                 Everything_SetMatchPath(_searchState.IsMatchPath);
@@ -262,7 +277,10 @@ namespace EverythingToolbar.Search
                     QueryQueue.Enqueue(countQuery);
                     Dispatcher.CurrentDispatcher.BeginInvoke(ProcessNextQuery);
 
-                    countCompletionSource.Task.ContinueWith(_ => IsBusy = false, TaskScheduler.FromCurrentSynchronizationContext());
+                    countCompletionSource.Task.ContinueWith(
+                        _ => IsBusy = false,
+                        TaskScheduler.FromCurrentSynchronizationContext()
+                    );
 
                     return countCompletionSource.Task;
                 }
@@ -299,7 +317,10 @@ namespace EverythingToolbar.Search
                     QueryQueue.Enqueue(rangeQuery);
                     Dispatcher.CurrentDispatcher.BeginInvoke(ProcessNextQuery);
 
-                    rangeCompletionSource.Task.ContinueWith(_ => IsBusy = false, TaskScheduler.FromCurrentSynchronizationContext());
+                    rangeCompletionSource.Task.ContinueWith(
+                        _ => IsBusy = false,
+                        TaskScheduler.FromCurrentSynchronizationContext()
+                    );
 
                     return rangeCompletionSource.Task;
                 }
@@ -346,7 +367,9 @@ namespace EverythingToolbar.Search
                     Logger.Error("Failed to allocate memory for the search query.");
                     break;
                 case ErrorCode.ErrorIpc:
-                    Logger.Error("IPC is not available. Is Everything running? If not, go to www.voidtools.com and download Everything.");
+                    Logger.Error(
+                        "IPC is not available. Is Everything running? If not, go to www.voidtools.com and download Everything."
+                    );
                     break;
                 case ErrorCode.ErrorRegisterClassEx:
                     Logger.Error("Failed to register the search query window class.");
@@ -366,7 +389,11 @@ namespace EverythingToolbar.Search
                 case ErrorCode.Ok:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(lastError), lastError, "Got invalid Everything error code.");
+                    throw new ArgumentOutOfRangeException(
+                        nameof(lastError),
+                        lastError,
+                        "Got invalid Everything error code."
+                    );
             }
         }
 
@@ -376,20 +403,32 @@ namespace EverythingToolbar.Search
 
             Version version = GetEverythingVersion();
 
-            if (version.Major > 1 || version is { Major: 1, Minor: > 4 } || version is { Major: 1, Minor: 4, Build: >= 1 })
+            if (
+                version.Major > 1
+                || version is { Major: 1, Minor: > 4 }
+                || version is { Major: 1, Minor: 4, Build: >= 1 }
+            )
             {
                 Logger.Info("Everything version: {major}.{minor}.{build}", version.Major, version.Minor, version.Build);
                 return true;
             }
 
-            if (version is { Major: 0, Minor: 0, Build: 0 } && (ErrorCode)Everything_GetLastError() == ErrorCode.ErrorIpc)
+            if (
+                version is { Major: 0, Minor: 0, Build: 0 }
+                && (ErrorCode)Everything_GetLastError() == ErrorCode.ErrorIpc
+            )
             {
                 LogLastError();
                 Logger.Error("Failed to get Everything version number.");
             }
             else
             {
-                Logger.Error("Everything version {major}.{minor}.{build} is not supported.", version.Major, version.Minor, version.Build);
+                Logger.Error(
+                    "Everything version {major}.{minor}.{build} is not supported.",
+                    version.Major,
+                    version.Minor,
+                    version.Build
+                );
             }
 
             return false;
@@ -418,7 +457,7 @@ namespace EverythingToolbar.Search
             HighlightedFileName = 0x00002000,
             HighlightedPath = 0x00004000,
             RequestSize = 0x00000010,
-            RequestDateModified = 0x00000040
+            RequestDateModified = 0x00000040,
         }
 
         [Flags]
@@ -431,7 +470,7 @@ namespace EverythingToolbar.Search
             ErrorCreateWindow,
             ErrorCreateThread,
             ErrorInvalidIndex,
-            ErrorInvalidCall
+            ErrorInvalidCall,
         }
 
         public static void IncrementRunCount(string path)
@@ -481,21 +520,36 @@ namespace EverythingToolbar.Search
 
             var searchTerm = searchState.Filter.GetSearchPrefix() + searchState.SearchTerm;
             var args = "";
-            if (!string.IsNullOrEmpty(ToolbarSettings.User.InstanceName)) args += " -instance \"" + ToolbarSettings.User.InstanceName + "\"";
-            if (!string.IsNullOrEmpty(filenameToHighlight)) args += " -select \"" + filenameToHighlight + "\"";
-            if (searchState.SortBy == 0) args += " -sort \"Name\"";
-            else if (searchState.SortBy == 1) args += " -sort \"Path\"";
-            else if (searchState.SortBy == 2) args += " -sort \"Size\"";
-            else if (searchState.SortBy == 3) args += " -sort \"Extension\"";
-            else if (searchState.SortBy == 4) args += " -sort \"Type name\"";
-            else if (searchState.SortBy == 5) args += " -sort \"Date created\"";
-            else if (searchState.SortBy == 6) args += " -sort \"Date modified\"";
-            else if (searchState.SortBy == 7) args += " -sort \"Attributes\"";
-            else if (searchState.SortBy == 8) args += " -sort \"File list filename\"";
-            else if (searchState.SortBy == 9) args += " -sort \"Run count\"";
-            else if (searchState.SortBy == 10) args += " -sort \"Date recently changed\"";
-            else if (searchState.SortBy == 11) args += " -sort \"Date accessed\"";
-            else if (searchState.SortBy == 12) args += " -sort \"Date run\"";
+            if (!string.IsNullOrEmpty(ToolbarSettings.User.InstanceName))
+                args += " -instance \"" + ToolbarSettings.User.InstanceName + "\"";
+            if (!string.IsNullOrEmpty(filenameToHighlight))
+                args += " -select \"" + filenameToHighlight + "\"";
+            if (searchState.SortBy == 0)
+                args += " -sort \"Name\"";
+            else if (searchState.SortBy == 1)
+                args += " -sort \"Path\"";
+            else if (searchState.SortBy == 2)
+                args += " -sort \"Size\"";
+            else if (searchState.SortBy == 3)
+                args += " -sort \"Extension\"";
+            else if (searchState.SortBy == 4)
+                args += " -sort \"Type name\"";
+            else if (searchState.SortBy == 5)
+                args += " -sort \"Date created\"";
+            else if (searchState.SortBy == 6)
+                args += " -sort \"Date modified\"";
+            else if (searchState.SortBy == 7)
+                args += " -sort \"Attributes\"";
+            else if (searchState.SortBy == 8)
+                args += " -sort \"File list filename\"";
+            else if (searchState.SortBy == 9)
+                args += " -sort \"Run count\"";
+            else if (searchState.SortBy == 10)
+                args += " -sort \"Date recently changed\"";
+            else if (searchState.SortBy == 11)
+                args += " -sort \"Date accessed\"";
+            else if (searchState.SortBy == 12)
+                args += " -sort \"Date run\"";
             args += searchState.IsSortDescending ? " -sort-descending" : " -sort-ascending";
             args += searchState.IsMatchCase ? " -case" : " -nocase";
             args += searchState.IsMatchPath ? " -matchpath" : " -nomatchpath";
@@ -508,6 +562,7 @@ namespace EverythingToolbar.Search
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -516,63 +571,94 @@ namespace EverythingToolbar.Search
         private enum QueryType : uint
         {
             Count = 0,
-            Range = 1
+            Range = 1,
         }
 
         [DllImport("Everything64.dll", CharSet = CharSet.Unicode)]
         private static extern uint Everything_SetSearchW(string lpSearchString);
+
         [DllImport("Everything64.dll", CharSet = CharSet.Unicode)]
         private static extern uint Everything_SetInstanceName(string lpInstanceName);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetMatchPath(bool bEnable);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetMatchCase(bool bEnable);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetMatchWholeWord(bool bEnable);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetRegex(bool bEnable);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetMax(uint dwMax);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetOffset(uint dwOffset);
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_QueryW(bool bWait);
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetNumResults();
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetTotResults();
+
         [DllImport("Everything64.dll", CharSet = CharSet.Unicode)]
-        private static extern void Everything_GetResultFullPathNameW(uint nIndex, StringBuilder lpString, uint nMaxCount);
+        private static extern void Everything_GetResultFullPathNameW(
+            uint nIndex,
+            StringBuilder lpString,
+            uint nMaxCount
+        );
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetSort(uint dwSortType);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetRequestFlags(uint dwRequestFlags);
+
         [DllImport("Everything64.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr Everything_GetResultHighlightedFileName(uint nIndex);
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_IncRunCountFromFileName(string lpFileName);
+
         [DllImport("Everything64.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr Everything_GetResultHighlightedPath(uint nIndex);
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_IsFileResult(uint nIndex);
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetLastError();
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetMajorVersion();
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetMinorVersion();
+
         [DllImport("Everything64.dll")]
         private static extern uint Everything_GetRevision();
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_IsFastSort(uint sortType);
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_GetResultSize(UInt32 nIndex, out long lpFileSize);
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_GetResultDateModified(UInt32 nIndex, out FILETIME lpFileTime);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetReplyWindow(IntPtr hwnd);
+
         [DllImport("Everything64.dll")]
         private static extern void Everything_SetReplyID(uint id);
+
         [DllImport("Everything64.dll")]
         private static extern bool Everything_IsQueryReply(uint message, IntPtr wParam, IntPtr lParam, long nId);
     }

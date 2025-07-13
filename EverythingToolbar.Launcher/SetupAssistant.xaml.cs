@@ -1,7 +1,4 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Helpers;
-using NLog;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -11,6 +8,9 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
+using NLog;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace EverythingToolbar.Launcher
@@ -72,7 +72,10 @@ namespace EverythingToolbar.Launcher
 
             if (File.Exists(_taskbarShortcutPath))
             {
-                Dispatcher.Invoke(() => { CurrentStep = 1; });
+                Dispatcher.Invoke(() =>
+                {
+                    CurrentStep = 1;
+                });
             }
             else
             {
@@ -121,18 +124,24 @@ namespace EverythingToolbar.Launcher
                 Path = pinnedIconsDir,
                 Filter = pinnedIconName,
                 NotifyFilter = NotifyFilters.FileName,
-                EnableRaisingEvents = true
+                EnableRaisingEvents = true,
             };
 
             _watcher.Created += (source, e) =>
             {
                 _iconUpdateRequired = true;
-                Dispatcher.Invoke(() => { CurrentStep = 1; });
+                Dispatcher.Invoke(() =>
+                {
+                    CurrentStep = 1;
+                });
             };
             _watcher.Deleted += (source, e) =>
             {
                 _iconUpdateRequired = false;
-                Dispatcher.Invoke(() => { CurrentStep = 0; });
+                Dispatcher.Invoke(() =>
+                {
+                    CurrentStep = 0;
+                });
             };
         }
 
@@ -151,9 +160,12 @@ namespace EverythingToolbar.Launcher
         {
             if (CurrentStep == 0)
             {
-                var result = await FluentMessageBox.CreateYesNo(
-                    Properties.Resources.SetupAssistantDisableWarningText,
-                    Properties.Resources.SetupAssistantDisableWarningTitle).ShowDialogAsync();
+                var result = await FluentMessageBox
+                    .CreateYesNo(
+                        Properties.Resources.SetupAssistantDisableWarningText,
+                        Properties.Resources.SetupAssistantDisableWarningTitle
+                    )
+                    .ShowDialogAsync();
                 var disableSetupAssistant = result == MessageBoxResult.Primary;
                 if (disableSetupAssistant)
                 {

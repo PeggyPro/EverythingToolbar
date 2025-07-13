@@ -1,8 +1,8 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -21,17 +21,22 @@ namespace EverythingToolbar.Helpers
             public int cbSize;
             public uint fMask;
             public IntPtr hwnd;
+
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpVerb;
+
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpFile;
+
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpParameters;
+
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpDirectory;
             public int nShow;
             public IntPtr hInstApp;
             public IntPtr lpIDList;
+
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpClass;
             public IntPtr hkeyClass;
@@ -94,7 +99,8 @@ namespace EverythingToolbar.Helpers
             IntPtr lpEnvironment,
             string lpCurrentDirectory,
             [In] ref STARTUPINFO lpStartupInfo,
-            out PROCESS_INFORMATION lpProcessInformation);
+            out PROCESS_INFORMATION lpProcessInformation
+        );
 
         public static void CreateProcessFromCommandLine(string commandLine, string workingDirectory = null)
         {
@@ -110,7 +116,8 @@ namespace EverythingToolbar.Helpers
                 IntPtr.Zero,
                 workingDirectory,
                 ref si,
-                out var _);
+                out var _
+            );
         }
 
         public static void OpenWithDialog(string path)
@@ -121,10 +128,21 @@ namespace EverythingToolbar.Helpers
         }
 
         [DllImport("shell32.dll", SetLastError = true)]
-        private static extern int SHOpenFolderAndSelectItems(IntPtr pidlFolder, uint cidl, [In, MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl, uint dwFlags);
+        private static extern int SHOpenFolderAndSelectItems(
+            IntPtr pidlFolder,
+            uint cidl,
+            [In, MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl,
+            uint dwFlags
+        );
 
         [DllImport("shell32.dll", SetLastError = true)]
-        private static extern void SHParseDisplayName([MarshalAs(UnmanagedType.LPWStr)] string name, IntPtr bindingContext, [Out] out IntPtr pidl, uint sfgaoIn, [Out] out uint psfgaoOut);
+        private static extern void SHParseDisplayName(
+            [MarshalAs(UnmanagedType.LPWStr)] string name,
+            IntPtr bindingContext,
+            [Out] out IntPtr pidl,
+            uint sfgaoIn,
+            [Out] out uint psfgaoOut
+        );
 
         public static void OpenParentFolderAndSelect(string path)
         {
@@ -143,7 +161,8 @@ namespace EverythingToolbar.Helpers
             SHOpenFolderAndSelectItems(nativeFolder, (uint)fileArray.Length, fileArray, 0);
 
             Marshal.FreeCoTaskMem(nativeFolder);
-            if (nativeFile != IntPtr.Zero) Marshal.FreeCoTaskMem(nativeFile);
+            if (nativeFile != IntPtr.Zero)
+                Marshal.FreeCoTaskMem(nativeFile);
         }
     }
 }

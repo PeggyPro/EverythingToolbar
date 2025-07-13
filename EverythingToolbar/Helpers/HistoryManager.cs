@@ -1,20 +1,22 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
     public class HistoryManager
     {
         private static readonly ILogger _logger = ToolbarLogger.GetLogger<HistoryManager>();
-        private static readonly string HISTORY_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                                                                   "EverythingToolbar",
-                                                                   "history.xml");
+        private static readonly string HISTORY_PATH = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "EverythingToolbar",
+            "history.xml"
+        );
         private static readonly int MAX_HISTORY_SIZE = 50;
         private readonly List<string> history = new List<string>(MAX_HISTORY_SIZE);
         private int currentIndex;

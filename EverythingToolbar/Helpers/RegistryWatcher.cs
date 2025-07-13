@@ -1,8 +1,8 @@
-﻿using Microsoft.Win32;
-using NLog;
-using System;
+﻿using System;
 using System.Management;
 using System.Security.Principal;
+using Microsoft.Win32;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -84,10 +84,11 @@ namespace EverythingToolbar.Helpers
                 target.keyPath = WindowsIdentity.GetCurrent().User.Value + @"\" + target.keyPath;
             }
 
-            var qu = "SELECT * FROM RegistryValueChangeEvent WHERE " +
-                     $"Hive='{target.hive}' " +
-                     $"AND KeyPath='{EscapeBackticks(target.keyPath)}' " +
-                     $"AND ValueName='{target.valueName}'";
+            var qu =
+                "SELECT * FROM RegistryValueChangeEvent WHERE "
+                + $"Hive='{target.hive}' "
+                + $"AND KeyPath='{EscapeBackticks(target.keyPath)}' "
+                + $"AND ValueName='{target.valueName}'";
 
             var query = new WqlEventQuery(qu);
             return new ManagementEventWatcher(query);

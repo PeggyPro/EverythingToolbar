@@ -1,11 +1,11 @@
-﻿using EverythingToolbar.Helpers;
-using EverythingToolbar.Search;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Search;
 
 namespace EverythingToolbar.Controls
 {
@@ -15,7 +15,12 @@ namespace EverythingToolbar.Controls
             nameof(SearchTerm),
             typeof(string),
             typeof(SearchBox),
-            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSearchTermPropertyChanged));
+            new FrameworkPropertyMetadata(
+                string.Empty,
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                OnSearchTermPropertyChanged
+            )
+        );
 
         public string SearchTerm
         {
@@ -44,7 +49,10 @@ namespace EverythingToolbar.Controls
             InputMethod.SetPreferredImeState(this, InputMethodState.DoNotCare);
 
             ToolbarSettings.User.PropertyChanged += OnSettingsChanged;
-            EventDispatcher.Instance.SearchTermReplaced += (s, searchTerm) => { UpdateSearchTerm(searchTerm); };
+            EventDispatcher.Instance.SearchTermReplaced += (s, searchTerm) =>
+            {
+                UpdateSearchTerm(searchTerm);
+            };
             EventDispatcher.Instance.SearchBoxFocusRequested += OnFocusRequested;
         }
 
@@ -78,21 +86,36 @@ namespace EverythingToolbar.Controls
                 UpdateSearchTerm(HistoryManager.Instance.GetNextItem());
                 e.Handled = true;
             }
-            else if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Enter && !ToolbarSettings.User.IsSearchAsYouType)
+            else if (
+                Keyboard.Modifiers == ModifierKeys.None
+                && e.Key == Key.Enter
+                && !ToolbarSettings.User.IsSearchAsYouType
+            )
             {
                 SearchTerm = TextBox.Text;
                 e.Handled = true;
             }
-            else if ((e.Key == Key.Home || e.Key == Key.End) && Keyboard.Modifiers != ModifierKeys.Shift && ToolbarSettings.User.IsAutoSelectFirstResult ||
-                e.Key == Key.PageDown || e.Key == Key.PageUp ||
-                e.Key == Key.Up || e.Key == Key.Down ||
-                e.Key == Key.Escape || e.Key == Key.Enter ||
-                (((e.Key >= Key.D0 && e.Key <= Key.D9) ||
-                  e.Key == Key.I ||
-                  e.Key == Key.B ||
-                  e.Key == Key.U ||
-                  e.Key == Key.R
-                 ) && Keyboard.Modifiers == ModifierKeys.Control))
+            else if (
+                (e.Key == Key.Home || e.Key == Key.End)
+                    && Keyboard.Modifiers != ModifierKeys.Shift
+                    && ToolbarSettings.User.IsAutoSelectFirstResult
+                || e.Key == Key.PageDown
+                || e.Key == Key.PageUp
+                || e.Key == Key.Up
+                || e.Key == Key.Down
+                || e.Key == Key.Escape
+                || e.Key == Key.Enter
+                || (
+                    (
+                        (e.Key >= Key.D0 && e.Key <= Key.D9)
+                        || e.Key == Key.I
+                        || e.Key == Key.B
+                        || e.Key == Key.U
+                        || e.Key == Key.R
+                    )
+                    && Keyboard.Modifiers == ModifierKeys.Control
+                )
+            )
             {
                 EventDispatcher.Instance.InvokeGlobalKeyEvent(this, e);
                 e.Handled = true;
@@ -166,7 +189,7 @@ namespace EverythingToolbar.Controls
 
         private void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if (e.NewFocus == null)  // New focus outside application
+            if (e.NewFocus == null) // New focus outside application
             {
                 SearchWindow.Instance.Hide();
             }
@@ -181,8 +204,19 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private void OnPasteClicked(object sender, RoutedEventArgs args) { TextBox.Paste(); }
-        private void OnCopyClicked(object sender, RoutedEventArgs args) { TextBox.Copy(); }
-        private void OnCutClicked(object sender, RoutedEventArgs args) { TextBox.Cut(); }
+        private void OnPasteClicked(object sender, RoutedEventArgs args)
+        {
+            TextBox.Paste();
+        }
+
+        private void OnCopyClicked(object sender, RoutedEventArgs args)
+        {
+            TextBox.Copy();
+        }
+
+        private void OnCutClicked(object sender, RoutedEventArgs args)
+        {
+            TextBox.Cut();
+        }
     }
 }

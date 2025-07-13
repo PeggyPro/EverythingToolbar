@@ -1,11 +1,11 @@
-﻿using EverythingToolbar.Controls;
-using EverythingToolbar.Helpers;
-using EverythingToolbar.Search;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using EverythingToolbar.Controls;
+using EverythingToolbar.Helpers;
+using EverythingToolbar.Search;
 
 namespace EverythingToolbar.Settings
 {
@@ -23,13 +23,21 @@ namespace EverythingToolbar.Settings
         public bool CheckingForUpdatesVisible
         {
             get => _checkingForUpdatesVisible;
-            set { _checkingForUpdatesVisible = value; OnPropertyChanged(); }
+            set
+            {
+                _checkingForUpdatesVisible = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool DownloadUpdateButtonVisible
         {
             get => _downloadUpdateButtonVisible;
-            set { _downloadUpdateButtonVisible = value; OnPropertyChanged(); }
+            set
+            {
+                _downloadUpdateButtonVisible = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool NoUpdatesBannerOpen
@@ -105,11 +113,7 @@ namespace EverythingToolbar.Settings
         {
             if (!string.IsNullOrEmpty(_latestVersionUrl))
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _latestVersionUrl,
-                    UseShellExecute = true
-                });
+                Process.Start(new ProcessStartInfo { FileName = _latestVersionUrl, UseShellExecute = true });
             }
         }
 

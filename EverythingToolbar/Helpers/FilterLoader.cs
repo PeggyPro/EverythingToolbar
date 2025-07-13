@@ -1,7 +1,7 @@
-﻿using EverythingToolbar.Data;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using EverythingToolbar.Data;
 
 namespace EverythingToolbar.Helpers
 {
@@ -21,7 +21,7 @@ namespace EverythingToolbar.Helpers
             }
         }
 
-        public static readonly FilterLoader Instance = new ();
+        public static readonly FilterLoader Instance = new();
 
         private FilterLoader()
         {

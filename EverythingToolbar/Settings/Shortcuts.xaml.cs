@@ -1,12 +1,12 @@
-﻿using EverythingToolbar.Helpers;
-using NHotkey.Wpf;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using EverythingToolbar.Helpers;
+using NHotkey.Wpf;
 
 namespace EverythingToolbar.Settings
 {
@@ -95,12 +95,14 @@ namespace EverythingToolbar.Settings
                     WinKeyEventHandler?.Invoke(null, new WinKeyEventArgs(isDown, Key.LWin));
                     break;
                 default:
-                    WinKeyEventHandler?.Invoke(null, new WinKeyEventArgs(isDown, KeyInterop.KeyFromVirtualKey((int)vkCode)));
+                    WinKeyEventHandler?.Invoke(
+                        null,
+                        new WinKeyEventArgs(isDown, KeyInterop.KeyFromVirtualKey((int)vkCode))
+                    );
                     break;
             }
 
             return 1;
-
         }
 
         private static void CaptureKeyboard(EventHandler<WinKeyEventArgs> callback)
@@ -208,7 +210,12 @@ namespace EverythingToolbar.Settings
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+        private static extern IntPtr SetWindowsHookEx(
+            int idHook,
+            LowLevelKeyboardProc lpfn,
+            IntPtr hMod,
+            uint dwThreadId
+        );
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]

@@ -23,11 +23,7 @@ namespace EverythingToolbar.Deskband.Converters
         private void SetTaskbarAutoHideState()
         {
             const uint ABS_AUTOHIDE = 0x0000001;
-            var autoHideData = new APPBARDATA
-            {
-                hWnd = IntPtr.Zero,
-                cbSize = Marshal.SizeOf<APPBARDATA>()
-            };
+            var autoHideData = new APPBARDATA { hWnd = IntPtr.Zero, cbSize = Marshal.SizeOf<APPBARDATA>() };
             var autoHideState = Shell32.SHAppBarMessage(APPBARMESSAGE.ABM_GETSTATE, ref autoHideData);
             if (autoHideState != IntPtr.Zero)
             {

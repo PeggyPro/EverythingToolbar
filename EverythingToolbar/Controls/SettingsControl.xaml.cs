@@ -1,9 +1,9 @@
-﻿using EverythingToolbar.Search;
-using EverythingToolbar.Settings;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using EverythingToolbar.Search;
+using EverythingToolbar.Settings;
 
 namespace EverythingToolbar.Controls
 {
@@ -31,15 +31,21 @@ namespace EverythingToolbar.Controls
             int selectedIndex = SortByMenu.Items.IndexOf(selectedItem);
 
             int[] fastSortExceptions = [4, 8];
-            if (SearchResultProvider.GetIsFastSort(selectedIndex, ToolbarSettings.User.IsSortDescending) ||
-                fastSortExceptions.Contains(selectedIndex))
+            if (
+                SearchResultProvider.GetIsFastSort(selectedIndex, ToolbarSettings.User.IsSortDescending)
+                || fastSortExceptions.Contains(selectedIndex)
+            )
             {
                 ToolbarSettings.User.SortBy = selectedIndex;
             }
             else
             {
-                FluentMessageBox.CreateRegular(Properties.Resources.MessageBoxFastSortUnavailable,
-                    Properties.Resources.MessageBoxFastSortUnavailableTitle).ShowDialogAsync();
+                FluentMessageBox
+                    .CreateRegular(
+                        Properties.Resources.MessageBoxFastSortUnavailable,
+                        Properties.Resources.MessageBoxFastSortUnavailableTitle
+                    )
+                    .ShowDialogAsync();
             }
 
             SelectSortType();

@@ -1,7 +1,7 @@
-﻿using Microsoft.Win32;
-using NLog;
-using System;
+﻿using System;
 using System.IO;
+using Microsoft.Win32;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -11,8 +11,10 @@ namespace EverythingToolbar.Helpers
 
         public static string GetConfigDirectory()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "EverythingToolbar");
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "EverythingToolbar"
+            );
         }
 
         public static bool GetWindowsSearchEnabledState()
@@ -26,7 +28,12 @@ namespace EverythingToolbar.Helpers
 
         public static void SetWindowsSearchEnabledState(bool enabled)
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search", RegistryKeyPermissionCheck.ReadWriteSubTree))
+            using (
+                var key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Search",
+                    RegistryKeyPermissionCheck.ReadWriteSubTree
+                )
+            )
             {
                 try
                 {

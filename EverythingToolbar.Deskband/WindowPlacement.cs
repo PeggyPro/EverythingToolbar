@@ -1,11 +1,11 @@
-﻿using EverythingToolbar.Helpers;
-using Microsoft.Xaml.Behaviors;
-using NLog;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using EverythingToolbar.Helpers;
+using Microsoft.Xaml.Behaviors;
+using NLog;
 using Point = System.Drawing.Point;
 
 namespace EverythingToolbar.Deskband
@@ -76,20 +76,44 @@ namespace EverythingToolbar.Deskband
                     var topDockPos = Math.Max(workingArea.Top, screenBounds.Top + (int)taskbarSize.Height);
                     var bottomDockPos = Math.Min(workingArea.Bottom, screenBounds.Bottom - (int)taskbarSize.Height);
 
-                    windowPosition.Right = Math.Min(placementTarget.Left + (int)windowSize.Width, workingArea.Right - margin);
-                    windowPosition.Left = Math.Max(workingArea.Left + margin, windowPosition.Right - (int)windowSize.Width);
-                    windowPosition.Top = Math.Max(topDockPos + margin, placementTarget.Top - margin - (int)windowSize.Height);
-                    windowPosition.Bottom = Math.Min(bottomDockPos - margin, placementTarget.Bottom + margin + (int)windowSize.Height);
+                    windowPosition.Right = Math.Min(
+                        placementTarget.Left + (int)windowSize.Width,
+                        workingArea.Right - margin
+                    );
+                    windowPosition.Left = Math.Max(
+                        workingArea.Left + margin,
+                        windowPosition.Right - (int)windowSize.Width
+                    );
+                    windowPosition.Top = Math.Max(
+                        topDockPos + margin,
+                        placementTarget.Top - margin - (int)windowSize.Height
+                    );
+                    windowPosition.Bottom = Math.Min(
+                        bottomDockPos - margin,
+                        placementTarget.Bottom + margin + (int)windowSize.Height
+                    );
                     break;
                 case Helpers.Edge.Left:
                 case Helpers.Edge.Right:
                     var leftDockPos = Math.Max(workingArea.Left, screenBounds.Left + (int)taskbarSize.Width);
                     var rightDockPos = Math.Min(workingArea.Right, screenBounds.Right - (int)taskbarSize.Width);
 
-                    windowPosition.Bottom = Math.Min(placementTarget.Top + (int)windowSize.Height, workingArea.Bottom - margin);
-                    windowPosition.Top = Math.Max(workingArea.Top + margin, windowPosition.Bottom - (int)windowSize.Height);
-                    windowPosition.Left = Math.Max(leftDockPos + margin, placementTarget.Left - margin - (int)windowSize.Width);
-                    windowPosition.Right = Math.Min(rightDockPos - margin, placementTarget.Right + margin + (int)windowSize.Width);
+                    windowPosition.Bottom = Math.Min(
+                        placementTarget.Top + (int)windowSize.Height,
+                        workingArea.Bottom - margin
+                    );
+                    windowPosition.Top = Math.Max(
+                        workingArea.Top + margin,
+                        windowPosition.Bottom - (int)windowSize.Height
+                    );
+                    windowPosition.Left = Math.Max(
+                        leftDockPos + margin,
+                        placementTarget.Left - margin - (int)windowSize.Width
+                    );
+                    windowPosition.Right = Math.Min(
+                        rightDockPos - margin,
+                        placementTarget.Right + margin + (int)windowSize.Width
+                    );
                     break;
             }
             return windowPosition;

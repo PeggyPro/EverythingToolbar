@@ -97,13 +97,20 @@ namespace EverythingToolbar.Search
 
             if (IsAsync)
             {
-                ItemsProvider.FetchCount(PageSize, isAsync: true).ContinueWith(task =>
-                {
-                    if (currentProviderVersion != _providerVersion || task.IsCanceled)
-                        return;
+                ItemsProvider
+                    .FetchCount(PageSize, isAsync: true)
+                    .ContinueWith(
+                        task =>
+                        {
+                            if (currentProviderVersion != _providerVersion || task.IsCanceled)
+                                return;
 
-                    Count = task.Result;
-                }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+                            Count = task.Result;
+                        },
+                        CancellationToken.None,
+                        TaskContinuationOptions.None,
+                        TaskScheduler.FromCurrentSynchronizationContext()
+                    );
             }
             else
             {
@@ -122,39 +129,55 @@ namespace EverythingToolbar.Search
         {
             var currentProviderVersion = _providerVersion;
 
-            ItemsProvider.FetchRange(index * PageSize, PageSize, isAsync: true).ContinueWith(task =>
-            {
-                if (task.IsCanceled)
-                {
-                    _pages.Remove(index);  // Page needs to be loaded again in the future
-                    return;
-                }
-
-                if (currentProviderVersion != _providerVersion)
-                    return;
-
-                List<T>? newItems = task.Result as List<T>;
-                _pages[index] = newItems;
-
-                try
-                {
-                    for (int i = 0; i < newItems?.Count; i++)
+            ItemsProvider
+                .FetchRange(index * PageSize, PageSize, isAsync: true)
+                .ContinueWith(
+                    task =>
                     {
-                        var itemIndex = index * PageSize + i;
-
-                        if (_displayedItems.TryGetValue(itemIndex, out var oldItem))
+                        if (task.IsCanceled)
                         {
-                            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItems[i], oldItem, itemIndex));
+                            _pages.Remove(index); // Page needs to be loaded again in the future
+                            return;
                         }
-                    }
-                }
-                catch (Exception)
-                {
-                    // For various internal reasons, the collection changed event can throw exceptions.
-                    // Whenever this happens, we reset the collection to recover from the error.
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                }
-            }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
+
+                        if (currentProviderVersion != _providerVersion)
+                            return;
+
+                        List<T>? newItems = task.Result as List<T>;
+                        _pages[index] = newItems;
+
+                        try
+                        {
+                            for (int i = 0; i < newItems?.Count; i++)
+                            {
+                                var itemIndex = index * PageSize + i;
+
+                                if (_displayedItems.TryGetValue(itemIndex, out var oldItem))
+                                {
+                                    OnCollectionChanged(
+                                        new NotifyCollectionChangedEventArgs(
+                                            NotifyCollectionChangedAction.Replace,
+                                            newItems[i],
+                                            oldItem,
+                                            itemIndex
+                                        )
+                                    );
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // For various internal reasons, the collection changed event can throw exceptions.
+                            // Whenever this happens, we reset the collection to recover from the error.
+                            OnCollectionChanged(
+                                new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)
+                            );
+                        }
+                    },
+                    CancellationToken.None,
+                    TaskContinuationOptions.None,
+                    TaskScheduler.FromCurrentSynchronizationContext()
+                );
         }
 
         public T this[int index]
@@ -192,7 +215,7 @@ namespace EverythingToolbar.Search
 
             if (IsAsync)
             {
-                _pages[pageIndex] = null;  // Mark page as loading
+                _pages[pageIndex] = null; // Mark page as loading
 
                 LoadPageAsync(pageIndex);
 

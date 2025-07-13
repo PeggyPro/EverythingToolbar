@@ -1,13 +1,13 @@
-﻿using EverythingToolbar.Helpers;
-using Microsoft.Xaml.Behaviors;
-using NLog;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using EverythingToolbar.Helpers;
+using Microsoft.Xaml.Behaviors;
+using NLog;
 using Size = System.Windows.Size;
 
 namespace EverythingToolbar.Launcher
@@ -56,28 +56,46 @@ namespace EverythingToolbar.Launcher
             if (taskbar.Edge == Edge.Top)
             {
                 windowPosition.Top = taskbar.Position.Bottom + margin;
-                windowPosition.Bottom = Math.Min(windowPosition.Top + (int)windowSize.Height, screen.WorkingArea.Bottom - margin);
+                windowPosition.Bottom = Math.Min(
+                    windowPosition.Top + (int)windowSize.Height,
+                    screen.WorkingArea.Bottom - margin
+                );
                 windowPosition = SetHorizontalPosition(windowPosition, screen.WorkingArea, windowSize, margin);
             }
             else if (taskbar.Edge == Edge.Bottom)
             {
                 windowPosition.Bottom = taskbar.Position.Y - margin;
-                windowPosition.Top = Math.Max(screen.WorkingArea.Top + margin, windowPosition.Bottom - (int)windowSize.Height);
+                windowPosition.Top = Math.Max(
+                    screen.WorkingArea.Top + margin,
+                    windowPosition.Bottom - (int)windowSize.Height
+                );
                 windowPosition = SetHorizontalPosition(windowPosition, screen.WorkingArea, windowSize, margin);
             }
             else if (taskbar.Edge == Edge.Left)
             {
                 windowPosition.Left = taskbar.Position.Right + margin;
-                windowPosition.Right = Math.Min(windowPosition.Left + (int)windowSize.Width, screen.WorkingArea.Right - margin);
+                windowPosition.Right = Math.Min(
+                    windowPosition.Left + (int)windowSize.Width,
+                    screen.WorkingArea.Right - margin
+                );
                 windowPosition.Top = margin;
-                windowPosition.Bottom = Math.Min(windowPosition.Top + (int)windowSize.Height, screen.WorkingArea.Bottom - margin);
+                windowPosition.Bottom = Math.Min(
+                    windowPosition.Top + (int)windowSize.Height,
+                    screen.WorkingArea.Bottom - margin
+                );
             }
             else if (taskbar.Edge == Edge.Right)
             {
                 windowPosition.Right = taskbar.Position.Left - margin;
-                windowPosition.Left = Math.Max(windowPosition.Right - (int)windowSize.Width, screen.WorkingArea.Left + margin);
+                windowPosition.Left = Math.Max(
+                    windowPosition.Right - (int)windowSize.Width,
+                    screen.WorkingArea.Left + margin
+                );
                 windowPosition.Top = margin;
-                windowPosition.Bottom = Math.Min(windowPosition.Top + (int)windowSize.Height, screen.WorkingArea.Bottom - margin);
+                windowPosition.Bottom = Math.Min(
+                    windowPosition.Top + (int)windowSize.Height,
+                    screen.WorkingArea.Bottom - margin
+                );
             }
 
             TaskbarStateManager.Instance.TaskbarEdge = taskbar.Edge;
@@ -93,7 +111,12 @@ namespace EverythingToolbar.Launcher
             return windowSize;
         }
 
-        private RECT SetHorizontalPosition(RECT windowPosition, Rectangle screenWorkingArea, Size windowSize, int margin)
+        private RECT SetHorizontalPosition(
+            RECT windowPosition,
+            Rectangle screenWorkingArea,
+            Size windowSize,
+            int margin
+        )
         {
             if (Utils.IsTaskbarCenterAligned())
             {
@@ -107,12 +130,18 @@ namespace EverythingToolbar.Launcher
                 if (CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
                 {
                     windowPosition.Right = screenWorkingArea.Right - margin;
-                    windowPosition.Left = Math.Max(windowPosition.Right - (int)windowSize.Width, screenWorkingArea.Left + margin);
+                    windowPosition.Left = Math.Max(
+                        windowPosition.Right - (int)windowSize.Width,
+                        screenWorkingArea.Left + margin
+                    );
                 }
                 else
                 {
                     windowPosition.Left = screenWorkingArea.Left + margin;
-                    windowPosition.Right = Math.Min(windowPosition.Left + (int)windowSize.Width, screenWorkingArea.Right - margin);
+                    windowPosition.Right = Math.Min(
+                        windowPosition.Left + (int)windowSize.Width,
+                        screenWorkingArea.Right - margin
+                    );
                 }
             }
 
@@ -130,32 +159,51 @@ namespace EverythingToolbar.Launcher
             {
                 return new TaskbarLocation
                 {
-                    Position = new Rectangle(screen.Bounds.Left, screen.Bounds.Top, leftDockedWidth, screen.Bounds.Height),
-                    Edge = Edge.Left
+                    Position = new Rectangle(
+                        screen.Bounds.Left,
+                        screen.Bounds.Top,
+                        leftDockedWidth,
+                        screen.Bounds.Height
+                    ),
+                    Edge = Edge.Left,
                 };
             }
             if (rightDockedWidth > 0 && bottomDockedHeight == 0)
             {
                 return new TaskbarLocation
                 {
-                    Position = new Rectangle(screen.WorkingArea.Right, screen.Bounds.Top, rightDockedWidth, screen.Bounds.Height),
-                    Edge = Edge.Right
+                    Position = new Rectangle(
+                        screen.WorkingArea.Right,
+                        screen.Bounds.Top,
+                        rightDockedWidth,
+                        screen.Bounds.Height
+                    ),
+                    Edge = Edge.Right,
                 };
-
             }
             if (topDockedHeight > 0 && bottomDockedHeight == 0)
             {
                 return new TaskbarLocation
                 {
-                    Position = new Rectangle(screen.WorkingArea.Left, screen.Bounds.Top, screen.WorkingArea.Width, topDockedHeight),
-                    Edge = Edge.Top
+                    Position = new Rectangle(
+                        screen.WorkingArea.Left,
+                        screen.Bounds.Top,
+                        screen.WorkingArea.Width,
+                        topDockedHeight
+                    ),
+                    Edge = Edge.Top,
                 };
             }
 
             return new TaskbarLocation
             {
-                Position = new Rectangle(screen.WorkingArea.Left, screen.WorkingArea.Bottom, screen.WorkingArea.Width, bottomDockedHeight),
-                Edge = Edge.Bottom
+                Position = new Rectangle(
+                    screen.WorkingArea.Left,
+                    screen.WorkingArea.Bottom,
+                    screen.WorkingArea.Width,
+                    bottomDockedHeight
+                ),
+                Edge = Edge.Bottom,
             };
         }
 

@@ -15,10 +15,7 @@ namespace EverythingToolbar.Converters
             if (value is not string input)
                 return null;
 
-            TextBlock textBlock = new()
-            {
-                TextTrimming = TextTrimming.CharacterEllipsis
-            };
+            TextBlock textBlock = new() { TextTrimming = TextTrimming.CharacterEllipsis };
 
             if (parameter is string paramStr && double.TryParse(paramStr, out double fontSizePt))
             {

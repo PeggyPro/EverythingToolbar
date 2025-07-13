@@ -1,11 +1,11 @@
-﻿using NLog;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using NLog;
 
 namespace EverythingToolbar.Helpers
 {
@@ -57,14 +57,24 @@ namespace EverythingToolbar.Helpers
             UnhookWinEvent(_focusedWindowChangedHookId);
         }
 
-        private void OnFocusedWindowChanged(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        private void OnFocusedWindowChanged(
+            IntPtr hWinEventHook,
+            uint eventType,
+            IntPtr hwnd,
+            int idObject,
+            int idChild,
+            uint dwEventThread,
+            uint dwmsEventTime
+        )
         {
             GetForegroundWindowAndProcess(out var foregroundHwnd, out var foregroundProcessName);
             Logger.Debug($"Foreground process: {foregroundProcessName}");
 
-            if (foregroundProcessName.EndsWith("SearchApp.exe") ||
-                foregroundProcessName.EndsWith("SearchUI.exe") ||
-                foregroundProcessName.EndsWith("SearchHost.exe"))
+            if (
+                foregroundProcessName.EndsWith("SearchApp.exe")
+                || foregroundProcessName.EndsWith("SearchUI.exe")
+                || foregroundProcessName.EndsWith("SearchHost.exe")
+            )
             {
                 _searchAppHwnd = foregroundHwnd;
                 HookStartMenuInput();
@@ -125,18 +135,20 @@ namespace EverythingToolbar.Helpers
 
                 // Queue keypress for replay in EverythingToolbar
                 _isInterceptingKeys = true;
-                RecordedInputs.Enqueue(new INPUT
-                {
-                    type = InputKeyboard,
-                    u = new InputUnion
+                RecordedInputs.Enqueue(
+                    new INPUT
                     {
-                        ki = new KEYBDINPUT
+                        type = InputKeyboard,
+                        u = new InputUnion
                         {
-                            wVk = (ushort)virtualKeyCode,
-                            dwFlags = isKeyDown ? 0 : KeyeventFKeyup
-                        }
+                            ki = new KEYBDINPUT
+                            {
+                                wVk = (ushort)virtualKeyCode,
+                                dwFlags = isKeyDown ? 0 : KeyeventFKeyup,
+                            },
+                        },
                     }
-                });
+                );
 
                 CloseStartMenu();
 
@@ -209,7 +221,15 @@ namespace EverythingToolbar.Helpers
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+        private delegate void WinEventDelegate(
+            IntPtr hWinEventHook,
+            uint eventType,
+            IntPtr hwnd,
+            int idObject,
+            int idChild,
+            uint dwEventThread,
+            uint dwmsEventTime
+        );
 
         [DllImport("kernel32.dll")]
         static extern IntPtr OpenProcess(uint dwDesiredAccess, bool bInheritHandle, uint dwProcessId);
@@ -234,7 +254,15 @@ namespace EverythingToolbar.Helpers
         static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport("user32.dll")]
-        static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+        static extern IntPtr SetWinEventHook(
+            uint eventMin,
+            uint eventMax,
+            IntPtr hmodWinEventProc,
+            WinEventDelegate lpfnWinEventProc,
+            uint idProcess,
+            uint idThread,
+            uint dwFlags
+        );
 
         [DllImport("user32.dll")]
         static extern bool UnhookWinEvent(IntPtr hWinEventHook);
