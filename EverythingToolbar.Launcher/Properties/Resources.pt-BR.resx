@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonClose" xml:space="preserve">
-    <value>Fechar</value>
-  </data>
-  <data name="CheckboxEnable" xml:space="preserve">
-    <value>Habilitar</value>
-  </data>
-  <data name="CheckboxHide" xml:space="preserve">
-    <value>Ocultar</value>
-  </data>
   <data name="ContextMenuQuit" xml:space="preserve">
     <value>Sair</value>
   </data>
@@ -135,41 +126,14 @@
   <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Para fixar o EverythingToolbar na barra de tarefas, clique com o botão direito no ícone do programa e selecione 'Fixar na barra de tarefas'.</value>
   </data>
-  <data name="SetupAssistantSecondStepTitle" xml:space="preserve">
-    <value>2. Fixar na barra de tarefas</value>
-  </data>
   <data name="SetupAssistantRestartExplorerDialogText" xml:space="preserve">
     <value>É necessário reiniciar o Explorer para atualizar o ícone da barra de tarefas. Deseja reiniciá-lo agora?</value>
   </data>
   <data name="SetupAssistantRestartExplorerDialogTitle" xml:space="preserve">
     <value>Reiniciar Explorer</value>
   </data>
-  <data name="SetupAssistantThirdStepText" xml:space="preserve">
-    <value>Opcionalmente, o ícone de pesquisa original do Windows pode ser ocultado.</value>
-  </data>
-  <data name="SetupAssistantThirdStepTitle" xml:space="preserve">
-    <value>3. Ocultar a pesquisa do Windows</value>
-  </data>
-  <data name="SetupAssistantFourthStepText" xml:space="preserve">
-    <value>É recomendado iniciar o EverythingToolbar automaticamente ao iniciar o sistema.</value>
-  </data>
-  <data name="SetupAssistantFourthStepTitle" xml:space="preserve">
-    <value>4. Configurar inicialização automática</value>
-  </data>
   <data name="SetupAssistantTitle" xml:space="preserve">
     <value>Assistente de Configuração do EverythingToolbar</value>
-  </data>
-  <data name="SetupAssistantFirstStepText" xml:space="preserve">
-    <value>Selecione um dos seguintes ícones da barra de tarefas:</value>
-  </data>
-  <data name="SetupAssistantFirstStepTitle" xml:space="preserve">
-    <value>1. Ícone da barra de tarefas</value>
-  </data>
-  <data name="SetupAssistantFifthStepText" xml:space="preserve">
-    <value>Ao ativar o ícone da bandeja do sistema, você pode encerrar o processo em segundo plano do EverythingToolbar a qualquer momento. Sem ele, o EverythingToolbar sempre pode ser encerrado através do gerenciador de tarefas.</value>
-  </data>
-  <data name="SetupAssistantFifthStepTitle" xml:space="preserve">
-    <value>5. Configurar ícone da bandeja do sistema</value>
   </data>
   <data name="SetupAssistantDisableWarningText" xml:space="preserve">
     <value>Tem certeza de que deseja sair do assistente de configuração? O EverythingToolbar só será acessível usando o atalho de teclado. Você pode acessar o assistente de configuração novamente através do ícone da bandeja do sistema para fixar o ícone de pesquisa na barra de tarefas.</value>

@@ -48,7 +48,6 @@
     <SolidColorBrush x:Key="TabBarButtonBackground" Color="Transparent" />
     <SolidColorBrush x:Key="TabBarButtonBackgroundHover" Color="#0effffff" />
     <SolidColorBrush x:Key="TabBarButtonBackgroundActive" Color="#12ffffff" />
-    <SolidColorBrush x:Key="TabBarBorder" Color="Transparent" />
     
     <SolidColorBrush x:Key="SearchResultBackgroundHover" Color="#0effffff" />
     <SolidColorBrush x:Key="SearchResultBackgroundActive" Color="#12ffffff" />

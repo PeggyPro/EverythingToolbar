@@ -30,9 +30,9 @@
     <SolidColorBrush x:Key="QuickSettingsToggleButtonBorderHover" Color="Transparent" />
     <SolidColorBrush x:Key="QuickSettingsToggleButtonBorderActive" Color="Transparent" />
 
-    <SolidColorBrush x:Key="SearchResultsViewBackground" Color="#f5f5f5" />
-    <SolidColorBrush x:Key="SearchResultsViewBorder" Color="#7f5f5f5f" />
-    <SolidColorBrush x:Key="SearchResultsViewHeader" Color="#cccccc" />
+    <SolidColorBrush x:Key="SearchResultsViewBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="SearchResultsViewBorder" Color="#b9b9b9" />
+    <SolidColorBrush x:Key="SearchResultsViewHeader" Color="#ddeeeeee" />
     <SolidColorBrush x:Key="SearchResultsViewSpinner" Color="#000000" />
     
     <SolidColorBrush x:Key="TabBackground" Color="Transparent" />
@@ -48,7 +48,6 @@
     <SolidColorBrush x:Key="TabBarButtonBackground" Color="Transparent" />
     <SolidColorBrush x:Key="TabBarButtonBackgroundHover" Color="Transparent" />
     <SolidColorBrush x:Key="TabBarButtonBackgroundActive" Color="Transparent" />
-    <SolidColorBrush x:Key="TabBarBorder" Color="#b9b9b9" />
     
     <SolidColorBrush x:Key="SearchResultBackgroundHover" Color="#c7c7c7" />
     <SolidColorBrush x:Key="SearchResultBackgroundActive" Color="#b1b1b1" />

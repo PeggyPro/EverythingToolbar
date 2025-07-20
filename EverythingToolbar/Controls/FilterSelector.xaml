@@ -6,33 +6,30 @@
              xmlns:local="clr-namespace:EverythingToolbar"
              x:Name="Root"
              DataContext="{Binding Source={x:Static helpers:FilterLoader.Instance}}">
-    <Border BorderBrush="{DynamicResource TabBarBorder}"
-            BorderThickness="0, 0, 0, 1">
-        <StackPanel Orientation="Horizontal">
-            <TabControl x:Name="TabControl"
-                        SelectedIndex="-1"
-                        SelectionChanged="OnTabItemSelected"
-                        FocusVisualStyle="{x:Null}">
-                <TabControl.ItemsSource>
-                    <MultiBinding Converter="{converters:TakeItemsMultiConverter}">
-                        <Binding Path="Filters" />
-                        <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
-                    </MultiBinding>
-                </TabControl.ItemsSource>
-            </TabControl>
+    <StackPanel Orientation="Horizontal">
+        <TabControl x:Name="TabControl"
+                    SelectedIndex="-1"
+                    SelectionChanged="OnTabItemSelected"
+                    FocusVisualStyle="{x:Null}">
+            <TabControl.ItemsSource>
+                <MultiBinding Converter="{converters:TakeItemsMultiConverter}">
+                    <Binding Path="Filters" />
+                    <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
+                </MultiBinding>
+            </TabControl.ItemsSource>
+        </TabControl>
 
-            <ComboBox Name="ComboBox"
-                      DisplayMemberPath="Name"
-                      SelectedIndex="-1"
-                      SelectionChanged="OnComboBoxItemSelected"
-                      FocusVisualStyle="{x:Null}">
-                <ComboBox.ItemsSource>
-                    <MultiBinding Converter="{converters:SkipItemsMultiConverter}">
-                        <Binding Path="Filters" />
-                        <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
-                    </MultiBinding>
-                </ComboBox.ItemsSource>
-            </ComboBox>
-        </StackPanel>
-    </Border>
+        <ComboBox Name="ComboBox"
+                  DisplayMemberPath="Name"
+                  SelectedIndex="-1"
+                  SelectionChanged="OnComboBoxItemSelected"
+                  FocusVisualStyle="{x:Null}">
+            <ComboBox.ItemsSource>
+                <MultiBinding Converter="{converters:SkipItemsMultiConverter}">
+                    <Binding Path="Filters" />
+                    <Binding Source="{x:Static local:ToolbarSettings.User}" Path="MaxTabItems" Mode="TwoWay" />
+                </MultiBinding>
+            </ComboBox.ItemsSource>
+        </ComboBox>
+    </StackPanel>
 </UserControl>

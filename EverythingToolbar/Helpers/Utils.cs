@@ -48,8 +48,8 @@ namespace EverythingToolbar.Helpers
 
         public static Version GetWindowsVersion()
         {
-            if (ToolbarSettings.User.OsBuildNumberOverride != 0)
-                return new Version(10, 0, ToolbarSettings.User.OsBuildNumberOverride);
+            if (ToolbarSettings.User.ForceWin10Behavior)
+                return WindowsVersion.Windows10Anniversary;
 
             return Environment.OSVersion.Version;
         }

@@ -116,8 +116,8 @@ namespace EverythingToolbar
         [Option(DefaultValue = false)]
         bool IsDoubleClickToOpen { get; set; }
 
-        [Option(DefaultValue = 0)]
-        int OsBuildNumberOverride { get; set; }
+        [Option(DefaultValue = false)]
+        bool ForceWin10Theme { get; set; }
 
         [Option(DefaultValue = "")]
         string ThemeOverride { get; set; }
@@ -604,14 +604,14 @@ namespace EverythingToolbar
             }
         }
 
-        public int OsBuildNumberOverride
+        public bool ForceWin10Behavior
         {
-            get => _settings.OsBuildNumberOverride;
+            get => _settings.ForceWin10Theme;
             set
             {
-                if (_settings.OsBuildNumberOverride != value)
+                if (_settings.ForceWin10Theme != value)
                 {
-                    _settings.OsBuildNumberOverride = value;
+                    _settings.ForceWin10Theme = value;
                     OnPropertyChanged();
                 }
             }

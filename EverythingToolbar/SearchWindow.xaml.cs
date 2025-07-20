@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Shell;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Search;
 
@@ -16,35 +15,17 @@ namespace EverythingToolbar
         public event EventHandler<EventArgs> Hiding;
         public event EventHandler<EventArgs> Showing;
 
-        private const int DropShadowBlurRadius = 12;
-
         private bool _dwmFlushOnRender;
 
         private SearchWindow()
         {
             InitializeComponent();
 
-            if (Utils.GetWindowsVersion() < Utils.WindowsVersion.Windows11)
-            {
-                // AllowsTransparency = true;
-                Loaded += (s, e) =>
-                {
-                    WindowChrome.SetWindowChrome(
-                        this,
-                        new WindowChrome
-                        {
-                            ResizeBorderThickness = new Thickness(DropShadowBlurRadius + 3),
-                            CaptionHeight = 0,
-                        }
-                    );
-                };
-            }
-
             CompositionTarget.Rendering += OnCompositionTargetRendering;
             EventDispatcher.Instance.GlobalKeyEvent += OnPreviewKeyDown;
         }
 
-        private void OnActivated(object sender, EventArgs e)
+        private void OnActivated(object? sender, EventArgs e)
         {
             if (TaskbarStateManager.Instance.IsIcon)
                 EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
@@ -54,7 +35,7 @@ namespace EverythingToolbar
             SetTopmostBelowTaskbar();
         }
 
-        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
         {
             if (e.Key >= Key.D0 && e.Key <= Key.D9 && Keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -72,7 +53,7 @@ namespace EverythingToolbar
             }
         }
 
-        private void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnLostKeyboardFocus(object? sender, KeyboardFocusChangedEventArgs e)
         {
             if (e.NewFocus == null) // New focus outside application
             {
@@ -80,7 +61,7 @@ namespace EverythingToolbar
             }
         }
 
-        private void OpenSearchInEverything(object sender, RoutedEventArgs e)
+        private void OpenSearchInEverything(object? sender, RoutedEventArgs e)
         {
             SearchResultProvider.OpenSearchInEverything(SearchState.Instance);
         }
@@ -153,52 +134,6 @@ namespace EverythingToolbar
 
         private void AnimateShowWin10(double left, double top, double width, double height, Edge taskbarEdge)
         {
-            DropShadowEffect.BlurRadius = DropShadowBlurRadius;
-            if (taskbarEdge == Edge.Top)
-            {
-                Top -= DropShadowBlurRadius;
-                Left -= DropShadowBlurRadius;
-                PopupMarginBorder.Margin = new Thickness(
-                    DropShadowBlurRadius,
-                    0,
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius
-                );
-            }
-            else if (taskbarEdge == Edge.Right)
-            {
-                Top -= DropShadowBlurRadius;
-                Left += DropShadowBlurRadius;
-                PopupMarginBorder.Margin = new Thickness(
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius,
-                    0,
-                    DropShadowBlurRadius
-                );
-            }
-            else if (taskbarEdge == Edge.Left)
-            {
-                Top -= DropShadowBlurRadius;
-                Left -= DropShadowBlurRadius;
-                PopupMarginBorder.Margin = new Thickness(
-                    0,
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius
-                );
-            }
-            else
-            {
-                Top += DropShadowBlurRadius;
-                Left -= DropShadowBlurRadius;
-                PopupMarginBorder.Margin = new Thickness(
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius,
-                    DropShadowBlurRadius,
-                    0
-                );
-            }
-
             DependencyProperty property = null;
             double from = 0;
             double to = 0;
@@ -429,7 +364,7 @@ namespace EverythingToolbar
                 AnimateHideWin10(taskbarEdge);
         }
 
-        private void OnCompositionTargetRendering(object sender, EventArgs e)
+        private void OnCompositionTargetRendering(object? sender, EventArgs e)
         {
             if (_dwmFlushOnRender)
                 NativeMethods.DwmFlush();

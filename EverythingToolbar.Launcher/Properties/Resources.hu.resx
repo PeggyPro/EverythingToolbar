@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonClose" xml:space="preserve">
-    <value>Bezár</value>
-  </data>
-  <data name="CheckboxEnable" xml:space="preserve">
-    <value>Engedélyez</value>
-  </data>
-  <data name="CheckboxHide" xml:space="preserve">
-    <value>Elrejt</value>
-  </data>
   <data name="ContextMenuQuit" xml:space="preserve">
     <value>Kilépés</value>
   </data>
@@ -135,41 +126,14 @@
   <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Az EverythingToolbar tálcára rögzítéséhez kattintson jobb gombbal az ikonjára, és válassza a 'Tálcára rögzítés' lehetőséget.</value>
   </data>
-  <data name="SetupAssistantSecondStepTitle" xml:space="preserve">
-    <value>2. Rögzítés a Tálcán</value>
-  </data>
   <data name="SetupAssistantRestartExplorerDialogText" xml:space="preserve">
     <value>A feladatsor ikonjának frissítéséhez az Explorer újraindítása szükséges. Szeretné most újraindítani?</value>
   </data>
   <data name="SetupAssistantRestartExplorerDialogTitle" xml:space="preserve">
     <value>Explorer újraindítás</value>
   </data>
-  <data name="SetupAssistantThirdStepText" xml:space="preserve">
-    <value>Opcionálisan a Windows eredeti kereső ikonja elrejthető.</value>
-  </data>
-  <data name="SetupAssistantThirdStepTitle" xml:space="preserve">
-    <value>3. Windows kereső elrejtése</value>
-  </data>
-  <data name="SetupAssistantFourthStepText" xml:space="preserve">
-    <value>Ajánlott az EverythingToolbar automatikus elindítása a rendszerrel.</value>
-  </data>
-  <data name="SetupAssistantFourthStepTitle" xml:space="preserve">
-    <value>4. Automatikus indítás beállítása</value>
-  </data>
   <data name="SetupAssistantTitle" xml:space="preserve">
     <value>EverythingToolbar Beállítás Asszisztens</value>
-  </data>
-  <data name="SetupAssistantFirstStepText" xml:space="preserve">
-    <value>Válassza ki a következő tálca ikonok egyikét:</value>
-  </data>
-  <data name="SetupAssistantFirstStepTitle" xml:space="preserve">
-    <value>1. Tálca ikon</value>
-  </data>
-  <data name="SetupAssistantFifthStepText" xml:space="preserve">
-    <value>A tálca ikon engedélyezésével bármikor kiléphet az EverythingToolbar háttérfolyamatából. Enélkül az EverythingToolbar mindig kiléphet a feladatkezelőn keresztül.</value>
-  </data>
-  <data name="SetupAssistantFifthStepTitle" xml:space="preserve">
-    <value>5. A tálca ikonjának konfigurálása</value>
   </data>
   <data name="SetupAssistantDisableWarningText" xml:space="preserve">
     <value>Biztos, hogy ki akar lépni a beállítási asszisztensből? Az EverythingToolbar csak a billentyűparancs segítségével lesz elérhető. A beállítási asszisztenst újra elérheti a tálca ikonján keresztül, hogy a keresés ikonját a tálcára tűzhesse.</value>

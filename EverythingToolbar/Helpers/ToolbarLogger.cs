@@ -35,8 +35,8 @@ namespace EverythingToolbar.Helpers
                 $"EverythingToolbar {Assembly.GetExecutingAssembly().GetName().Version} started. OS: {Environment.OSVersion}"
             );
 
-            if (ToolbarSettings.User.OsBuildNumberOverride != 0)
-                logger.Info($"OS build number override: {ToolbarSettings.User.OsBuildNumberOverride}");
+            if (ToolbarSettings.User.ForceWin10Behavior)
+                logger.Info("Using Windows 10 behavior.");
         }
 
         private static void InitializeExceptionLoggers(ILogger logger)

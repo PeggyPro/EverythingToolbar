@@ -402,13 +402,4 @@
   <data name="MessageBoxOk" xml:space="preserve">
     <value>Certo</value>
   </data>
-  <data name="SettingsFilterOrder" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SettingsMaxTabItems" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SettingsMaxTabItemsHelp" xml:space="preserve">
-    <value />
-  </data>
 </root>

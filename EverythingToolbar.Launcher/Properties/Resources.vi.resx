@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ButtonClose" xml:space="preserve">
-    <value>Đóng</value>
-  </data>
-  <data name="CheckboxEnable" xml:space="preserve">
-    <value>Bật</value>
-  </data>
-  <data name="CheckboxHide" xml:space="preserve">
-    <value>Ẩn</value>
-  </data>
   <data name="ContextMenuQuit" xml:space="preserve">
     <value>Thoát</value>
   </data>
@@ -135,41 +126,14 @@
   <data name="SetupAssistantPinToTaskbarHelp" xml:space="preserve">
     <value>Để ghim EverythingToolbar vào thanh tác vụ, hãy nhấp chuột phải vào biểu tượng và chọn 'Ghim vào thanh tác vụ'.</value>
   </data>
-  <data name="SetupAssistantSecondStepTitle" xml:space="preserve">
-    <value>2. Ghim vào thanh tác vụ</value>
-  </data>
   <data name="SetupAssistantRestartExplorerDialogText" xml:space="preserve">
     <value>Cần khởi động lại File Explorer để cập nhật biểu tượng trên thanh tác vụ. Bạn có muốn khởi động lại ngay bây giờ không?</value>
   </data>
   <data name="SetupAssistantRestartExplorerDialogTitle" xml:space="preserve">
     <value>Khởi động lại File Explorer</value>
   </data>
-  <data name="SetupAssistantThirdStepText" xml:space="preserve">
-    <value>Nếu muốn bạn cũng có thể ẩn biểu tượng tìm kiếm mặc định của Windows.</value>
-  </data>
-  <data name="SetupAssistantThirdStepTitle" xml:space="preserve">
-    <value>3. Ẩn menu Tìm Kiếm của Windows</value>
-  </data>
-  <data name="SetupAssistantFourthStepText" xml:space="preserve">
-    <value>Bạn nên thiết lập EverythingToolbar tự khởi động cùng hệ thống.</value>
-  </data>
-  <data name="SetupAssistantFourthStepTitle" xml:space="preserve">
-    <value>4. Cấu hình tự khởi động cùng hệ thống</value>
-  </data>
   <data name="SetupAssistantTitle" xml:space="preserve">
     <value>Trình trợ giúp thiết lập EverythingToolbar</value>
-  </data>
-  <data name="SetupAssistantFirstStepText" xml:space="preserve">
-    <value>Chọn một trong các biểu tượng thanh tác vụ sau:</value>
-  </data>
-  <data name="SetupAssistantFirstStepTitle" xml:space="preserve">
-    <value>1. Biểu tượng thanh tác vụ</value>
-  </data>
-  <data name="SetupAssistantFifthStepText" xml:space="preserve">
-    <value>Bằng cách bật biểu tượng ở khay hệ thống, bạn có thể thoát tiến trình chạy nền của EverythingToolbar bất cứ lúc nào. Nếu không bật, bạn vẫn có thể thoát EverythingToolbar qua Trình quản lý tác vụ.</value>
-  </data>
-  <data name="SetupAssistantFifthStepTitle" xml:space="preserve">
-    <value>5. Cấu hình biểu tượng khay hệ thống</value>
   </data>
   <data name="SetupAssistantDisableWarningText" xml:space="preserve">
     <value>Bạn có chắc chắn muốn thoát trình trợ giúp thiết lập không? EverythingToolbar sẽ chỉ có thể truy cập bằng phím tắt. Bạn có thể mở lại trình trợ giúp thiết lập qua biểu tượng khay hệ thống để ghim biểu tượng tìm kiếm vào thanh tác vụ.</value>

@@ -790,6 +790,24 @@ namespace EverythingToolbar.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Force Windows 10 styles.
+        /// </summary>
+        public static string SettingsForceWin10Styles {
+            get {
+                return ResourceManager.GetString("SettingsForceWin10Styles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uses Windows 10 styles to match certain legacy taskbar modifications.
+        /// </summary>
+        public static string SettingsForceWin10StylesHelp {
+            get {
+                return ResourceManager.GetString("SettingsForceWin10StylesHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide empty search.
         /// </summary>
         public static string SettingsHideEmptyResults {

@@ -19,6 +19,8 @@ namespace EverythingToolbar.Settings
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public bool IsLauncher => Application.Current != null;
+        
+        public int WindowsBuildVersion => Environment.OSVersion.Version.Build;
 
         public bool CheckingForUpdatesVisible
         {

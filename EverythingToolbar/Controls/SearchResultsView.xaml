@@ -8,6 +8,8 @@
              mc:Ignorable="d"
              d:DesignWidth="300"
              d:DesignHeight="300"
+             BorderThickness="0, 1, 0, 0"
+             BorderBrush="{DynamicResource SearchResultsViewBorder}"
              Loaded="OnLoaded">
     <UserControl.Resources>
         <ResourceDictionary>

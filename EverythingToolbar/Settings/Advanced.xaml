@@ -108,11 +108,24 @@
                     Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1,1,1,1"
-                    CornerRadius="8,8,8,8">
+                    CornerRadius="8,8,0,0">
                 <controls:SettingItem Title="{x:Static properties:Resources.SettingsReplaceStartMenuSearch}"
                                       HelpText="{x:Static properties:Resources.SettingsReplaceStartMenuHelp}">
                     <controls:SettingItem.SettingContent>
                         <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsReplaceStartMenuSearch, Mode=TwoWay}" />
+                    </controls:SettingItem.SettingContent>
+                </controls:SettingItem>
+            </Border>
+            <Border Padding="16"
+                    Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1,1,1,1"
+                    CornerRadius="0, 0,8,8"
+                    Visibility="{Binding WindowsBuildVersion, Converter={c:WindowsVersionToVisibilityConverter}, ConverterParameter='>=22000'}">
+                <controls:SettingItem Title="{x:Static properties:Resources.SettingsForceWin10Styles}"
+                                      HelpText="{x:Static properties:Resources.SettingsForceWin10StylesHelp}">
+                    <controls:SettingItem.SettingContent>
+                        <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=ForceWin10Behavior, Mode=TwoWay}" />
                     </controls:SettingItem.SettingContent>
                 </controls:SettingItem>
             </Border>
