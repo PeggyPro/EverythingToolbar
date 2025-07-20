@@ -54,6 +54,9 @@
                                     <Grid Name="DropDown"
                                           MinWidth="{TemplateBinding ActualWidth}"
                                           MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform />
+                                        </Grid.RenderTransform>
                                         <Border x:Name="DropDownBorder"
                                                 Background="{DynamicResource ContextMenuBackground}"
                                                 BorderBrush="{DynamicResource ContextMenuBorder}"
@@ -101,6 +104,24 @@
                             <Setter TargetName="ContentSite"
                                     Property="TextBlock.Foreground"
                                     Value="{DynamicResource TabForegroundHover}" />
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="IsOpen" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="DropDown"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
+                                            From="-90"
+                                            To="0"
+                                            Duration="00:00:00.167">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CircleEase EasingMode="EaseOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
