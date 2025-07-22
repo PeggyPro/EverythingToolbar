@@ -19,7 +19,7 @@
     <SolidColorBrush x:Key="TextBoxWatermarkForeground" Color="#dadada" />
     <SolidColorBrush x:Key="TextBoxWatermarkForegroundHover" Color="#dadada" />
     <SolidColorBrush x:Key="TextBoxWatermarkForegroundActive" Color="#999999" />
-    <SolidColorBrush x:Key="TextBoxBorder" Color="#18ffffff" />
+    <SolidColorBrush x:Key="TextBoxBorder" Color="#19ffffff" />
     <SolidColorBrush x:Key="TextBoxBorderHover" Color="#1affffff" />
     <SolidColorBrush x:Key="TextBoxBorderActive" Color="#aa333333" />
 
@@ -32,14 +32,14 @@
 
     <SolidColorBrush x:Key="SearchResultsViewBackground" Color="Transparent" />
     <SolidColorBrush x:Key="SearchResultsViewBorder" Color="Transparent" />
-    <SolidColorBrush x:Key="SearchResultsViewHeader" Color="#c0292929" />
+    <SolidColorBrush x:Key="SearchResultsViewHeader" Color="#f0252525" />
     <SolidColorBrush x:Key="SearchResultsViewSpinner" Color="#ffffff" />
 
     <SolidColorBrush x:Key="TabBackground" Color="#11ffffff" />
     <SolidColorBrush x:Key="TabBackgroundHover" Color="#cc3E3E3E" />
     <SolidColorBrush x:Key="TabBorder" Color="#1bffffff" />
     <SolidColorBrush x:Key="TabForeground" Color="#d1d1d1" />
-    <SolidColorBrush x:Key="TabForegroundHover" Color="#ffffff" />
+    <SolidColorBrush x:Key="TabForegroundHover" Color="#efefef" />
     <SolidColorBrush x:Key="TabForegroundActive" Color="#000000" />
     
     <SolidColorBrush x:Key="TabBarButtonForeground" Color="#d1d1d1" />

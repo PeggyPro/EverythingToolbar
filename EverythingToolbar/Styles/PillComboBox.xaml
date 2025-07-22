@@ -130,6 +130,9 @@
                                 <Setter TargetName="ContentSite"
                                         Property="TextBlock.Foreground"
                                         Value="{DynamicResource TabForegroundHover}" />
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="{DynamicResource TabBackgroundHover}" />
                             </MultiDataTrigger.Setters>
                         </MultiDataTrigger>
                         <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}"
