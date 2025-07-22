@@ -41,16 +41,19 @@ namespace EverythingToolbar.Settings
 
         public static List<Rule> LoadCustomActions()
         {
-            if (File.Exists(CustomActionsPath))
-            {
-                var serializer = new XmlSerializer(_actions.GetType());
-                using (var reader = XmlReader.Create(CustomActionsPath))
-                {
-                    return (List<Rule>)serializer.Deserialize(reader);
-                }
-            }
+            if (!File.Exists(CustomActionsPath))
+                return [];
 
-            return new List<Rule>();
+            XmlSerializer serializer = new(_actions.GetType());
+            using XmlReader reader = XmlReader.Create(CustomActionsPath);
+            try
+            {
+                return (List<Rule>)serializer.Deserialize(reader) ?? [];
+            }
+            catch
+            {
+                return [];
+            }
         }
 
         private static bool SaveCustomActions(List<Rule> newActions, bool isAutoApplyCustomActions)
@@ -174,7 +177,7 @@ namespace EverythingToolbar.Settings
             UpdateUi();
         }
 
-        public static bool HandleAction(SearchResult searchResult, string command = "")
+        public static bool HandleAction(SearchResult? searchResult, string command = "")
         {
             if (searchResult == null)
                 return false;

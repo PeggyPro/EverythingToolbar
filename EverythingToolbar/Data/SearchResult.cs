@@ -63,7 +63,7 @@ namespace EverythingToolbar.Data
             }
         }
 
-        private ImageSource _icon;
+        private ImageSource? _icon;
         public ImageSource Icon
         {
             get

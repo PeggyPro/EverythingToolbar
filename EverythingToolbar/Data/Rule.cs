@@ -1,7 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
+using System.Xml.Serialization;
+using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Data
 {
@@ -16,7 +20,7 @@ namespace EverythingToolbar.Data
     public class Rule : INotifyPropertyChanged
     {
         [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void NotifyPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -57,17 +61,6 @@ namespace EverythingToolbar.Data
             }
         }
 
-        private string _command;
-        public string Command
-        {
-            get => _command;
-            set
-            {
-                _command = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         public bool ExpressionValid
         {
             get
@@ -82,6 +75,114 @@ namespace EverythingToolbar.Data
                     return false;
                 }
             }
+        }
+
+        private string _command;
+        public string Command
+        {
+            get => _command;
+            set
+            {
+                _command = value;
+                NotifyPropertyChanged();
+
+                Icon = null;
+            }
+        }
+
+        [field: NonSerialized]
+        private ImageSource? _icon;
+
+        [field: NonSerialized]
+        private bool _iconLoadFailed;
+
+        [XmlIgnore]
+        public ImageSource? Icon
+        {
+            get
+            {
+                if (_icon != null || _iconLoadFailed)
+                    return _icon;
+
+                if (string.IsNullOrWhiteSpace(Command))
+                {
+                    _iconLoadFailed = true;
+                    return null;
+                }
+
+                string executableName = GetExecutableFromCommandLine(Command);
+                if (string.IsNullOrWhiteSpace(executableName))
+                {
+                    _iconLoadFailed = true;
+                    return null;
+                }
+
+                string? executablePath = FindExecutablePath(executableName);
+                if (executablePath == null)
+                {
+                    _iconLoadFailed = true;
+                    return null;
+                }
+
+                _icon = IconProvider.GetImage(
+                    executablePath,
+                    source =>
+                    {
+                        Icon = source;
+                    }
+                );
+
+                if (_icon == null)
+                    _iconLoadFailed = true;
+
+                return _icon;
+            }
+            set
+            {
+                _iconLoadFailed = false;
+                _icon = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public static string GetExecutableFromCommandLine(string commandLine)
+        {
+            if (string.IsNullOrWhiteSpace(commandLine))
+                return string.Empty;
+
+            commandLine = commandLine.Trim();
+
+            if (commandLine.StartsWith("\""))
+            {
+                int endQuote = commandLine.IndexOf("\"", 1);
+                return endQuote > 0 ? commandLine.Substring(1, endQuote - 1) : commandLine.Substring(1);
+            }
+
+            int spaceIndex = commandLine.IndexOf(' ');
+            return spaceIndex > 0 ? commandLine.Substring(0, spaceIndex) : commandLine;
+        }
+
+        public static string? FindExecutablePath(string exeName)
+        {
+            if (File.Exists(exeName))
+                return Path.GetFullPath(exeName);
+
+            string[] extensions = Environment.GetEnvironmentVariable("PATHEXT")?.Split(';') ?? [".exe"];
+            string[] paths = Environment.GetEnvironmentVariable("PATH")?.Split(';') ?? [];
+
+            foreach (var path in paths)
+            {
+                foreach (var ext in extensions)
+                {
+                    string candidate = Path.Combine(
+                        path,
+                        exeName.EndsWith(ext, StringComparison.OrdinalIgnoreCase) ? exeName : exeName + ext
+                    );
+                    if (File.Exists(candidate))
+                        return candidate;
+                }
+            }
+            return null;
         }
     }
 }

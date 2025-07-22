@@ -515,7 +515,19 @@ namespace EverythingToolbar.Controls
 
             for (int i = 0; i < actions.Count; i++)
             {
-                MenuItem actionMenuItem = new() { Header = actions[i].Name, Tag = actions[i].Command };
+                Rule action = actions[i];
+                MenuItem actionMenuItem = new()
+                {
+                    Header = action.Name,
+                    Tag = action.Command,
+                    DataContext = action,
+                };
+                if (action.Icon != null)
+                {
+                    Image iconImage = new() { Width = 16, Height = 16 };
+                    iconImage.SetBinding(Image.SourceProperty, new Binding("Icon"));
+                    actionMenuItem.Icon = iconImage;
+                }
                 actionMenuItem.Click += OpenWithCustomAction;
                 menuItem.Items.Insert(i, actionMenuItem);
             }

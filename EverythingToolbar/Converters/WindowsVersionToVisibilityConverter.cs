@@ -12,14 +12,14 @@ namespace EverythingToolbar.Converters
         {
             if (value is not Version currentVersion)
                 return Visibility.Visible;
-            
+
             if (parameter == null)
                 return Visibility.Visible;
 
             var parameterString = parameter.ToString();
             if (string.IsNullOrEmpty(parameterString))
                 return Visibility.Visible;
-            
+
             var comparison = ParseVersionParameter(parameterString);
             if (comparison == null)
                 return Visibility.Visible;
@@ -79,7 +79,7 @@ namespace EverythingToolbar.Converters
                 ComparisonOperation.LessThan => compareResult < 0,
                 ComparisonOperation.GreaterThanOrEqual => compareResult >= 0,
                 ComparisonOperation.LessThanOrEqual => compareResult <= 0,
-                _ => true
+                _ => true,
             };
         }
 
@@ -89,7 +89,7 @@ namespace EverythingToolbar.Converters
             GreaterThan,
             LessThan,
             GreaterThanOrEqual,
-            LessThanOrEqual
+            LessThanOrEqual,
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
