@@ -567,6 +567,18 @@ namespace EverythingToolbar.Controls
             }
         }
 
+        private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (SelectedItem == null)
+                return;
+
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                SelectedItem.ShowWindowsContextMenu();
+                e.Handled = true;
+            }
+        }
+
         private void OnContextMenuOpened(object sender, RoutedEventArgs e)
         {
             if (SelectedItem == null)
