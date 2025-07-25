@@ -58,7 +58,7 @@
             <Border Padding="16"
                     Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1,1,1,0"
+                    BorderThickness="1,1,1,1"
                     CornerRadius="8,8,8,8">
                 <StackPanel>
                     <controls:SettingItem Title="{x:Static properties:Resources.SettingsCheckForUpdates}"
@@ -119,7 +119,7 @@
             <Border Padding="16"
                     Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1,1,1,1"
+                    BorderThickness="1,0,1,1"
                     CornerRadius="0, 0,8,8"
                     Visibility="{Binding WindowsBuildVersion, Converter={c:WindowsVersionToVisibilityConverter}, ConverterParameter='>=22000'}">
                 <controls:SettingItem Title="{x:Static properties:Resources.SettingsForceWin10Styles}"

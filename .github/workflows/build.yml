@@ -1,6 +1,6 @@
 name: Build solution
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
@@ -18,12 +18,25 @@ jobs:
       - name: Restore NuGet dependencies
         run: nuget restore
 
-      - name: Download .NET 8 Desktop Runtime
-        run: curl -L -o Installer\Bundle\windowsdesktop-runtime-8.0.15-win-x64.exe https://builds.dotnet.microsoft.com/dotnet/WindowsDesktop/8.0.15/windowsdesktop-runtime-8.0.15-win-x64.exe
-
       - name: Decode certificate
         shell: bash
         run: echo ${{ secrets.PFX_CERTIFICATE_FILE }} | base64 --decode  > ./EverythingToolbar.snk
 
       - name: Build all
         run: MSBuild $Env:GITHUB_WORKSPACE /p:Configuration=Release
+
+      - name: Install Inno Setup
+        run: |
+          Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "innosetup.exe"
+          Start-Process -FilePath "innosetup.exe" -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait
+
+      - name: Build installer
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "Installer\Installer.iss"
+
+      - name: Upload installer artifact
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v3
+        with:
+          name: EverythingToolbar-Installer
+          path: Installer/Output/*.exe

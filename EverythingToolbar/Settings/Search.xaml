@@ -77,7 +77,7 @@
             <Border Padding="16"
                     Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
                     BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1, 1, 1, 0"
+                    BorderThickness="1, 1, 1, 1"
                     CornerRadius="8, 8, 8, 8">
                 <controls:SettingItem Title="{x:Static properties:Resources.SettingsEnableHistory}"
                                       HelpText="{x:Static properties:Resources.SettingsHistoryHelp}">
