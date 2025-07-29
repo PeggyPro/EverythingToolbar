@@ -4,7 +4,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,13 +26,10 @@ jobs:
         run: MSBuild $Env:GITHUB_WORKSPACE /p:Configuration=Release
 
       - name: Install Inno Setup
-        run: |
-          Invoke-WebRequest -Uri "https://jrsoftware.org/download.php/is.exe" -OutFile "innosetup.exe"
-          Start-Process -FilePath "innosetup.exe" -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait
+        run: choco install innosetup -y --version 6.4.0
 
       - name: Build installer
-        run: |
-          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "Installer\Installer.iss"
+        run: iscc "Installer\Installer.iss"
 
       - name: Upload installer artifact
         if: github.event_name == 'workflow_dispatch'
