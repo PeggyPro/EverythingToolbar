@@ -94,7 +94,7 @@ namespace EverythingToolbar.Controls
             WINDOW_CORNER_PREFERENCE = 33,
         }
 
-        public enum WindowCorner
+        private enum WindowCorner
         {
             Default = 0,
             DoNotRound = 1,

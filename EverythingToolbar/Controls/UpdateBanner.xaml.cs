@@ -16,7 +16,7 @@ namespace EverythingToolbar.Controls
 {
     public partial class UpdateBanner
     {
-        private Version _latestVersion;
+        private Version? _latestVersion;
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<UpdateBanner>();
         private static readonly string ApiUrl = "https://api.github.com/repos/srwi/EverythingToolbar/releases";
         private static readonly string LatestReleaseUrl = "https://github.com/srwi/EverythingToolbar/releases/latest";
@@ -31,22 +31,20 @@ namespace EverythingToolbar.Controls
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("EverythingToolbar");
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("EverythingToolbar");
 
-                    var response = await client.GetAsync(ApiUrl);
-                    if (response.IsSuccessStatusCode)
+                var response = await client.GetAsync(ApiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonStream = await response.Content.ReadAsStreamAsync();
+                    var serializer = new DataContractJsonSerializer(typeof(List<Release>));
+                    var releases = serializer.ReadObject(jsonStream) as List<Release>;
+                    var stableReleases = releases?.Where(r => !r.Prerelease).ToList();
+                    var latestStableRelease = stableReleases?.FirstOrDefault();
+                    if (latestStableRelease != null)
                     {
-                        var jsonStream = await response.Content.ReadAsStreamAsync();
-                        var serializer = new DataContractJsonSerializer(typeof(List<Release>));
-                        var releases = serializer.ReadObject(jsonStream) as List<Release>;
-                        var stableReleases = releases?.Where(r => !r.Prerelease).ToList();
-                        var latestStableRelease = stableReleases?.FirstOrDefault();
-                        if (latestStableRelease != null)
-                        {
-                            return new Version(latestStableRelease.TagName);
-                        }
+                        return new Version(latestStableRelease.TagName);
                     }
                 }
             }
@@ -69,7 +67,11 @@ namespace EverythingToolbar.Controls
                 return;
 
             _latestVersion = latestVersion;
-            LatestVersionRun.Text = _latestVersion.ToString();
+            var banner = FindName("Banner") as GenericBanner;
+            if (banner != null)
+            {
+                banner.Text = $"{Properties.Resources.UpdateBannerText} {_latestVersion}";
+            }
             Visibility = Visibility.Visible;
         }
 
@@ -85,14 +87,17 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private void OnDownloadClicked(object sender, RoutedEventArgs e)
+        private void OnDownloadClicked(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo(LatestReleaseUrl) { UseShellExecute = true });
         }
 
-        private void OnSkipUpdateClicked(object sender, RoutedEventArgs e)
+        private void OnSkipUpdateClicked(object sender, EventArgs e)
         {
-            ToolbarSettings.User.SkippedUpdate = _latestVersion.ToString();
+            if (_latestVersion != null)
+            {
+                ToolbarSettings.User.SkippedUpdate = _latestVersion.ToString();
+            }
             Visibility = Visibility.Collapsed;
         }
 
@@ -113,7 +118,7 @@ namespace EverythingToolbar.Controls
         private class Release
         {
             [DataMember(Name = "tag_name")]
-            public string TagName { get; set; }
+            public string TagName { get; set; } = string.Empty;
 
             [DataMember(Name = "prerelease")]
             public bool Prerelease { get; set; }

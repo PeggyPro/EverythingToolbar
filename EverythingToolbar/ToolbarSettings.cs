@@ -121,6 +121,9 @@ namespace EverythingToolbar
 
         [Option(DefaultValue = "")]
         string ThemeOverride { get; set; }
+
+        [Option(DefaultValue = "")]
+        string VersionBeforeUpdate { get; set; }
     }
 
     public sealed class ToolbarSettingsWrapper : INotifyPropertyChanged
@@ -625,6 +628,19 @@ namespace EverythingToolbar
                 if (_settings.ThemeOverride != value)
                 {
                     _settings.ThemeOverride = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string VersionBeforeUpdate
+        {
+            get => _settings.VersionBeforeUpdate;
+            set
+            {
+                if (_settings.VersionBeforeUpdate != value)
+                {
+                    _settings.VersionBeforeUpdate = value;
                     OnPropertyChanged();
                 }
             }

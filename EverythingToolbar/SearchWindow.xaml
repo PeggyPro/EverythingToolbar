@@ -62,6 +62,7 @@
             </Grid>
 
             <controls:UpdateBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
+            <controls:UpdateSuccessfulBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
 
             <controls:SearchResultsView x:Name="SearchResultsView"
                                         Grid.Row="{DynamicResource SearchResultsViewGridRow}" />

@@ -83,7 +83,12 @@ namespace EverythingToolbar.Behaviors
 
         private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ToolbarSettings.User.ItemTemplate))
+            if (
+                e.PropertyName
+                is nameof(ToolbarSettings.User.ItemTemplate)
+                    or nameof(ToolbarSettings.User.ThemeOverride)
+                    or nameof(ToolbarSettings.User.ForceWin10Behavior)
+            )
             {
                 AutoApplyTheme();
             }

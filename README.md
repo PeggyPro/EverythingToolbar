@@ -2,6 +2,7 @@ EverythingToolbar
 =================
 
 <a href="https://paypal.me/rumswinkel"><img src="https://img.shields.io/static/v1?label=Donate&message=%E2%9D%A4&logo=PayPal&color=%23009cde" height="25" /></a>
+<a href="https://ko-fi.com/stephanrwi"><img src="https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=%E2%98%95&logo=Ko-fi&color=%23FF5E5B" height="25" /></a>
 <a href="https://github.com/srwi/EverythingToolbar/releases/latest"><img src="https://img.shields.io/github/downloads/srwi/EverythingToolbar/total?color=critical" height="25" /></a>
 <a href="https://crowdin.com/project/everythingtoolbar"><img src="https://badges.crowdin.net/everythingtoolbar/localized.svg" height="25" /></a>
 
@@ -94,7 +95,7 @@ EverythingToolbar is compatible with both Windows 10 and Windows 11 and works we
 
 ## Build
 
-- Open the solution in Visual Studio with .NET Framework 4.7 support
+- Open the solution in Visual Studio with .NET 8.0 support
 - Disable signing in project properties
 - Deskband:
   - Build project `EverythingToolbar.Deskband` (Windows Explorer will be restarted) 
@@ -107,3 +108,11 @@ EverythingToolbar is compatible with both Windows 10 and Windows 11 and works we
 All kinds of contributions (questions, bug reports, pull requests) are welcome! Helping with open issues is greatly appreciated. As a basic rule, before filing issues, feature requests or anything else, take a look at the issues and check if they have already been reported by another user. If so, engage in the already existing discussion.
 
 You can also help by [translating EverythingToolbar](https://crowdin.com/project/everythingtoolbar).
+
+## Support 💖
+
+If you're enjoying EverythingToolbar, I'd be truly grateful for your support!
+You can show your appreciation by giving a star on GitHub or making a donation:
+
+- [Buy me a coffee](https://ko-fi.com/stephanrwi)
+- [Donate via PayPal](https://paypal.me/rumswinkel)
