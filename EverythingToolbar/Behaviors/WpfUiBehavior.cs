@@ -10,7 +10,7 @@ namespace EverythingToolbar.Behaviors
         private static readonly RegistryEntry SystemThemeRegistryEntry = new(
             "HKEY_CURRENT_USER",
             @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
-            "SystemUsesLightTheme"
+            "AppsUseLightTheme"
         );
 
         public WpfUiBehavior()

@@ -6,7 +6,6 @@ using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using NLog;
 using Shell32;
-using Wpf.Ui.Appearance;
 using File = System.IO.File;
 
 namespace EverythingToolbar.Launcher
@@ -40,7 +39,7 @@ namespace EverythingToolbar.Launcher
                     {
                         var folder = shell.NameSpace(Path.GetDirectoryName(lnkFile));
                         var folderItem = folder.ParseName(Path.GetFileName(lnkFile));
-                        if (folderItem != null && folderItem.IsLink)
+                        if (folderItem is { IsLink: true })
                         {
                             var link = (ShellLinkObject)folderItem.GetLink;
                             var linkFileName = Path.GetFileName(link.Path);
@@ -67,49 +66,36 @@ namespace EverythingToolbar.Launcher
             if (Helpers.Utils.GetWindowsVersion() < Helpers.Utils.WindowsVersion.Windows11)
                 return false;
 
-            using (
-                var key = Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-                )
-            )
-            {
-                var taskbarAlignment = key?.GetValue("TaskbarAl");
-                var leftAligned = taskbarAlignment != null && (int)taskbarAlignment == 0;
-                return !leftAligned;
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
+            );
+            var taskbarAlignment = key?.GetValue("TaskbarAl");
+            var leftAligned = taskbarAlignment != null && (int)taskbarAlignment == 0;
+            return !leftAligned;
         }
 
         public static bool GetAutostartState()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run"))
-            {
-                return key?.GetValue("EverythingToolbar") != null;
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+            return key?.GetValue("EverythingToolbar") != null;
         }
 
         public static void SetAutostartState(bool enabled)
         {
-            using (
-                var key = Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Run",
-                    RegistryKeyPermissionCheck.ReadWriteSubTree
-                )
-            )
+            using var key = Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\CurrentVersion\Run",
+                RegistryKeyPermissionCheck.ReadWriteSubTree
+            );
+            try
             {
-                try
-                {
-                    if (enabled)
-                        key?.SetValue(
-                            "EverythingToolbar",
-                            "\"" + Process.GetCurrentProcess().MainModule.FileName + "\""
-                        );
-                    else
-                        key?.DeleteValue("EverythingToolbar", false);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Failed to set autostart state.");
-                }
+                if (enabled)
+                    key?.SetValue("EverythingToolbar", "\"" + Process.GetCurrentProcess().MainModule.FileName + "\"");
+                else
+                    key?.DeleteValue("EverythingToolbar", false);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to set autostart state.");
             }
         }
 
@@ -135,14 +121,24 @@ namespace EverythingToolbar.Launcher
 
         public static string GetThemedAppIconName()
         {
-            switch (SystemThemeManager.GetCachedSystemTheme())
+            try
             {
-                case SystemTheme.Light:
+                using RegistryKey? key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+                );
+                object? systemUsesLightTheme = key?.GetValue("SystemUsesLightTheme");
+                if (systemUsesLightTheme != null && (int)systemUsesLightTheme == 1)
+                {
                     return "Icons/Light.ico";
-                case SystemTheme.Dark:
+                }
+                else
+                {
                     return "Icons/Dark.ico";
-                default:
-                    return "Icons/Medium.ico";
+                }
+            }
+            catch (Exception)
+            {
+                return "Icons/Medium.ico";
             }
         }
     }
