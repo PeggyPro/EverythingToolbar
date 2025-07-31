@@ -1,16 +1,16 @@
 # Frequently Asked Questions
 
 ### What is EverythingToolbar?
-EverythingToolbar is a separate user interface for the standalone file search utility Everything developed by voidtools. EverythingToolbar cannot search for files on its own. Instead, it accesses search results provided by Everything using its SDK and displays them in a modern UI that matches the look and feel of Windows' native start menu search.
+EverythingToolbar is a separate user interface for the standalone file search utility [Everything](https://www.voidtools.com) developed by voidtools. EverythingToolbar cannot search for files on its own. Instead, it accesses search results provided by Everything using its SDK and displays them in a modern UI that matches the look and feel of Windows' native start menu search.
 
 ### Can I use EverythingToolbar without Everything?
-No, EverythingToolbar requires Everything to be running in the background at all times.
+No, EverythingToolbar requires [Everything](https://www.voidtools.com) to be running in the background at all times.
 
 ### Everything is running but I get no search results.
 If you're not seeing search results, try these troubleshooting steps:
 
-- **Check Everything is running**: Verify that Everything (not just EverythingToolbar) is running in the background. You should see an orange search icon in the system tray.
-- **Check Everything version**: You may be running the lite version of Everything, which doesn't allow other applications to retrieve search results. Please uninstall it and install the regular version instead. Make sure it's running in the background.
+- **Check Everything is running**: Verify that [Everything](https://www.voidtools.com) (not just EverythingToolbar) is running in the background. You should see an orange search icon in the system tray.
+- **Check Everything version**: You may be running the lite version of [Everything](https://www.voidtools.com), which doesn't allow other applications to retrieve search results. Please uninstall it and install the regular version instead. Make sure it's running in the background.
 - **Everything 1.5 alpha users**: If you're using Everything 1.5 alpha, you need to change the Everything instance name to `1.5a` in EverythingToolbar settings.
 
 ### What is the difference between the Deskband and Launcher variants of EverythingToolbar?
@@ -49,7 +49,7 @@ While EverythingToolbar's main goal is to provide fast search results rather tha
 2. Create a new filter in Everything: `Everything → Search → Organize Filters...`
 3. Configure the filter with the following settings:
 
-    <img width="704" height="510" alt="Filter options" src="https://github.com/user-attachments/assets/ed90300d-14c4-4f07-80b4-bebbd7763073" />
+    <img width="50%" alt="Filter options" src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/start_menu_search_filter.png" />
 
 **Tip**: Use Everything's filter order or EverythingToolbar's `Settings → Filters → Remember filter` option to control which filter is selected when opening the search window.
 

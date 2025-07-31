@@ -7,34 +7,34 @@
 
 Instant file search integration for the Windows taskbar powered by [Everything](https://www.voidtools.com/).
 
-<img src="https://user-images.githubusercontent.com/17520641/213898038-c8f76cc4-572e-481c-82bf-e420900e1aff.gif">
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/demo.gif" alt="EverythingToolbar in action">
 
 ## 🌟 Features
 
 ### Light & Dark Themes
 EverythingToolbar seamlessly blends into Windows 10 and 11, automatically adjusting to your system theme.
 
-<img src="https://user-images.githubusercontent.com/17520641/213913562-076e00f3-f54b-40b4-b6a5-ec705302fe39.png">
+![Light and dark themes](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/fast.png)
 
 ### Custom Search Filters
 EverythingToolbar includes common search filters out of the box. For advanced users, it can synchronize with Everything's custom filters, giving you complete control over your search experience. Enable this feature by checking **Use Everything filters** in the EverythingToolbar's **Filters** settings.
 
-![Custom search filters](https://user-images.githubusercontent.com/17520641/213913613-3621a0c1-0386-4d7a-ac0f-e7ab0239b222.png)
+![Custom search filters](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/flexible.png)
 
 ### Quick Search Options
 Easily toggle search flags (match case, whole word, match path, and regex) to find your files with precision.
 
-![Quick toggles](https://user-images.githubusercontent.com/17520641/213913757-da27d69d-59eb-445b-9d44-5b2e34c6faf4.png)
+![Quick toggles](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/on_point.png)
 
 ### RegEx-Powered File Actions
 Create custom **Open with** actions by navigating to **Settings** → **Custom actions**. Enable **Automatically apply rules based on condition** to execute commands automatically based on file type and regular expressions. Leave the regex field empty to display the action only in the context menu.
 
-![Custom actions options](https://github.com/user-attachments/assets/85ba9937-dc47-4f13-a1fa-0b6482a0886d)
+![Custom action options](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/custom_actions.png)
 
 ### Compatibility
 EverythingToolbar works seamlessly on Windows 10 and Windows 11, and integrates perfectly with tools like [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) and [StartAllBack](https://www.startallback.com/) for full deskband support on Windows 11.
 
-![Windows 10 screenshot](https://user-images.githubusercontent.com/17520641/213918399-a566c476-9b7e-460b-97c5-479964ddfa78.png)
+![Windows 10 screenshot](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/compatible.png)
 
 ### Additional Features
 
@@ -75,7 +75,7 @@ Choose one of the following installation methods:
 - **Chocolatey**: `choco install everythingtoolbar`
 - **winget**: `winget install stnkl.everythingtoolbar`
 
-> **Important:** For Everything 1.5a users, set the instance name to `1.5a` in EverythingToolbar's advanced settings (**Settings** → **Advanced** → **Everything instance name**). ([Screenshot](https://github.com/user-attachments/assets/30f07f64-4480-4f8b-ad9d-c9f957d0ab6e))
+> **Important:** For Everything 1.5a users, set the instance name to `1.5a` in EverythingToolbar's advanced settings (**Settings** → **Advanced** → **Everything instance name**). ([Screenshot](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/named_instance.png))
 
 For troubleshooting and additional setup help, see the [FAQ](FAQ.md).
 
@@ -96,7 +96,7 @@ After installation on Windows 11, the setup assistant will guide you through the
 After installation on Windows 10:
 1. Right-click the taskbar and select EverythingToolbar from the context menu
    > You may need to open the context menu twice for EverythingToolbar to appear
-2. Unlock the taskbar to adjust size and position ([demonstration video](https://user-images.githubusercontent.com/17520641/107118574-19a1bf80-6882-11eb-843a-7e854e5d0684.gif))
+2. Unlock the taskbar to adjust size and position ([demonstration video](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/deskband_resizing_demo.gif))
 
 > **Windows 11 users**: The search icon setup assistant starts automatically after installation. To use the deskband instead (only recommended with ExplorerPatcher/StartAllBack), close the assistant and end EverythingToolbar's background process via the system tray.
 
