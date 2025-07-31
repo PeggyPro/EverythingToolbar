@@ -1311,6 +1311,15 @@ namespace EverythingToolbar.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open system context menu.
+        /// </summary>
+        public static string ShortcutOpenSystemContextMenu {
+            get {
+                return ResourceManager.GetString("ShortcutOpenSystemContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview file in QuickLook.
         /// </summary>
         public static string ShortcutPreviewQuickLook {

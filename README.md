@@ -1,5 +1,4 @@
-EverythingToolbar
-=================
+# <img src="EverythingToolbar/Images/AppIcon.ico" width="32" height="32" alt="" style="vertical-align: middle;margin-top:-4px"> EverythingToolbar
 
 <a href="https://paypal.me/rumswinkel"><img src="https://img.shields.io/static/v1?label=Donate&message=%E2%9D%A4&logo=PayPal&color=%23009cde" height="25" /></a>
 <a href="https://ko-fi.com/stephanrwi"><img src="https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=%E2%98%95&logo=Ko-fi&color=%23FF5E5B" height="25" /></a>
@@ -10,109 +9,123 @@ Instant file search integration for the Windows taskbar powered by [Everything](
 
 <img src="https://user-images.githubusercontent.com/17520641/213898038-c8f76cc4-572e-481c-82bf-e420900e1aff.gif">
 
-## Features
+## 🌟 Features
 
-### Light & Dark
-EverythingToolbar seemlessly blends into Windows 10 and 11 and adjusts according to your theme settings.
+### Light & Dark Themes
+EverythingToolbar seamlessly blends into Windows 10 and 11, automatically adjusting to your system theme.
 
 <img src="https://user-images.githubusercontent.com/17520641/213913562-076e00f3-f54b-40b4-b6a5-ec705302fe39.png">
 
-### Custom search filters
-EverythingToolbar reads custom filters previously defined in Everything. To enable this feature, check the `Use Everything filters` option in the EverythingToolbar settings. From now on, all filters will be available from the filter dropdown:
+### Custom Search Filters
+EverythingToolbar includes common search filters out of the box. For advanced users, it can synchronize with Everything's custom filters, giving you complete control over your search experience. Enable this feature by checking **Use Everything filters** in the EverythingToolbar's **Filters** settings.
 
 ![Custom search filters](https://user-images.githubusercontent.com/17520641/213913613-3621a0c1-0386-4d7a-ac0f-e7ab0239b222.png)
 
-### Quick toggles for search options
-Quick access to search flags (match case, whole word, match path and reg-ex) allows you to find your files precisely.
+### Quick Search Options
+Easily toggle search flags (match case, whole word, match path, and regex) to find your files with precision.
 
 ![Quick toggles](https://user-images.githubusercontent.com/17520641/213913757-da27d69d-59eb-445b-9d44-5b2e34c6faf4.png)
 
-### RegEx-powered file associations
-Create custom *Open with* commands by selecting <kbd>Rules...</kbd> in the preferences. By checking the <kbd>Automatically apply rules based on condition</kbd> checkbox, matching files/folders will execute the appropriate command based on the type and regular expression field. Leaving the regular expression field empty will never match, but the entry will only be displayed in the *Open with* context menu of the search results.
+### RegEx-Powered File Actions
+Create custom **Open with** actions by navigating to **Settings** → **Custom actions**. Enable **Automatically apply rules based on condition** to execute commands automatically based on file type and regular expressions. Leave the regex field empty to display the action only in the context menu.
 
-![Rules window](https://user-images.githubusercontent.com/17520641/213928743-a7f6a932-0b60-4dc3-8d2b-72ee09cf6e53.png)
+![Custom actions options](https://github.com/user-attachments/assets/85ba9937-dc47-4f13-a1fa-0b6482a0886d)
 
 ### Compatibility
-EverythingToolbar is compatible with both Windows 10 and Windows 11 and works well with tools like [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) and [StartAllBack](https://www.startallback.com/) to give you the full deskband integration even on Windows 11.
+EverythingToolbar works seamlessly on Windows 10 and Windows 11, and integrates perfectly with tools like [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) and [StartAllBack](https://www.startallback.com/) for full deskband support on Windows 11.
 
 ![Windows 10 screenshot](https://user-images.githubusercontent.com/17520641/213918399-a566c476-9b7e-460b-97c5-479964ddfa78.png)
 
-### Other features:
+### Additional Features
 
-- Open EverythingToolbar at any time via a customizable shortcut
-- Redirect Start menu search to EverythingToolbar (experimental)
-- Drag and drop files to where you need them most
-- Quickly preview files thanks to [QuickLook](https://github.com/QL-Win/QuickLook)/[Seer](http://1218.io/) integration
-- Use custom Everything [instance names](https://www.voidtools.com/support/everything/multiple_instances/#named_instances)
+- Access EverythingToolbar instantly via customizable global shortcut
+- Drag and drop files directly from search results
+- Preview files with [QuickLook](https://github.com/QL-Win/QuickLook) or [Seer](http://1218.io/) integration
+- Support for custom Everything [instance names](https://www.voidtools.com/support/everything/multiple_instances/#named_instances)
 
-### Keyboard shortcuts
+### Keyboard Shortcuts
 
-| Shortcut                                              | Function                             |
-|-------------------------------------------------------|--------------------------------------|
-| <kbd>&#8593;</kbd>/<kbd>&#8595;</kbd>                 | Navigate search results              |
-| <kbd>Ctrl</kbd>+<kbd>&#8593;</kbd>/<kbd>&#8595;</kbd> | Navigate search history (if enabled) |
-| <kbd>Enter</kbd>                                      | Open                                 |
-| <kbd>Ctrl</kbd>+<kbd>Enter</kbd>/<kbd>Click</kbd>     | Open path                            |
-| <kbd>Shift</kbd>+<kbd>Enter</kbd>/<kbd>Click</kbd>    | Open in Everything                   |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>         | Copy full path to clipboard          |
-| <kbd>Alt</kbd>+<kbd>Enter</kbd>/<kbd>Click</kbd>      | File properties                      |
-| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Enter</kbd>     | Run as admin                         |
-| (<kbd>Shift</kbd>+)<kbd>Tab</kbd>                     | Cycle through filters                |
-| <kbd>Ctrl</kbd>+<kbd>0-9</kbd>                        | Select filter                        |
-| <kbd>Space</kbd>                                      | Preview file in [QuickLook](https://github.com/QL-Win/QuickLook) |
-| <kbd>Win</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd>            | Focus search box (customizable)      |
+| Shortcut                                                           | Function                                 |
+|--------------------------------------------------------------------|------------------------------------------|
+| <kbd>↑</kbd> / <kbd>↓</kbd>                                        | Navigate search results                  |
+| <kbd>Ctrl</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd>                     | Navigate search history (if enabled)    |
+| <kbd>Enter</kbd> / <kbd>Click</kbd>                                | Open file or folder                     |
+| <kbd>Ctrl</kbd> + <kbd>Enter</kbd> / <kbd>Click</kbd>             | Open containing folder                   |
+| <kbd>Shift</kbd> + <kbd>Enter</kbd> / <kbd>Click</kbd>            | Open in Everything                      |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>                 | Copy full path to clipboard             |
+| <kbd>Alt</kbd> + <kbd>Enter</kbd> / <kbd>Click</kbd>              | Show file properties                     |
+| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Enter</kbd> / <kbd>Click</kbd> | Run as administrator                     |
+| <kbd>Shift</kbd> + <kbd>Right Click</kbd>                         | Open system context menu                |
+| (<kbd>Shift</kbd> +) <kbd>Tab</kbd>                               | Cycle through filters                    |
+| <kbd>Ctrl</kbd> + <kbd>0-9</kbd>                                  | Select filter by number                  |
+| <kbd>Space</kbd>                                                   | Preview file in QuickLook                |
+| <kbd>Win</kbd> + <kbd>Alt</kbd> + <kbd>S</kbd>                    | Focus search box (customizable)         |
 
-## Installation
+## 📦 Installation
 
-- Make sure you are running Windows 10 or 11 and [Everything](https://www.voidtools.com) &ge; 1.4.1 is installed and running (the Lite version is not supported)
-- Install EverythingToolbar using one of the following methods
-  - Download the installer for [EverythingToolbar](https://github.com/srwi/EverythingToolbar/releases)
-  - [Chocolatey](https://chocolatey.org/): `choco install everythingtoolbar`
-  - [winget](https://github.com/microsoft/winget-cli/): `winget install stnkl.everythingtoolbar`
-  - [Manual installation](https://github.com/srwi/EverythingToolbar/wiki/Installation-per-user-(experimental)) without admin privileges (not recommended)
-- **Note:** For Everything 1.5a the instance name `1.5a` must be set in the EverythingToolbar settings ([screenshot](https://github.com/srwi/EverythingToolbar/assets/17520641/c8e6f9ad-9f33-4ad9-92c1-788b5f7f438a)).
+### Prerequisites
+- Windows 10 or Windows 11
+- [Everything](https://www.voidtools.com) ≥ 1.4.1 installed and running
+  > **Note:** The Lite version of Everything is not supported
 
-## Setup
+### Install EverythingToolbar
+Choose one of the following installation methods:
 
-### Search icon
+- **Installer**: Download from [GitHub Releases](https://github.com/srwi/EverythingToolbar/releases)
+- **Chocolatey**: `choco install everythingtoolbar`
+- **winget**: `winget install stnkl.everythingtoolbar`
 
-*Recommended for **unmodified Windows 11** installations*
+> **Important:** For Everything 1.5a users, set the instance name to `1.5a` in EverythingToolbar's advanced settings (**Settings** → **Advanced** → **Everything instance name**). ([Screenshot](https://github.com/user-attachments/assets/30f07f64-4480-4f8b-ad9d-c9f957d0ab6e))
 
-- After installation on Windows 11 the setup assistant will guide you through the setup process
-  > If the setup assistant did not start automatically, search for `EverythingToolbar` in the Windows Start menu.
-  
-  > If you want to use the search icon on Windows 10 (not recommended), search for `EverythingToolbar.Launcher.exe`, start it manually and follow the setup process.
+For troubleshooting and additional setup help, see the [FAQ](FAQ.md).
+
+## ⚙️ Setup
+
+### Launcher (Taskbar Icon)
+*Recommended for unmodified Windows 11 installations*
+
+After installation on Windows 11, the setup assistant will guide you through the configuration process.
+
+> If the setup assistant doesn't start automatically, search for **EverythingToolbar** in the Windows Start menu.
+
+> For Windows 10 users who prefer the search icon (not recommended), search for **EverythingToolbar.Launcher.exe**, start it manually and follow the setup process.
 
 ### Deskband
+*Recommended for Windows 10 or when using [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) / [StartAllBack](https://www.startallback.com/)*
 
-*Recommended for **Windows 10** or in combination with [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher)/[StartAllBack](https://www.startallback.com/)*
+After installation on Windows 10:
+1. Right-click the taskbar and select EverythingToolbar from the context menu
+   > You may need to open the context menu twice for EverythingToolbar to appear
+2. Unlock the taskbar to adjust size and position ([demonstration video](https://user-images.githubusercontent.com/17520641/107118574-19a1bf80-6882-11eb-843a-7e854e5d0684.gif))
 
-- After installation on Windows 10, activate EverythingToolbar from the taskbar context menu
-  > You will need to open the context menu twice, as EverythingToolbar will not appear the first time.
-  
-  > **Windows 11 only**: After installation, the search icon setup assistant will start automatically. If you want to use the deskband instead (only recommended in combination with ExplorerPatcher/StartAllback), close the assistant and end EverythingToolbar's background process via the taskbar tray icon.
-- Adjust size and position after unlocking the taskbar ([Demonstration video](https://user-images.githubusercontent.com/17520641/107118574-19a1bf80-6882-11eb-843a-7e854e5d0684.gif))
+> **Windows 11 users**: The search icon setup assistant starts automatically after installation. To use the deskband instead (only recommended with ExplorerPatcher/StartAllBack), close the assistant and end EverythingToolbar's background process via the system tray.
 
-## Build
+## 🛠️ Development
 
-- Open the solution in Visual Studio with .NET 8.0 support
-- Disable signing in project properties
-- Deskband:
-  - Build project `EverythingToolbar.Deskband` (Windows Explorer will be restarted) 
-  - Install the toolbar deskband by running `/tools/install_deskband.cmd` as admin
-- Search icon:
-  - Set `EverythingToolbar.Launcher` as startup project and start debugging
+### Building from Source
+1. Open the solution in Visual Studio with .NET 8.0 support
+2. Disable code signing in project properties
+3. Choose your build target:
+   - **Deskband**: Build `EverythingToolbar.Deskband` project, then run `/tools/install_deskband.cmd` as administrator
+   - **Search icon**: Set `EverythingToolbar.Launcher` as startup project and start debugging
 
-## Contribute
+## 🤝 Contributing
 
-All kinds of contributions (questions, bug reports, pull requests) are welcome! Helping with open issues is greatly appreciated. As a basic rule, before filing issues, feature requests or anything else, take a look at the issues and check if they have already been reported by another user. If so, engage in the already existing discussion.
+All types of contributions are welcome! Whether you're reporting bugs, requesting features, or submitting pull requests, your help is appreciated.
 
-You can also help by [translating EverythingToolbar](https://crowdin.com/project/everythingtoolbar).
+### How to Contribute
+- Check existing [issues](https://github.com/srwi/EverythingToolbar/issues) before creating new ones
+- Help with open issues and discussions
+- [Translate EverythingToolbar](https://crowdin.com/project/everythingtoolbar) into your language
 
-## Support 💖
+## 💖 Support
 
 If you're enjoying EverythingToolbar, I'd be truly grateful for your support!
 You can show your appreciation by giving a star on GitHub or making a donation:
 
-- [Buy me a coffee](https://ko-fi.com/stephanrwi)
-- [Donate via PayPal](https://paypal.me/rumswinkel)
+- **[Buy me a coffee](https://ko-fi.com/stephanrwi)**
+- **[Donate via PayPal](https://paypal.me/rumswinkel)**
+
+## ❓ FAQ
+
+For frequently asked questions, troubleshooting guides, and detailed configuration instructions, visit the [FAQ](https://github.com/srwi/EverythingToolbar/blob/develop/FAQ.md).

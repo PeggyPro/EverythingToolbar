@@ -161,6 +161,15 @@
                             </StackPanel>
                         </controls:SettingItem.SettingContent>
                     </controls:SettingItem>
+                    <controls:SettingItem Title="{x:Static properties:Resources.ShortcutOpenSystemContextMenu}">
+                        <controls:SettingItem.SettingContent>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:Button Content="Shift" Style="{StaticResource StaticShortcutButtonStyle}" />
+                                <ui:TextBlock VerticalAlignment="Center" Text="+" />
+                                <ui:Button Content="Right Click" Style="{StaticResource StaticShortcutButtonStyle}" />
+                            </StackPanel>
+                        </controls:SettingItem.SettingContent>
+                    </controls:SettingItem>
                     <controls:SettingItem Title="{x:Static properties:Resources.ShortcutCopyFullPath}">
                         <controls:SettingItem.SettingContent>
                             <StackPanel Orientation="Horizontal">

@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Check the FAQ
+    url: https://github.com/srwi/EverythingToolbar/blob/develop/FAQ.md
+    about: Check frequently asked questions and troubleshooting guides
   - name: Open a discussion
     url: https://github.com/srwi/EverythingToolbar/discussions
     about: Discuss anything that is not a bug report or feature request
