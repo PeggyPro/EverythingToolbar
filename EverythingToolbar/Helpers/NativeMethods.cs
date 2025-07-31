@@ -8,9 +8,14 @@ namespace EverythingToolbar.Helpers
     {
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<NativeMethods>();
 
+        public static IntPtr FindTaskbarHandle()
+        {
+            return FindWindow("Shell_TrayWnd", null);
+        }
+
         public static void FocusTaskbarWindow()
         {
-            var taskbarHandle = FindWindow("Shell_TrayWnd", null);
+            var taskbarHandle = FindTaskbarHandle();
             if (taskbarHandle != IntPtr.Zero)
             {
                 ForciblySetForegroundWindow(taskbarHandle);

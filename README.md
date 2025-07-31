@@ -1,4 +1,4 @@
-# <img src="EverythingToolbar/Images/AppIcon.ico" width="32" height="32" alt="" style="vertical-align: middle;margin-top:-4px"> EverythingToolbar
+# <img src="EverythingToolbar/Images/AppIcon.ico" width="32" height="32" alt="" style="vertical-align: middle"> EverythingToolbar
 
 <a href="https://paypal.me/rumswinkel"><img src="https://img.shields.io/static/v1?label=Donate&message=%E2%9D%A4&logo=PayPal&color=%23009cde" height="25" /></a>
 <a href="https://ko-fi.com/stephanrwi"><img src="https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=%E2%98%95&logo=Ko-fi&color=%23FF5E5B" height="25" /></a>
@@ -14,27 +14,27 @@ Instant file search integration for the Windows taskbar powered by [Everything](
 ### Light & Dark Themes
 EverythingToolbar seamlessly blends into Windows 10 and 11, automatically adjusting to your system theme.
 
-![Light and dark themes](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/fast.png)
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/fast.png" alt="Light and dark themes" width="80%">
 
 ### Custom Search Filters
 EverythingToolbar includes common search filters out of the box. For advanced users, it can synchronize with Everything's custom filters, giving you complete control over your search experience. Enable this feature by checking **Use Everything filters** in the EverythingToolbar's **Filters** settings.
 
-![Custom search filters](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/flexible.png)
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/flexible.png" alt="Custom search filters" width="80%">
 
 ### Quick Search Options
 Easily toggle search flags (match case, whole word, match path, and regex) to find your files with precision.
 
-![Quick toggles](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/on_point.png)
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/on_point.png" alt="Quick toggles" width="80%">
 
 ### RegEx-Powered File Actions
 Create custom **Open with** actions by navigating to **Settings** → **Custom actions**. Enable **Automatically apply rules based on condition** to execute commands automatically based on file type and regular expressions. Leave the regex field empty to display the action only in the context menu.
 
-![Custom action options](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/custom_actions.png)
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/custom_actions.png" alt="Custom action options" width="80%">
 
 ### Compatibility
 EverythingToolbar works seamlessly on Windows 10 and Windows 11, and integrates perfectly with tools like [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) and [StartAllBack](https://www.startallback.com/) for full deskband support on Windows 11.
 
-![Windows 10 screenshot](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/compatible.png)
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/compatible.png" alt="Windows 10 screenshot" width="80%">
 
 ### Additional Features
 

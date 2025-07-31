@@ -49,7 +49,7 @@ While EverythingToolbar's main goal is to provide fast search results rather tha
 2. Create a new filter in Everything: `Everything → Search → Organize Filters...`
 3. Configure the filter with the following settings:
 
-    <img width="50%" alt="Filter options" src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/start_menu_search_filter.png" />
+    <img width="60%" alt="Filter options" src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/start_menu_search_filter.png" />
 
 **Tip**: Use Everything's filter order or EverythingToolbar's `Settings → Filters → Remember filter` option to control which filter is selected when opening the search window.
 

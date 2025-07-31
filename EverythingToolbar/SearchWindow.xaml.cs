@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Search;
 
@@ -11,11 +12,12 @@ namespace EverythingToolbar
 {
     public partial class SearchWindow
     {
-        public static readonly SearchWindow Instance = new SearchWindow();
+        public static readonly SearchWindow Instance = new();
         public event EventHandler<EventArgs> Hiding;
         public event EventHandler<EventArgs> Showing;
 
         private bool _dwmFlushOnRender;
+        private bool _isFirstShow = true;
 
         private SearchWindow()
         {
@@ -31,13 +33,11 @@ namespace EverythingToolbar
                 EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
 
             EventDispatcher.Instance.InvokeFocusRequested(this, EventArgs.Empty);
-
-            SetTopmostBelowTaskbar();
         }
 
         private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
         {
-            if (e.Key >= Key.D0 && e.Key <= Key.D9 && Keyboard.Modifiers == ModifierKeys.Control)
+            if (e.Key is >= Key.D0 and <= Key.D9 && Keyboard.Modifiers == ModifierKeys.Control)
             {
                 var index = e.Key == Key.D0 ? 9 : e.Key - Key.D1;
                 SearchState.Instance.SelectFilterFromIndex(index);
@@ -71,20 +71,16 @@ namespace EverythingToolbar
             if (Visibility != Visibility.Visible)
                 return;
 
-            Hiding?.Invoke(this, EventArgs.Empty);
+            Hiding.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnHidden(object sender, EventArgs e)
+        private void OnHidden(object? sender, EventArgs e)
         {
             if ((int)Height != ToolbarSettings.User.PopupHeight || (int)Width != ToolbarSettings.User.PopupWidth)
             {
                 ToolbarSettings.User.PopupHeight = (int)Height;
                 ToolbarSettings.User.PopupWidth = (int)Width;
             }
-
-            // Push outside of screens to prevent flickering when showing
-            BeginAnimation(TopProperty, new DoubleAnimation { To = 100000, Duration = TimeSpan.Zero });
-            BeginAnimation(LeftProperty, new DoubleAnimation { To = 100000, Duration = TimeSpan.Zero });
 
             base.Hide();
 
@@ -101,9 +97,23 @@ namespace EverythingToolbar
             ShowActivated = TaskbarStateManager.Instance.IsIcon;
             base.Show();
 
-            SetTopmostBelowTaskbar();
-
-            Showing?.Invoke(this, EventArgs.Empty);
+            // For first show we ensure the UI is fully rendered
+            if (_isFirstShow)
+            {
+                _isFirstShow = false;
+                UpdateLayout();
+                Dispatcher.BeginInvoke(
+                    new Action(() =>
+                    {
+                        Showing.Invoke(this, EventArgs.Empty);
+                    }),
+                    DispatcherPriority.Loaded
+                );
+            }
+            else
+            {
+                Showing.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public void Toggle()
@@ -114,27 +124,41 @@ namespace EverythingToolbar
                 Show();
         }
 
+        private void ClearAnimations()
+        {
+            BeginAnimation(LeftProperty, null);
+            BeginAnimation(TopProperty, null);
+            BeginAnimation(OpacityProperty, null);
+            ContentGrid.BeginAnimation(MarginProperty, null);
+        }
+
         public void AnimateShow(double left, double top, double width, double height, Edge taskbarEdge)
         {
+            // Clearing all animations allows us to set the corresponding properties again
+            ClearAnimations();
+
             Width = width;
             Height = height;
 
-            var vertical = taskbarEdge == Edge.Left || taskbarEdge == Edge.Right;
-            var animation = new DoubleAnimation { To = vertical ? top : left, Duration = TimeSpan.Zero };
-            animation.Completed += (s, e) =>
-            {
-                if (Utils.GetWindowsVersion() >= Utils.WindowsVersion.Windows11)
-                    AnimateShowWin11(left, top, width, height, taskbarEdge);
-                else
-                    AnimateShowWin10(left, top, width, height, taskbarEdge);
-            };
+            // Move window to correct secondary axis position
+            var vertical = taskbarEdge is Edge.Left or Edge.Right;
+            if (vertical)
+                Top = top;
+            else
+                Left = left;
 
-            BeginAnimation(vertical ? TopProperty : LeftProperty, animation);
+            SetTopmostBelowTaskbar();
+
+            // Animate window along primary axis position
+            if (Utils.GetWindowsVersion() >= Utils.WindowsVersion.Windows11)
+                AnimateShowWin11(left, top, width, height, taskbarEdge);
+            else
+                AnimateShowWin10(left, top, taskbarEdge);
         }
 
-        private void AnimateShowWin10(double left, double top, double width, double height, Edge taskbarEdge)
+        private void AnimateShowWin10(double left, double top, Edge taskbarEdge)
         {
-            DependencyProperty property = null;
+            DependencyProperty? property = null;
             double from = 0;
             double to = 0;
             switch (taskbarEdge)
@@ -212,7 +236,7 @@ namespace EverythingToolbar
 
         private void AnimateShowWin11(double left, double top, double width, double height, Edge taskbarEdge)
         {
-            DependencyProperty property = null;
+            DependencyProperty? property = null;
             double from = 0;
             double to = 0;
             switch (taskbarEdge)
@@ -290,7 +314,7 @@ namespace EverythingToolbar
             );
 
             double target = 0;
-            DependencyProperty property = null;
+            DependencyProperty? property = null;
             switch (taskbarEdge)
             {
                 case Edge.Left:
@@ -317,29 +341,30 @@ namespace EverythingToolbar
 
         private void AnimateHideWin11(Edge taskbarEdge)
         {
-            DependencyProperty property = null;
+            DependencyProperty? property = null;
             double from = 0;
             double to = 0;
+            double extraOffset = 50; // To include all possible window decorations
             switch (taskbarEdge)
             {
                 case Edge.Left:
                     from = RestoreBounds.Left;
-                    to = RestoreBounds.Left - Width;
+                    to = RestoreBounds.Left - Width - extraOffset;
                     property = LeftProperty;
                     break;
                 case Edge.Right:
                     from = RestoreBounds.Left;
-                    to = RestoreBounds.Left + Width;
+                    to = RestoreBounds.Left + Width + extraOffset;
                     property = LeftProperty;
                     break;
                 case Edge.Top:
                     from = RestoreBounds.Top;
-                    to = RestoreBounds.Top - Height;
+                    to = RestoreBounds.Top - Height - extraOffset;
                     property = TopProperty;
                     break;
                 case Edge.Bottom:
                     from = RestoreBounds.Top;
-                    to = RestoreBounds.Top + Height;
+                    to = RestoreBounds.Top + Height + extraOffset;
                     property = TopProperty;
                     break;
             }
@@ -373,40 +398,20 @@ namespace EverythingToolbar
         private void SetTopmostBelowTaskbar()
         {
             const int hwndTopmost = -1;
+
             const int swpNoactivate = 0x0010;
             const int swpShowwindow = 0x0040;
             const int swpNomove = 0x0002;
             const int swpNosize = 0x0001;
 
-            var hwnd = new WindowInteropHelper(this).Handle;
-            var taskbarHwnd = NativeMethods.FindWindow("Shell_TrayWnd", null);
+            const uint flags = swpNomove | swpNosize | swpNoactivate | swpShowwindow;
 
-            if (taskbarHwnd != IntPtr.Zero)
-            {
-                // Set window above other windows but below the taskbar
-                NativeMethods.SetWindowPos(
-                    hwnd,
-                    taskbarHwnd,
-                    0,
-                    0,
-                    0,
-                    0,
-                    swpNomove | swpNosize | swpNoactivate | swpShowwindow
-                );
-            }
-            else
-            {
-                // Regular topmost
-                NativeMethods.SetWindowPos(
-                    hwnd,
-                    (IntPtr)hwndTopmost,
-                    0,
-                    0,
-                    0,
-                    0,
-                    swpNomove | swpNosize | swpNoactivate | swpShowwindow
-                );
-            }
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var taskbarHwnd = NativeMethods.FindTaskbarHandle();
+            var targetHwnd = taskbarHwnd == IntPtr.Zero ? hwndTopmost : taskbarHwnd;
+
+            // Set window above other windows but below the taskbar
+            NativeMethods.SetWindowPos(hwnd, targetHwnd, 0, 0, 0, 0, flags);
         }
     }
 }
