@@ -6,7 +6,7 @@
     <UserControl.Resources>
         <Style x:Key="BannerButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ButtonBorderBrush}" />
+            <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="12, 6" />
             <Setter Property="MinWidth" Value="60" />
@@ -24,10 +24,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ButtonBorderBrush}" />
+                                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonBorderBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ButtonBorderBrush}" />
+                                <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonBorderBrush}" />
                                 <Setter Property="Opacity" Value="0.8" />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -36,7 +36,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Border Background="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=BannerColor}"
+    <Border Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BannerColor}"
             CornerRadius="{DynamicResource UpdateBannerCornerRadius}"
             Margin="{DynamicResource UpdateBannerMargin}"
             MinHeight="50">
@@ -49,7 +49,7 @@
             <StackPanel VerticalAlignment="Center" 
                         Margin="16, 10, 60, 10">
                 <TextBlock Name="BannerHeadlineBlock"
-                           Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Headline}"
+                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Headline}"
                            FontWeight="Medium"
                            Margin="0, 0, 0, 4"
                            TextWrapping="Wrap">
@@ -57,10 +57,10 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Headline}" Value="">
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Headline}" Value="">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Headline}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Headline}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -68,18 +68,18 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock Name="BannerTextBlock"
-                           Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Text}"
+                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Text}"
                            TextWrapping="Wrap" />
             </StackPanel>
             <Button Name="SecondaryButton"
                     Grid.Column="1"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=SecondaryButtonText}"
+                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SecondaryButtonText}"
                     Margin="8, 10"
                     Click="OnSecondaryButtonClicked"
                     Style="{StaticResource BannerButtonStyle}" />
             <Button Name="PrimaryButton"
                     Grid.Column="2"
-                    Content="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=PrimaryButtonText}"
+                    Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=PrimaryButtonText}"
                     Margin="8, 10, 16, 10"
                     Click="OnPrimaryButtonClicked"
                     Style="{StaticResource BannerButtonStyle}" />
