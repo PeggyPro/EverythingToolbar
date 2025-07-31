@@ -11,19 +11,18 @@ namespace EverythingToolbar.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length >= 2 && values[0] is IEnumerable enumerable && values[1] is int count)
-            {
+            if (values is [IEnumerable enumerable, int count, ..])
                 return enumerable.Cast<object>().Take(count).ToList();
-            }
+
             return values[0];
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("This converter cannot be used in two-way binding.");
         }
 
-        public override object? ProvideValue(IServiceProvider serviceProvider)
+        public override object ProvideValue(IServiceProvider serviceProvider)
         {
             return this;
         }

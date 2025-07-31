@@ -58,21 +58,27 @@ namespace EverythingToolbar.Controls
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if (!ToolbarSettings.User.IsUpdateNotificationsEnabled)
-                return;
-
-            var latestVersion = await CheckForUpdateAsync();
-
-            if (latestVersion == null || latestVersion == TryGetSkippedUpdate())
-                return;
-
-            _latestVersion = latestVersion;
-            var banner = FindName("Banner") as GenericBanner;
-            if (banner != null)
+            try
             {
-                banner.Text = $"{Properties.Resources.UpdateBannerText} {_latestVersion}";
+                if (!ToolbarSettings.User.IsUpdateNotificationsEnabled)
+                    return;
+
+                var latestVersion = await CheckForUpdateAsync();
+
+                if (latestVersion == null || latestVersion == TryGetSkippedUpdate())
+                    return;
+
+                _latestVersion = latestVersion;
+                if (FindName("Banner") is GenericBanner banner)
+                {
+                    banner.Text = $"{Properties.Resources.UpdateBannerText} {_latestVersion}";
+                }
+                Visibility = Visibility.Visible;
             }
-            Visibility = Visibility.Visible;
+            catch (Exception ex)
+            {
+                Logger.Error("Failed to check for updates: {Message}", ex.Message);
+            }
         }
 
         private static Version? TryGetSkippedUpdate()

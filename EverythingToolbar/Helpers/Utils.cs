@@ -19,30 +19,24 @@ namespace EverythingToolbar.Helpers
 
         public static bool GetWindowsSearchEnabledState()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search"))
-            {
-                var searchboxTaskbarMode = key?.GetValue("SearchboxTaskbarMode");
-                return searchboxTaskbarMode != null && (int)searchboxTaskbarMode > 0;
-            }
+            using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Search");
+            var searchboxTaskbarMode = key?.GetValue("SearchboxTaskbarMode");
+            return searchboxTaskbarMode != null && (int)searchboxTaskbarMode > 0;
         }
 
         public static void SetWindowsSearchEnabledState(bool enabled)
         {
-            using (
-                var key = Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Search",
-                    RegistryKeyPermissionCheck.ReadWriteSubTree
-                )
-            )
+            using var key = Registry.CurrentUser.OpenSubKey(
+                @"Software\Microsoft\Windows\CurrentVersion\Search",
+                RegistryKeyPermissionCheck.ReadWriteSubTree
+            );
+            try
             {
-                try
-                {
-                    key?.SetValue("SearchboxTaskbarMode", enabled ? 1 : 0);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e, "Failed to set taskbar search icon mode.");
-                }
+                key?.SetValue("SearchboxTaskbarMode", enabled ? 1 : 0);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to set taskbar search icon mode.");
             }
         }
 

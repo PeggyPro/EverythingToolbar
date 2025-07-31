@@ -188,8 +188,8 @@
                     Margin="8,0,0,0"
                     Padding="4"
                     Content="{x:Static properties:Resources.AboutDonation}"
-                    NavigateUri="https://github.com/srwi/EverythingToolbar#support"
-                    ToolTip="https://github.com/srwi/EverythingToolbar#support" />
+                    NavigateUri="https://github.com/srwi/EverythingToolbar#support-"
+                    ToolTip="https://github.com/srwi/EverythingToolbar#support-" />
             </StackPanel>
         </Grid>
     </ScrollViewer>

@@ -52,14 +52,14 @@ namespace EverythingToolbar.Helpers
             IntPtr parentHandle,
             IntPtr childAfter,
             string className,
-            string windowTitle
+            string? windowTitle
         );
 
         [DllImport("user32.dll")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+        public static extern IntPtr FindWindow(string lpClassName, string? lpWindowName);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, ref Copydatastruct lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, ref Copydatastruct lParam);
 
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
@@ -75,8 +75,8 @@ namespace EverythingToolbar.Helpers
         public static extern bool SetWindowPos(
             IntPtr hWnd,
             IntPtr hWndInsertAfter,
-            int X,
-            int Y,
+            int x,
+            int y,
             int cx,
             int cy,
             uint uFlags

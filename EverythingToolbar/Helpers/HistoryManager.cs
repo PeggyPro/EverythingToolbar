@@ -11,84 +11,85 @@ namespace EverythingToolbar.Helpers
 {
     public class HistoryManager
     {
-        private static readonly ILogger _logger = ToolbarLogger.GetLogger<HistoryManager>();
-        private static readonly string HISTORY_PATH = Path.Combine(
+        public static readonly HistoryManager Instance = new();
+
+        private static readonly ILogger Logger = ToolbarLogger.GetLogger<HistoryManager>();
+        private static readonly string HistoryPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "EverythingToolbar",
             "history.xml"
         );
-        private static readonly int MAX_HISTORY_SIZE = 50;
-        private readonly List<string> history = new List<string>(MAX_HISTORY_SIZE);
-        private int currentIndex;
-        private int currentHistorySize;
 
-        public static HistoryManager Instance = new HistoryManager();
+        private const int MaxHistorySize = 50;
+
+        private int _currentHistorySize;
+        private int _currentIndex;
+        private readonly List<string> _history;
 
         private HistoryManager()
         {
-            history = LoadHistory();
-            currentIndex = history.Count;
-            currentHistorySize = ToolbarSettings.User.IsEnableHistory ? MAX_HISTORY_SIZE : 0;
+            _history = LoadHistory();
+            _currentIndex = _history.Count;
+            _currentHistorySize = ToolbarSettings.User.IsEnableHistory ? MaxHistorySize : 0;
             ToolbarSettings.User.PropertyChanged += OnSettingChanged;
         }
 
-        private void OnSettingChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSettingChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ToolbarSettings.User.IsEnableHistory))
             {
                 if (ToolbarSettings.User.IsEnableHistory)
                 {
-                    currentHistorySize = MAX_HISTORY_SIZE;
+                    _currentHistorySize = MaxHistorySize;
                 }
                 else
                 {
-                    currentHistorySize = 0;
+                    _currentHistorySize = 0;
                     ClearHistory();
                 }
             }
         }
 
-        public List<string> LoadHistory()
+        private List<string> LoadHistory()
         {
-            if (File.Exists(HISTORY_PATH))
-            {
-                try
-                {
-                    var serializer = new XmlSerializer(history.GetType());
-                    using (var reader = XmlReader.Create(HISTORY_PATH))
-                    {
-                        return (List<string>)serializer.Deserialize(reader);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Failed to load search term history.");
-                }
-            }
+            if (!File.Exists(HistoryPath))
+                return [];
 
-            return new List<string>();
-        }
-
-        public void SaveHistory()
-        {
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(HISTORY_PATH));
-                var serializer = new XmlSerializer(history.GetType());
-                using (var writer = XmlWriter.Create(HISTORY_PATH))
-                {
-                    serializer.Serialize(writer, history);
-                }
+                var serializer = new XmlSerializer(_history.GetType());
+                using var reader = XmlReader.Create(HistoryPath);
+                return serializer.Deserialize(reader) as List<string> ?? [];
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Failed to save search term history.");
+                Logger.Error(e, "Failed to load search term history.");
+            }
+
+            return [];
+        }
+
+        private void SaveHistory()
+        {
+            try
+            {
+                if (Path.GetDirectoryName(HistoryPath) is { } path)
+                    Directory.CreateDirectory(path);
+
+                var serializer = new XmlSerializer(_history.GetType());
+                using var writer = XmlWriter.Create(HistoryPath);
+                serializer.Serialize(writer, _history);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to save search term history.");
             }
         }
 
         public void ClearHistory()
         {
-            history.Clear();
+            _history.Clear();
+
             SaveHistory();
         }
 
@@ -97,38 +98,39 @@ namespace EverythingToolbar.Helpers
             if (string.IsNullOrEmpty(searchTerm))
                 return;
 
-            if (history.Count > 0 && history.Last() == searchTerm)
+            if (_history.Count > 0 && _history.Last() == searchTerm)
                 return;
 
-            history.Add(searchTerm);
-            while (history.Count > currentHistorySize)
-                history.RemoveAt(0);
-            currentIndex = history.Count;
+            _history.Add(searchTerm);
+            while (_history.Count > _currentHistorySize)
+                _history.RemoveAt(0);
+            _currentIndex = _history.Count;
+
             SaveHistory();
         }
 
         public string GetPreviousItem()
         {
-            if (history.Count == 0)
+            if (_history.Count == 0)
                 return "";
 
-            currentIndex = Math.Max(0, currentIndex - 1);
-            return history.ElementAt(currentIndex);
+            _currentIndex = Math.Max(0, _currentIndex - 1);
+            return _history.ElementAt(_currentIndex);
         }
 
         public string GetNextItem()
         {
-            if (history.Count == 0)
+            if (_history.Count == 0)
                 return "";
 
-            if (currentIndex >= history.Count - 1)
+            if (_currentIndex >= _history.Count - 1)
             {
-                currentIndex = history.Count;
+                _currentIndex = _history.Count;
                 return "";
             }
 
-            currentIndex = Math.Min(currentIndex + 1, history.Count - 1);
-            return history.ElementAt(currentIndex);
+            _currentIndex = Math.Min(_currentIndex + 1, _history.Count - 1);
+            return _history.ElementAt(_currentIndex);
         }
     }
 }

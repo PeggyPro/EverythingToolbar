@@ -31,7 +31,7 @@ namespace EverythingToolbar.Data
 
         public string FullPathAndFileName { get; init; }
 
-        public string Path => System.IO.Path.GetDirectoryName(FullPathAndFileName);
+        public string Path => System.IO.Path.GetDirectoryName(FullPathAndFileName) ?? "";
 
         public string HighlightedPath { get; set; }
 
@@ -71,7 +71,7 @@ namespace EverythingToolbar.Data
                 if (_icon != null)
                     return _icon;
 
-                string[] imageExtensions = { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico" };
+                string[] imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"];
                 string ext = System.IO.Path.GetExtension(FullPathAndFileName).ToLowerInvariant();
                 if (
                     ToolbarSettings.User.IsThumbnailsEnabled
@@ -217,9 +217,9 @@ namespace EverythingToolbar.Data
         public void ShowWindowsContextMenu()
         {
             var menu = new ShellContextMenu();
-            var arrFI = new FileInfo[1];
-            arrFI[0] = new FileInfo(FullPathAndFileName);
-            menu.ShowContextMenu(arrFI, Control.MousePosition);
+            var arrFi = new FileInfo[1];
+            arrFi[0] = new FileInfo(FullPathAndFileName);
+            menu.ShowContextMenu(arrFi, Control.MousePosition);
         }
 
         public void ShowInEverything()
@@ -233,22 +233,16 @@ namespace EverythingToolbar.Data
             {
                 try
                 {
-                    using (
-                        var client = new NamedPipeClientStream(
-                            ".",
-                            "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value,
-                            PipeDirection.Out
-                        )
-                    )
-                    {
-                        client.Connect(1000);
+                    using var client = new NamedPipeClientStream(
+                        ".",
+                        "QuickLook.App.Pipe." + WindowsIdentity.GetCurrent().User?.Value,
+                        PipeDirection.Out
+                    );
+                    client.Connect(1000);
 
-                        using (var writer = new StreamWriter(client))
-                        {
-                            writer.WriteLine($"QuickLook.App.PipeMessages.Toggle|{FullPathAndFileName}");
-                            writer.Flush();
-                        }
-                    }
+                    using var writer = new StreamWriter(client);
+                    writer.WriteLine($"QuickLook.App.PipeMessages.Toggle|{FullPathAndFileName}");
+                    writer.Flush();
                 }
                 catch (TimeoutException)
                 {
@@ -269,17 +263,17 @@ namespace EverythingToolbar.Data
                 {
                     var seer = NativeMethods.FindWindowEx(IntPtr.Zero, IntPtr.Zero, "SeerWindowClass", null);
 
-                    const int SEER_INVOKE_W32 = 5000;
-                    const int WM_COPYDATA = 0x004A;
+                    const int seerInvokeW32 = 5000;
+                    const int wmCopydata = 0x004A;
 
                     var cd = new NativeMethods.Copydatastruct
                     {
                         cbData = (FullPathAndFileName.Length + 1) * 2,
                         lpData = Marshal.StringToHGlobalUni(FullPathAndFileName),
-                        dwData = new IntPtr(SEER_INVOKE_W32),
+                        dwData = new IntPtr(seerInvokeW32),
                     };
 
-                    NativeMethods.SendMessage(seer, WM_COPYDATA, IntPtr.Zero, ref cd);
+                    NativeMethods.SendMessage(seer, wmCopydata, IntPtr.Zero, ref cd);
 
                     Marshal.FreeHGlobal(cd.lpData);
                 }
@@ -290,7 +284,7 @@ namespace EverythingToolbar.Data
             });
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

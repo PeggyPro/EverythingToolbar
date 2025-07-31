@@ -17,16 +17,7 @@ namespace EverythingToolbar.Helpers
     internal class EverythingFilterLoader : INotifyPropertyChanged
     {
         private ObservableCollection<Filter>? _filters;
-        public ObservableCollection<Filter>? Filters
-        {
-            get
-            {
-                if (_filters == null)
-                    _filters = LoadFilters();
-
-                return _filters;
-            }
-        }
+        public ObservableCollection<Filter>? Filters => _filters ??= LoadFilters();
 
         public static readonly EverythingFilterLoader Instance = new();
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<EverythingFilterLoader>();

@@ -67,7 +67,7 @@ namespace EverythingToolbar.Data
             {
                 try
                 {
-                    Regex.IsMatch("", Expression);
+                    bool _ = Regex.IsMatch("", Expression);
                     return true;
                 }
                 catch (ArgumentException)

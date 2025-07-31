@@ -7,7 +7,7 @@ using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Controls
 {
-    public partial class SearchButton : Button
+    public partial class SearchButton
     {
         public SearchButton()
         {
@@ -19,21 +19,27 @@ namespace EverythingToolbar.Controls
             ThemeAwareness.ResourceChanged += UpdateTheme;
         }
 
-        private void OnSearchWindowDeactivated(object sender, EventArgs e)
+        private void OnSearchWindowDeactivated(object? sender, EventArgs e)
         {
-            var border = Template.FindName("OuterBorder", this) as Border;
+            if (Template.FindName("OuterBorder", this) is not Border border)
+                return;
+
             border.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
         }
 
-        private void OnSearchWindowActivated(object sender, EventArgs e)
+        private void OnSearchWindowActivated(object? sender, EventArgs e)
         {
-            var border = Template.FindName("OuterBorder", this) as Border;
+            if (Template.FindName("OuterBorder", this) is not Border border)
+                return;
+
             border.Background = new SolidColorBrush(Color.FromArgb(64, 255, 255, 255));
         }
 
         private void UpdateTheme(Theme newTheme)
         {
-            var border = Template.FindName("OuterBorder", this) as Border;
+            if (Template.FindName("OuterBorder", this) is not Border border)
+                return;
+
             if (newTheme == Theme.Light)
             {
                 Foreground = new SolidColorBrush(Colors.Black);
@@ -46,23 +52,23 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private void UpdateTheme(object sender, ResourcesChangedEventArgs e)
+        private void UpdateTheme(object? sender, ResourcesChangedEventArgs e)
         {
             if (IsLoaded)
                 UpdateTheme(e.NewTheme);
             else
-                Loaded += (s, e_) =>
+                Loaded += (_, _) =>
                 {
                     UpdateTheme(e.NewTheme);
                 };
         }
 
-        private void OnClick(object sender, RoutedEventArgs e)
+        private void OnClick(object? sender, RoutedEventArgs e)
         {
             SearchWindow.Instance.Toggle();
         }
 
-        private void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void OnIsVisibleChanged(object? sender, DependencyPropertyChangedEventArgs e)
         {
             TaskbarStateManager.Instance.IsIcon = (bool)e.NewValue;
         }

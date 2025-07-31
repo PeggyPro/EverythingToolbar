@@ -11,12 +11,12 @@ namespace EverythingToolbar.Helpers
 {
     public class StartMenuIntegration
     {
-        public static readonly StartMenuIntegration Instance = new StartMenuIntegration();
-        private static readonly Queue<INPUT> RecordedInputs = new Queue<INPUT>();
+        public static readonly StartMenuIntegration Instance = new();
+        private static readonly Queue<Input> RecordedInputs = new();
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<StartMenuIntegration>();
 
-        private static WinEventDelegate _focusedWindowChangedCallback;
-        private static LowLevelKeyboardProc _startMenuKeyboardHookCallback;
+        private static WinEventDelegate? _focusedWindowChangedCallback;
+        private static LowLevelKeyboardProc? _startMenuKeyboardHookCallback;
         private static IntPtr _focusedWindowChangedHookId = IntPtr.Zero;
         private static IntPtr _startMenuKeyboardHookId = IntPtr.Zero;
 
@@ -35,7 +35,7 @@ namespace EverythingToolbar.Helpers
             ToolbarSettings.User.PropertyChanged += OnSettingsChanged;
         }
 
-        private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ToolbarSettings.User.IsReplaceStartMenuSearch))
             {
@@ -118,7 +118,7 @@ namespace EverythingToolbar.Helpers
             if (nCode >= 0 && !_isNativeSearchActive)
             {
                 var virtualKeyCode = (uint)Marshal.ReadInt32(lParam);
-                var isKeyDown = wParam == (IntPtr)WmKeyDown || wParam == (IntPtr)WmSyskeyDown;
+                var isKeyDown = wParam is WmKeyDown or WmSyskeyDown;
 
                 // We never want to block the Windows key
                 if (Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin))
@@ -136,12 +136,12 @@ namespace EverythingToolbar.Helpers
                 // Queue keypress for replay in EverythingToolbar
                 _isInterceptingKeys = true;
                 RecordedInputs.Enqueue(
-                    new INPUT
+                    new Input
                     {
                         type = InputKeyboard,
                         u = new InputUnion
                         {
-                            ki = new KEYBDINPUT
+                            ki = new KeybdInput
                             {
                                 wVk = (ushort)virtualKeyCode,
                                 dwFlags = isKeyDown ? 0 : KeyeventFKeyup,
@@ -152,7 +152,7 @@ namespace EverythingToolbar.Helpers
 
                 CloseStartMenu();
 
-                return (IntPtr)1;
+                return 1;
             }
 
             return CallNextHookEx(_startMenuKeyboardHookId, nCode, wParam, lParam);
@@ -170,7 +170,7 @@ namespace EverythingToolbar.Helpers
             }
             else
             {
-                SearchWindow.Instance.SearchBox.TextBox.Loaded += (s, args) =>
+                SearchWindow.Instance.SearchBox.TextBox.Loaded += (_, _) =>
                 {
                     SearchWindow.Instance.SearchBox.Focus();
                     ReplayRecordedInputs();
@@ -238,7 +238,7 @@ namespace EverythingToolbar.Helpers
         static extern bool CloseHandle(IntPtr handle);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+        static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc? lpfn, IntPtr hMod, uint dwThreadId);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -258,7 +258,7 @@ namespace EverythingToolbar.Helpers
             uint eventMin,
             uint eventMax,
             IntPtr hmodWinEventProc,
-            WinEventDelegate lpfnWinEventProc,
+            WinEventDelegate? lpfnWinEventProc,
             uint idProcess,
             uint idThread,
             uint dwFlags
@@ -277,7 +277,7 @@ namespace EverythingToolbar.Helpers
         private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct INPUT
+        private struct Input
         {
             public int type;
             public InputUnion u;
@@ -287,11 +287,11 @@ namespace EverythingToolbar.Helpers
         private struct InputUnion
         {
             [FieldOffset(0)]
-            public KEYBDINPUT ki;
+            public KeybdInput ki;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct KEYBDINPUT
+        private struct KeybdInput
         {
             public ushort wVk;
             public ushort wScan;

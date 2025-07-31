@@ -13,23 +13,6 @@ namespace EverythingToolbar.Behaviors
             "AppsUseLightTheme"
         );
 
-        public WpfUiBehavior()
-        {
-            if (AssociatedObject is not Window)
-                return;
-
-            // TODO: Theme switching seems to be broken in WPF UI: https://github.com/lepoco/wpfui/issues/1193
-            var systemThemeWatcher = new RegistryWatcher(SystemThemeRegistryEntry);
-            systemThemeWatcher.OnChangeValue += newValue =>
-            {
-                Dispatcher.Invoke(() =>
-                {
-                    var theme = GetThemeFromRegistryValue((int)newValue);
-                    ApplyTheme(theme);
-                });
-            };
-        }
-
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -51,7 +34,7 @@ namespace EverythingToolbar.Behaviors
 
         private void AutoApplyTheme()
         {
-            var themeValue = (int)SystemThemeRegistryEntry.GetValue(0);
+            var themeValue = SystemThemeRegistryEntry.GetValue(0) as int? ?? 0;
             var theme = GetThemeFromRegistryValue(themeValue);
             ApplyTheme(theme);
         }

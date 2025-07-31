@@ -12,13 +12,13 @@ namespace EverythingToolbar.Settings
 {
     public partial class Shortcuts
     {
-        public Key Key { get; private set; }
-        public ModifierKeys Modifiers { get; private set; }
+        private Key Key { get; set; }
+        private ModifierKeys Modifiers { get; set; }
         private ModifierKeys TempMods { get; set; }
 
-        private static event EventHandler<WinKeyEventArgs> WinKeyEventHandler;
+        private static event EventHandler<WinKeyEventArgs>? WinKeyEventHandler;
 
-        private static LowLevelKeyboardProc _llKeyboardHookCallback;
+        private static LowLevelKeyboardProc? _llKeyboardHookCallback;
         private static IntPtr _llKeyboardHookId = IntPtr.Zero;
 
         private const int WhKeyboardLl = 13;
@@ -30,7 +30,7 @@ namespace EverythingToolbar.Settings
             InitializeComponent();
         }
 
-        private void OnKeyPressedReleased(object sender, WinKeyEventArgs e)
+        private void OnKeyPressedReleased(object? sender, WinKeyEventArgs e)
         {
             switch (e.Key)
             {

@@ -22,8 +22,8 @@ namespace EverythingToolbar.Launcher
         private const string StartSetupAssistantEventName = "StartSetupAssistantEvent";
         private const string MutexName = "EverythingToolbar.Launcher";
         private static bool _searchWindowRecentlyClosed;
-        private static Timer _searchWindowRecentlyClosedTimer;
-        private static NotifyIcon _notifyIcon;
+        private static Timer? _searchWindowRecentlyClosedTimer;
+        private static NotifyIcon? _notifyIcon;
 
         private class LauncherWindow : Window
         {
@@ -36,7 +36,7 @@ namespace EverythingToolbar.Launcher
 
                 _searchWindowRecentlyClosedTimer = new Timer(500);
                 _searchWindowRecentlyClosedTimer.AutoReset = false;
-                _searchWindowRecentlyClosedTimer.Elapsed += (s, e) =>
+                _searchWindowRecentlyClosedTimer.Elapsed += (_, _) =>
                 {
                     _searchWindowRecentlyClosed = false;
                 };
@@ -68,7 +68,7 @@ namespace EverythingToolbar.Launcher
 
                 SearchWindow.Instance.Hiding += OnSearchWindowHiding;
 
-                ToolbarSettings.User.PropertyChanged += async (sender, e) =>
+                ToolbarSettings.User.PropertyChanged += async (_, e) =>
                 {
                     if (e.PropertyName == nameof(ToolbarSettings.User.IsTrayIconEnabled))
                     {
@@ -103,13 +103,13 @@ namespace EverythingToolbar.Launcher
                 JumpList.SetJumpList(Application.Current, jumpList);
             }
 
-            private static void OnSearchWindowHiding(object sender, EventArgs e)
+            private static void OnSearchWindowHiding(object? sender, EventArgs e)
             {
                 _searchWindowRecentlyClosed = true;
-                _searchWindowRecentlyClosedTimer.Start();
+                _searchWindowRecentlyClosedTimer?.Start();
             }
 
-            private static void FocusSearchBox(object sender, HotkeyEventArgs e)
+            private static void FocusSearchBox(object? sender, HotkeyEventArgs e)
             {
                 SearchWindow.Instance.Toggle();
             }
@@ -152,7 +152,8 @@ namespace EverythingToolbar.Launcher
             {
                 Dispatcher?.Invoke(() =>
                 {
-                    new SetupAssistant(_notifyIcon).Show();
+                    if (_notifyIcon != null)
+                        new SetupAssistant(_notifyIcon).Show();
                 });
             }
         }
@@ -164,32 +165,30 @@ namespace EverythingToolbar.Launcher
             {
                 if (createdNew)
                 {
-                    using (var trayIcon = new NotifyIcon())
-                    {
-                        var app = new Application();
-                        trayIcon.Icon = new Icon(Utils.GetThemedAppIconName());
-                        trayIcon.ContextMenuStrip = new ContextMenuStrip();
-                        var setupItem = new ToolStripMenuItem(
-                            Resources.ContextMenuRunSetupAssistant,
-                            null,
-                            (s, e) =>
-                            {
-                                new SetupAssistant(trayIcon).Show();
-                            }
-                        );
-                        trayIcon.ContextMenuStrip.Items.Add(setupItem);
-                        var quitItem = new ToolStripMenuItem(
-                            Resources.ContextMenuQuit,
-                            null,
-                            (s, e) =>
-                            {
-                                app.Shutdown();
-                            }
-                        );
-                        trayIcon.ContextMenuStrip.Items.Add(quitItem);
-                        trayIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;
-                        app.Run(new LauncherWindow(trayIcon));
-                    }
+                    using var trayIcon = new NotifyIcon();
+                    var app = new Application();
+                    trayIcon.Icon = new Icon(Utils.GetThemedAppIconName());
+                    trayIcon.ContextMenuStrip = new ContextMenuStrip();
+                    var setupItem = new ToolStripMenuItem(
+                        Resources.ContextMenuRunSetupAssistant,
+                        null,
+                        (_, _) =>
+                        {
+                            new SetupAssistant(trayIcon).Show();
+                        }
+                    );
+                    trayIcon.ContextMenuStrip.Items.Add(setupItem);
+                    var quitItem = new ToolStripMenuItem(
+                        Resources.ContextMenuQuit,
+                        null,
+                        (_, _) =>
+                        {
+                            app.Shutdown();
+                        }
+                    );
+                    trayIcon.ContextMenuStrip.Items.Add(quitItem);
+                    trayIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;
+                    app.Run(new LauncherWindow(trayIcon));
                 }
                 else
                 {

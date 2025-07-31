@@ -30,7 +30,7 @@ namespace EverythingToolbar.Converters
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException("This converter cannot be used in two-way binding.");
         }
 
         private (Version targetVersion, ComparisonOperation operation)? ParseVersionParameter(string parameter)

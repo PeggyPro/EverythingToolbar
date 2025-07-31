@@ -51,7 +51,7 @@ namespace EverythingToolbar.Helpers
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string? propertyName = null)
         {

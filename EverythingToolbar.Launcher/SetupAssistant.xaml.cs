@@ -105,8 +105,12 @@ namespace EverythingToolbar.Launcher
 
         private void CreateFileWatcher(string taskbarShortcutPath)
         {
-            var pinnedIconsDir = Path.GetDirectoryName(taskbarShortcutPath);
-            var pinnedIconName = Path.GetFileName(taskbarShortcutPath);
+            string pinnedIconName = Path.GetFileName(taskbarShortcutPath);
+            if (Path.GetDirectoryName(taskbarShortcutPath) is not { } pinnedIconsDir)
+            {
+                Logger.Error("Failed to get directory name for taskbar shortcut path.");
+                return;
+            }
 
             try
             {
@@ -127,7 +131,7 @@ namespace EverythingToolbar.Launcher
                 EnableRaisingEvents = true,
             };
 
-            _watcher.Created += (source, e) =>
+            _watcher.Created += (_, _) =>
             {
                 _iconUpdateRequired = true;
                 Dispatcher.Invoke(() =>
@@ -135,7 +139,7 @@ namespace EverythingToolbar.Launcher
                     CurrentStep = 1;
                 });
             };
-            _watcher.Deleted += (source, e) =>
+            _watcher.Deleted += (_, _) =>
             {
                 _iconUpdateRequired = false;
                 Dispatcher.Invoke(() =>

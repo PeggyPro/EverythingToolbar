@@ -14,13 +14,13 @@ namespace EverythingToolbar.Settings
     public class FilterOrderItem
     {
         public string Name { get; set; }
-        public int OriginalIndex { get; set; }
+        public int OriginalIndex { get; init; }
     }
 
     public partial class Filters : INotifyPropertyChanged
     {
         private ObservableCollection<FilterOrderItem> _filterOrderItems;
-        private bool _isDragging = false;
+        private bool _isDragging;
         private Point _startPoint;
 
         public ObservableCollection<FilterOrderItem> FilterOrderItems
@@ -97,7 +97,9 @@ namespace EverythingToolbar.Settings
         {
             if (e.Data.GetData(typeof(FilterOrderItem)) is FilterOrderItem draggedItem)
             {
-                ListBox listBox = sender as ListBox;
+                if (sender is not ListBox listBox)
+                    return;
+
                 Point dropPosition = e.GetPosition(listBox);
 
                 int newIndex = GetDropIndex(listBox, dropPosition);
@@ -132,7 +134,7 @@ namespace EverythingToolbar.Settings
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

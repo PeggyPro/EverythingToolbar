@@ -8,19 +8,20 @@ namespace EverythingToolbar.Converters
 {
     public class BoolToVisibilityConverter : MarkupExtension, IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            var invert = System.Convert.ToBoolean(parameter);
+            bool invert = System.Convert.ToBoolean(parameter);
+
+            if (value == null)
+                return invert ? Visibility.Visible : Visibility.Collapsed;
 
             if ((bool)value)
-            {
                 return invert ? Visibility.Collapsed : Visibility.Visible;
-            }
 
             return invert ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException("This converter cannot be used in two-way binding.");
         }

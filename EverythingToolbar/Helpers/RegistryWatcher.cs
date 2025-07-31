@@ -7,67 +7,59 @@ using NLog;
 namespace EverythingToolbar.Helpers
 {
     public delegate void RegistryChange();
-    public delegate void RegistryChangeValue(object newValue);
+    public delegate void RegistryChangeValue(object? newValue);
 
-    internal class RegistryEntry
+    internal class RegistryEntry(string hive, string keyPath, string valueName)
     {
-        public string hive;
-        public string keyPath;
-        public string valueName;
+        public string Hive = hive;
+        public string KeyPath = keyPath;
+        public string ValueName = valueName;
 
-        public RegistryEntry(string hive, string keyPath, string valueName)
+        public object? GetValue(object? defaultValue = null)
         {
-            this.hive = hive;
-            this.keyPath = keyPath;
-            this.valueName = valueName;
-        }
-
-        public object GetValue(object defaultValue = null)
-        {
-            return Registry.GetValue(hive + @"\" + keyPath, valueName, defaultValue);
+            return Registry.GetValue(Hive + @"\" + KeyPath, ValueName, defaultValue);
         }
     }
 
     internal class RegistryWatcher
     {
-        private readonly ManagementEventWatcher watcher;
-        private readonly RegistryEntry target;
+        private readonly ManagementEventWatcher _watcher;
+        private readonly RegistryEntry _target;
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<RegistryWatcher>();
 
-        public event RegistryChange OnChange;
-        public event RegistryChangeValue OnChangeValue;
+        public event RegistryChange? OnChange;
+        public event RegistryChangeValue? OnChangeValue;
 
         public RegistryWatcher(RegistryEntry target)
         {
-            this.target = target;
+            _target = target;
 
-            watcher = CreateWatcher();
-            watcher.EventArrived += OnEventArrived;
+            _watcher = CreateWatcher();
+            _watcher.EventArrived += OnEventArrived;
 
             Start();
         }
 
         ~RegistryWatcher()
         {
-            if (watcher != null)
-                watcher.Dispose();
+            _watcher.Dispose();
         }
 
-        public void Start()
+        private void Start()
         {
             try
             {
-                watcher.Start();
+                _watcher.Start();
             }
             catch (Exception e)
             {
-                Logger.Error(e, $"Failed to initialize RegistryWatcher for target {target}.");
+                Logger.Error(e, $"Failed to initialize RegistryWatcher for target {_target}.");
             }
         }
 
         public void Stop()
         {
-            watcher.Stop();
+            _watcher.Stop();
         }
 
         private static string EscapeBackticks(string unescaped)
@@ -78,25 +70,25 @@ namespace EverythingToolbar.Helpers
         private ManagementEventWatcher CreateWatcher()
         {
             // Cannot watch HKEY_CURRENT_USER as it is synthetic.
-            if (target.hive == "HKEY_CURRENT_USER")
+            if (_target.Hive == "HKEY_CURRENT_USER")
             {
-                target.hive = "HKEY_USERS";
-                target.keyPath = WindowsIdentity.GetCurrent().User.Value + @"\" + target.keyPath;
+                _target.Hive = "HKEY_USERS";
+                _target.KeyPath = WindowsIdentity.GetCurrent().User?.Value + @"\" + _target.KeyPath;
             }
 
             var qu =
                 "SELECT * FROM RegistryValueChangeEvent WHERE "
-                + $"Hive='{target.hive}' "
-                + $"AND KeyPath='{EscapeBackticks(target.keyPath)}' "
-                + $"AND ValueName='{target.valueName}'";
+                + $"Hive='{_target.Hive}' "
+                + $"AND KeyPath='{EscapeBackticks(_target.KeyPath)}' "
+                + $"AND ValueName='{_target.ValueName}'";
 
             var query = new WqlEventQuery(qu);
             return new ManagementEventWatcher(query);
         }
 
-        public object GetValue(object defaultValue = null)
+        private object? GetValue(object? defaultValue = null)
         {
-            return target.GetValue(defaultValue);
+            return _target.GetValue(defaultValue);
         }
 
         private void OnEventArrived(object sender, EventArrivedEventArgs e)
@@ -106,7 +98,7 @@ namespace EverythingToolbar.Helpers
             // Only read value if required
             if (OnChangeValue?.GetInvocationList().Length > 0)
             {
-                OnChangeValue?.Invoke(GetValue());
+                OnChangeValue.Invoke(GetValue());
             }
         }
     }

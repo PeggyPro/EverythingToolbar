@@ -38,19 +38,19 @@ namespace EverythingToolbar.Settings
 
         public List<IconItem> IconItems { get; } =
             [
-                new IconItem
+                new()
                 {
                     DisplayName = "Light",
                     IconPath = "pack://siteoforigin:,,,/Icons/Dark.ico",
                     Value = "Icons/Dark.ico",
                 },
-                new IconItem
+                new()
                 {
                     DisplayName = "Dark",
                     IconPath = "pack://siteoforigin:,,,/Icons/Light.ico",
                     Value = "Icons/Light.ico",
                 },
-                new IconItem
+                new()
                 {
                     DisplayName = "Blue",
                     IconPath = "pack://siteoforigin:,,,/Icons/Medium.ico",
@@ -60,7 +60,7 @@ namespace EverythingToolbar.Settings
 
         public SearchResult SampleSearchResult { get; }
 
-        public IconItem SelectedIconItem
+        public IconItem? SelectedIconItem
         {
             get => IconItems.FirstOrDefault(item => item.Value == ToolbarSettings.User.IconName);
             set

@@ -16,7 +16,7 @@ namespace EverythingToolbar.Settings
     public partial class CustomActions
     {
         private static List<Rule> _actions = new();
-        private static string CustomActionsPath => Path.Combine(Utils.GetConfigDirectory(), "rules.xml"); // TODO: Rename to actions.xml and add compatibility handling
+        private static string CustomActionsPath => Path.Combine(Utils.GetConfigDirectory(), "rules.xml");
 
         public CustomActions()
         {
@@ -33,9 +33,10 @@ namespace EverythingToolbar.Settings
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (SaveCustomActions(_actions, (bool)AutoApplyCustomActionsCheckbox.IsChecked))
+            var autoApply = AutoApplyCustomActionsCheckbox.IsChecked == true;
+            if (SaveCustomActions(_actions, autoApply))
             {
-                ToolbarSettings.User.IsAutoApplyCustomActions = (bool)AutoApplyCustomActionsCheckbox.IsChecked;
+                ToolbarSettings.User.IsAutoApplyCustomActions = autoApply;
             }
         }
 
@@ -48,7 +49,7 @@ namespace EverythingToolbar.Settings
             using XmlReader reader = XmlReader.Create(CustomActionsPath);
             try
             {
-                return (List<Rule>)serializer.Deserialize(reader) ?? [];
+                return serializer.Deserialize(reader) as List<Rule> ?? [];
             }
             catch
             {
@@ -76,12 +77,12 @@ namespace EverythingToolbar.Settings
                 return false;
             }
 
-            Directory.CreateDirectory(Path.GetDirectoryName(CustomActionsPath));
+            if (Path.GetDirectoryName(CustomActionsPath) is { } parent)
+                Directory.CreateDirectory(parent);
+
             var serializer = new XmlSerializer(newActions.GetType());
-            using (var writer = XmlWriter.Create(CustomActionsPath))
-            {
-                serializer.Serialize(writer, newActions);
-            }
+            using var writer = XmlWriter.Create(CustomActionsPath);
+            serializer.Serialize(writer, newActions);
 
             return true;
         }
@@ -129,8 +130,10 @@ namespace EverythingToolbar.Settings
 
         private void MoveItem(int delta)
         {
+            if (DataGrid.SelectedItem is not Rule item)
+                return;
+
             var selectedIndex = DataGrid.SelectedIndex;
-            var item = DataGrid.SelectedItem as Rule;
             _actions.RemoveAt(selectedIndex);
             _actions.Insert(selectedIndex + delta, item);
             RefreshList();
@@ -160,7 +163,7 @@ namespace EverythingToolbar.Settings
             if (typeColumn is null)
                 return;
 
-            if ((bool)AutoApplyCustomActionsCheckbox.IsChecked)
+            if (AutoApplyCustomActionsCheckbox.IsChecked == true)
             {
                 typeColumn.Visibility = Visibility.Visible;
                 ExpressionColumn.Visibility = Visibility.Visible;

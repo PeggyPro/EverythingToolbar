@@ -2,21 +2,18 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using NLog;
 
 namespace EverythingToolbar.Helpers
 {
-    class ShellUtils
+    internal abstract class ShellUtils
     {
-        private static readonly ILogger Logger = ToolbarLogger.GetLogger<ShellUtils>();
-
         private ShellUtils() { }
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
+        private static extern bool ShellExecuteEx(ref ShellExecuteInfo lpExecInfo);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public struct SHELLEXECUTEINFO
+        private struct ShellExecuteInfo
         {
             public int cbSize;
             public uint fMask;
@@ -47,7 +44,7 @@ namespace EverythingToolbar.Helpers
 
         public static void ShowFileProperties(string path)
         {
-            var info = new SHELLEXECUTEINFO();
+            var info = new ShellExecuteInfo();
             info.cbSize = Marshal.SizeOf(info);
             info.lpVerb = "properties";
             info.lpFile = path;
@@ -57,7 +54,7 @@ namespace EverythingToolbar.Helpers
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        private struct STARTUPINFO
+        private struct StartupInfo
         {
             public Int32 cb;
             public string lpReserved;
@@ -80,7 +77,7 @@ namespace EverythingToolbar.Helpers
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct PROCESS_INFORMATION
+        private struct ProcessInformation
         {
             public IntPtr hProcess;
             public IntPtr hThread;
@@ -90,21 +87,21 @@ namespace EverythingToolbar.Helpers
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern bool CreateProcess(
-            string lpApplicationName,
+            string? lpApplicationName,
             string lpCommandLine,
             IntPtr lpProcessAttributes,
             IntPtr lpThreadAttributes,
             bool bInheritHandles,
             uint dwCreationFlags,
             IntPtr lpEnvironment,
-            string lpCurrentDirectory,
-            [In] ref STARTUPINFO lpStartupInfo,
-            out PROCESS_INFORMATION lpProcessInformation
+            string? lpCurrentDirectory,
+            [In] ref StartupInfo lpStartupInfo,
+            out ProcessInformation lpProcessInformation
         );
 
-        public static void CreateProcessFromCommandLine(string commandLine, string workingDirectory = null)
+        public static void CreateProcessFromCommandLine(string commandLine, string? workingDirectory = null)
         {
-            var si = new STARTUPINFO();
+            var si = new StartupInfo();
 
             CreateProcess(
                 null,

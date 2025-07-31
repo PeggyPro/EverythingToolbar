@@ -26,12 +26,12 @@ namespace EverythingToolbar.Launcher
             AssociatedObject.Hiding += OnHiding;
         }
 
-        private void OnHiding(object sender, EventArgs e)
+        private void OnHiding(object? sender, EventArgs e)
         {
             AssociatedObject.AnimateHide(TaskbarStateManager.Instance.TaskbarEdge);
         }
 
-        private void OnShowing(object sender, EventArgs e)
+        private void OnShowing(object? sender, EventArgs e)
         {
             var scalingFactor = GetScalingFactor();
             var position = CalculatePosition(scalingFactor);
@@ -44,14 +44,14 @@ namespace EverythingToolbar.Launcher
             );
         }
 
-        private RECT CalculatePosition(double scalingFactor)
+        private Rect CalculatePosition(double scalingFactor)
         {
             var screen = Screen.FromPoint(Cursor.Position);
             var taskbar = FindDockedTaskBar(screen);
             var windowSize = GetTargetWindowSize(scalingFactor);
             var margin = (int)(GetMargin() / scalingFactor);
 
-            var windowPosition = new RECT();
+            var windowPosition = new Rect();
 
             if (taskbar.Edge == Edge.Top)
             {
@@ -111,8 +111,8 @@ namespace EverythingToolbar.Launcher
             return windowSize;
         }
 
-        private RECT SetHorizontalPosition(
-            RECT windowPosition,
+        private Rect SetHorizontalPosition(
+            Rect windowPosition,
             Rectangle screenWorkingArea,
             Size windowSize,
             int margin
@@ -233,20 +233,12 @@ namespace EverythingToolbar.Launcher
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
+        private struct Rect
         {
             public int Left;
             public int Top;
             public int Right;
             public int Bottom;
-
-            public RECT(int left, int top, int right, int bottom)
-            {
-                Left = left;
-                Top = top;
-                Right = right;
-                Bottom = bottom;
-            }
         }
     }
 }

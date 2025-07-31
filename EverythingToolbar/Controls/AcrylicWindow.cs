@@ -230,7 +230,7 @@ namespace EverythingToolbar.Controls
                     DataSize = (uint)Marshal.SizeOf<AccentPolicy>(),
                 };
 
-                hwndSource.CompositionTarget.BackgroundColor = Colors.Transparent;
+                hwndSource.CompositionTarget!.BackgroundColor = Colors.Transparent;
 
                 var margins = new Margins
                 {

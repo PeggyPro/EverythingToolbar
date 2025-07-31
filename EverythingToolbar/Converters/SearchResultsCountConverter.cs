@@ -8,7 +8,7 @@ namespace EverythingToolbar.Converters
 {
     public class SearchResultsCountConverter : MarkupExtension, IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null)
                 return "";
@@ -19,7 +19,7 @@ namespace EverythingToolbar.Converters
             return $"{formattedValue} {suffix}";
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException("This converter cannot be used in two-way binding.");
         }

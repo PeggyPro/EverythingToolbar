@@ -37,7 +37,7 @@ namespace EverythingToolbar.Helpers
 
         private const int SiigbfResizetofit = 0x00;
 
-        public static ImageSource GetImage(string filePath)
+        public static ImageSource? GetImage(string filePath)
         {
             try
             {
@@ -117,13 +117,13 @@ namespace EverythingToolbar.Helpers
 
         private static int _fallbackIconIndex;
 
-        public static ImageSource GetImage(string path, Action<ImageSource> onUpdated = null)
+        public static ImageSource? GetImage(string path, Action<ImageSource>? onUpdated = null)
         {
             string extension = Path.GetExtension(path).ToLowerInvariant();
             if (string.IsNullOrEmpty(extension))
                 extension = Path.GetFileName(path).ToLowerInvariant();
 
-            if (!ExtensionCache.TryGetValue(extension, out var iconByExtension))
+            if (!ExtensionCache.TryGetValue(extension, out ImageSource? iconByExtension))
             {
                 iconByExtension = GetIconByPath(path);
                 if (iconByExtension != null)
@@ -147,17 +147,18 @@ namespace EverythingToolbar.Helpers
                     return;
                 }
 
-                var exactIcon = GetIconByPath(path);
-                IconIndexCache.TryAdd(iconIndex, exactIcon);
-
+                ImageSource? exactIcon = GetIconByPath(path);
                 if (exactIcon != null)
+                {
+                    IconIndexCache.TryAdd(iconIndex, exactIcon);
                     onUpdated.Invoke(exactIcon);
+                }
             });
 
             return iconByExtension;
         }
 
-        private static ImageSource GetIconByPath(string path)
+        private static ImageSource? GetIconByPath(string path)
         {
             Shfileinfo shfi = new();
             const uint flags = ShgfiIcon | ShgfiSmallicon;

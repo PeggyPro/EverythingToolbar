@@ -14,10 +14,9 @@ namespace EverythingToolbar.Deskband
     {
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<SearchWindowPlacement>();
 
-        // Using a dependency property for binding is not required since the placement target will not change
-        public FrameworkElement PlacementTarget;
+        public FrameworkElement? PlacementTarget;
 
-        private double DpiScalingFactor;
+        private double _dpiScalingFactor;
 
         protected override void OnAttached()
         {
@@ -28,35 +27,44 @@ namespace EverythingToolbar.Deskband
             AssociatedObject.Showing += OnShowing;
             AssociatedObject.Hiding += OnHiding;
 
-            PlacementTarget.Loaded += OnPlacementTargetLoaded;
+            if (PlacementTarget != null)
+                PlacementTarget.Loaded += OnPlacementTargetLoaded;
         }
 
         private void OnPlacementTargetLoaded(object sender, RoutedEventArgs e)
         {
-            DpiScalingFactor = GetScalingFactor();
+            _dpiScalingFactor = GetScalingFactor();
         }
 
-        private void OnHiding(object sender, EventArgs e)
+        private void OnHiding(object? sender, EventArgs e)
         {
             AssociatedObject.AnimateHide(TaskbarStateManager.Instance.TaskbarEdge);
         }
 
-        private void OnShowing(object sender, EventArgs e)
+        private void OnShowing(object? sender, EventArgs e)
         {
             var position = CalculatePosition();
             AssociatedObject.AnimateShow(
-                position.Left * DpiScalingFactor,
-                position.Top * DpiScalingFactor,
-                (position.Right - position.Left) * DpiScalingFactor,
-                (position.Bottom - position.Top) * DpiScalingFactor,
+                position.Left * _dpiScalingFactor,
+                position.Top * _dpiScalingFactor,
+                (position.Right - position.Left) * _dpiScalingFactor,
+                (position.Bottom - position.Top) * _dpiScalingFactor,
                 TaskbarStateManager.Instance.TaskbarEdge
             );
         }
 
-        private RECT CalculatePosition()
+        private Rect CalculatePosition()
         {
-            var hwnd = ((HwndSource)PresentationSource.FromVisual(PlacementTarget)).Handle;
-            GetWindowRect(hwnd, out var placementTarget);
+            if (
+                PlacementTarget == null
+                || PresentationSource.FromVisual(PlacementTarget) as HwndSource is not { } hwndSource
+            )
+            {
+                Logger.Error("Failed to get HwndSource from PlacementTarget. Cannot calculate window position.");
+                return new Rect();
+            }
+
+            GetWindowRect(hwndSource.Handle, out var placementTarget);
 
             var placementTargetPos = new Point(placementTarget.Left, placementTarget.Top);
             var screen = Screen.FromPoint(placementTargetPos);
@@ -66,7 +74,7 @@ namespace EverythingToolbar.Deskband
             var taskbarSize = TaskbarStateManager.Instance.TaskbarSize;
             var margin = GetMargin();
 
-            var windowPosition = new RECT();
+            var windowPosition = new Rect();
             switch (TaskbarStateManager.Instance.TaskbarEdge)
             {
                 case Helpers.Edge.Bottom:
@@ -122,14 +130,14 @@ namespace EverythingToolbar.Deskband
         private Size GetTargetWindowSize()
         {
             var windowSize = new Size(ToolbarSettings.User.PopupWidth, ToolbarSettings.User.PopupHeight);
-            windowSize.Width = Math.Max(windowSize.Width, AssociatedObject.MinWidth) / DpiScalingFactor;
-            windowSize.Height = Math.Max(windowSize.Height, AssociatedObject.MinHeight) / DpiScalingFactor;
+            windowSize.Width = Math.Max(windowSize.Width, AssociatedObject.MinWidth) / _dpiScalingFactor;
+            windowSize.Height = Math.Max(windowSize.Height, AssociatedObject.MinHeight) / _dpiScalingFactor;
             return windowSize;
         }
 
         private double GetScalingFactor()
         {
-            if (!(PresentationSource.FromVisual(PlacementTarget) is HwndSource hwndSource))
+            if (PlacementTarget == null || PresentationSource.FromVisual(PlacementTarget) is not HwndSource hwndSource)
             {
                 Logger.Error("Failed to get display scaling factor. This may result in incorrect window placement.");
                 return 1.0;
@@ -151,10 +159,10 @@ namespace EverythingToolbar.Deskband
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
+        private struct Rect
         {
             public int Left;
             public int Top;

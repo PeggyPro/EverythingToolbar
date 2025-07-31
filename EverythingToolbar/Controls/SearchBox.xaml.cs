@@ -49,10 +49,6 @@ namespace EverythingToolbar.Controls
             InputMethod.SetPreferredImeState(this, InputMethodState.DoNotCare);
 
             ToolbarSettings.User.PropertyChanged += OnSettingsChanged;
-            EventDispatcher.Instance.SearchTermReplaced += (s, searchTerm) =>
-            {
-                UpdateSearchTerm(searchTerm);
-            };
             EventDispatcher.Instance.SearchBoxFocusRequested += OnFocusRequested;
         }
 
@@ -67,14 +63,14 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private void OnFocusRequested(object sender, EventArgs e)
+        private void OnFocusRequested(object? sender, EventArgs e)
         {
             // Only visible SearchBoxes should respond to focus requests
             if (Visibility == Visibility.Visible)
                 Focus();
         }
 
-        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void OnPreviewKeyDown(object? sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.Up)
             {
@@ -96,7 +92,7 @@ namespace EverythingToolbar.Controls
                 e.Handled = true;
             }
             else if (
-                (e.Key == Key.Home || e.Key == Key.End)
+                e.Key is Key.Home or Key.End
                     && Keyboard.Modifiers != ModifierKeys.Shift
                     && ToolbarSettings.User.IsAutoSelectFirstResult
                 || e.Key == Key.PageDown
@@ -106,13 +102,7 @@ namespace EverythingToolbar.Controls
                 || e.Key == Key.Escape
                 || e.Key == Key.Enter
                 || (
-                    (
-                        (e.Key >= Key.D0 && e.Key <= Key.D9)
-                        || e.Key == Key.I
-                        || e.Key == Key.B
-                        || e.Key == Key.U
-                        || e.Key == Key.R
-                    )
+                    e.Key is >= Key.D0 and <= Key.D9 or Key.I or Key.B or Key.U or Key.R
                     && Keyboard.Modifiers == ModifierKeys.Control
                 )
             )
@@ -146,13 +136,13 @@ namespace EverythingToolbar.Controls
             _isInternalTextChange = false;
         }
 
-        private void OnSettingsChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ToolbarSettings.User.IsShowQuickToggles))
                 UpdateQuickTogglesVisibility();
         }
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
         {
             UpdateQuickTogglesVisibility();
         }
@@ -197,7 +187,7 @@ namespace EverythingToolbar.Controls
 
         private void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TextBox textBox && !textBox.IsKeyboardFocusWithin)
+            if (sender is TextBox { IsKeyboardFocusWithin: false } textBox)
             {
                 e.Handled = true;
                 textBox.Focus();

@@ -20,15 +20,15 @@ namespace EverythingToolbar.Deskband
     [CSDeskBandRegistration(Name = "EverythingToolbar")]
     public class Server : CSDeskBandWpf, IServer
     {
-        private static readonly ILogger _logger = ToolbarLogger.GetLogger<Server>();
-        private static ToolbarControl ToolbarControl;
-        protected override UIElement UIElement => ToolbarControl;
+        private static readonly ILogger Logger = ToolbarLogger.GetLogger<Server>();
+        private static ToolbarControl? _toolbarControl;
+        protected override UIElement UIElement => _toolbarControl!;
 
         public Server()
         {
             try
             {
-                ToolbarControl = new ToolbarControl();
+                _toolbarControl = new ToolbarControl();
 
                 Options.MinHorizontalSize = new Size(24, 30);
                 Options.MinVerticalSize = new Size(24, 30);
@@ -42,7 +42,7 @@ namespace EverythingToolbar.Deskband
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unhandled exception");
+                Logger.Error(e, "Unhandled exception");
                 if (
                     MessageBox.Show(
                         e + "\n\n" + Resources.MessageBoxCopyException,
@@ -59,22 +59,22 @@ namespace EverythingToolbar.Deskband
 
         public void Dummy() { }
 
-        private void OnUnfocusRequested(object sender, EventArgs e)
+        private void OnUnfocusRequested(object? sender, EventArgs e)
         {
             UpdateFocus(false);
         }
 
-        private void OnFocusRequested(object sender, EventArgs e)
+        private void OnFocusRequested(object? sender, EventArgs e)
         {
             UpdateFocus(true);
         }
 
-        private void OnTaskbarEdgeChanged(object sender, TaskbarEdgeChangedEventArgs e)
+        private void OnTaskbarEdgeChanged(object? sender, TaskbarEdgeChangedEventArgs e)
         {
             TaskbarStateManager.Instance.TaskbarEdge = (Helpers.Edge)e.Edge;
         }
 
-        private void OnTaskbarSizeChanged(object sender, TaskbarSizeChangedEventArgs e)
+        private void OnTaskbarSizeChanged(object? sender, TaskbarSizeChangedEventArgs e)
         {
             TaskbarStateManager.Instance.TaskbarSize = new Size(e.Size.Width, e.Size.Height);
         }
@@ -82,9 +82,14 @@ namespace EverythingToolbar.Deskband
         protected override void DeskbandOnClosed()
         {
             StartMenuIntegration.Instance.Disable();
+
             base.DeskbandOnClosed();
-            ToolbarControl.Content = null;
-            ToolbarControl = null;
+
+            if (_toolbarControl != null)
+            {
+                _toolbarControl.Content = null;
+                _toolbarControl = null;
+            }
         }
     }
 }

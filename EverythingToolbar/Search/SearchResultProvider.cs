@@ -17,7 +17,7 @@ using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace EverythingToolbar.Search
 {
-    public class SearchResultProvider : IItemsProvider<SearchResult>, INotifyPropertyChanged
+    public class SearchResultProvider : IItemsProvider<SearchResult>
     {
         private class QueryQueueItem
         {
@@ -563,7 +563,7 @@ namespace EverythingToolbar.Search
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -28,13 +28,13 @@ namespace EverythingToolbar.Launcher
                 relativeTaskBarPath
             );
 
-            if (Directory.Exists(taskBarPath))
+            if (Directory.Exists(taskBarPath) && GetExecutableFilename() is { } executableFilename)
             {
                 try
                 {
+                    var thisExecutableName = Path.GetFileName(executableFilename);
                     var lnkFiles = Directory.GetFiles(taskBarPath, "*.lnk");
                     var shell = new Shell();
-                    var thisExecutableName = Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
                     foreach (var lnkFile in lnkFiles)
                     {
                         var folder = shell.NameSpace(Path.GetDirectoryName(lnkFile));
@@ -89,9 +89,14 @@ namespace EverythingToolbar.Launcher
             try
             {
                 if (enabled)
-                    key?.SetValue("EverythingToolbar", "\"" + Process.GetCurrentProcess().MainModule.FileName + "\"");
+                {
+                    if (GetExecutableFilename() is { } executableFilename)
+                        key?.SetValue("EverythingToolbar", "\"" + executableFilename + "\"");
+                }
                 else
+                {
                     key?.DeleteValue("EverythingToolbar", false);
+                }
             }
             catch (Exception e)
             {
@@ -101,6 +106,9 @@ namespace EverythingToolbar.Launcher
 
         public static void ChangeTaskbarPinIcon(string iconName, bool restartExplorer)
         {
+            if (GetExecutableFilename() is not { } executableFilename)
+                return;
+
             var taskbarShortcutPath = GetTaskbarShortcutPath();
 
             if (File.Exists(taskbarShortcutPath))
@@ -108,7 +116,7 @@ namespace EverythingToolbar.Launcher
 
             var shell = new WshShell();
             var shortcut = (IWshShortcut)shell.CreateShortcut(taskbarShortcutPath);
-            shortcut.TargetPath = Process.GetCurrentProcess().MainModule.FileName;
+            shortcut.TargetPath = executableFilename;
             shortcut.IconLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, iconName);
             shortcut.Save();
 
@@ -140,6 +148,14 @@ namespace EverythingToolbar.Launcher
             {
                 return "Icons/Medium.ico";
             }
+        }
+
+        private static string? GetExecutableFilename()
+        {
+            if (Process.GetCurrentProcess().MainModule is not { } mainModule)
+                return null;
+
+            return mainModule.FileName;
         }
     }
 }

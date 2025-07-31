@@ -235,7 +235,7 @@ namespace EverythingToolbar.Controls
             SearchResultsListView.ItemContainerStyle = newStyle;
         }
 
-        private void OnKeyPressed(object sender, KeyEventArgs e)
+        private void OnKeyPressed(object? sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {

@@ -126,16 +126,9 @@ namespace EverythingToolbar
         string VersionBeforeUpdate { get; set; }
     }
 
-    public sealed class ToolbarSettingsWrapper : INotifyPropertyChanged
+    public sealed class ToolbarSettingsWrapper(IToolbarSettings settings) : INotifyPropertyChanged
     {
-        private readonly IToolbarSettings _settings;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ToolbarSettingsWrapper(IToolbarSettings settings)
-        {
-            _settings = settings;
-        }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
@@ -144,12 +137,12 @@ namespace EverythingToolbar
 
         public bool IsMatchCase
         {
-            get => _settings.IsMatchCase;
+            get => settings.IsMatchCase;
             set
             {
-                if (_settings.IsMatchCase != value)
+                if (settings.IsMatchCase != value)
                 {
-                    _settings.IsMatchCase = value;
+                    settings.IsMatchCase = value;
                     OnPropertyChanged();
                 }
             }
@@ -157,12 +150,12 @@ namespace EverythingToolbar
 
         public bool IsRegExEnabled
         {
-            get => _settings.IsRegExEnabled;
+            get => settings.IsRegExEnabled;
             set
             {
-                if (_settings.IsRegExEnabled != value)
+                if (settings.IsRegExEnabled != value)
                 {
-                    _settings.IsRegExEnabled = value;
+                    settings.IsRegExEnabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -170,12 +163,12 @@ namespace EverythingToolbar
 
         public bool IsMatchPath
         {
-            get => _settings.IsMatchPath;
+            get => settings.IsMatchPath;
             set
             {
-                if (_settings.IsMatchPath != value)
+                if (settings.IsMatchPath != value)
                 {
-                    _settings.IsMatchPath = value;
+                    settings.IsMatchPath = value;
                     OnPropertyChanged();
                 }
             }
@@ -183,12 +176,12 @@ namespace EverythingToolbar
 
         public int SortBy
         {
-            get => _settings.SortBy;
+            get => settings.SortBy;
             set
             {
-                if (_settings.SortBy != value)
+                if (settings.SortBy != value)
                 {
-                    _settings.SortBy = value;
+                    settings.SortBy = value;
                     OnPropertyChanged();
                 }
             }
@@ -196,12 +189,12 @@ namespace EverythingToolbar
 
         public bool IsSortDescending
         {
-            get => _settings.IsSortDescending;
+            get => settings.IsSortDescending;
             set
             {
-                if (_settings.IsSortDescending != value)
+                if (settings.IsSortDescending != value)
                 {
-                    _settings.IsSortDescending = value;
+                    settings.IsSortDescending = value;
                     OnPropertyChanged();
                 }
             }
@@ -209,12 +202,12 @@ namespace EverythingToolbar
 
         public bool IsMatchWholeWord
         {
-            get => _settings.IsMatchWholeWord;
+            get => settings.IsMatchWholeWord;
             set
             {
-                if (_settings.IsMatchWholeWord != value)
+                if (settings.IsMatchWholeWord != value)
                 {
-                    _settings.IsMatchWholeWord = value;
+                    settings.IsMatchWholeWord = value;
                     OnPropertyChanged();
                 }
             }
@@ -222,12 +215,12 @@ namespace EverythingToolbar
 
         public int PopupHeight
         {
-            get => _settings.PopupHeight;
+            get => settings.PopupHeight;
             set
             {
-                if (_settings.PopupHeight != value)
+                if (settings.PopupHeight != value)
                 {
-                    _settings.PopupHeight = value;
+                    settings.PopupHeight = value;
                     OnPropertyChanged();
                 }
             }
@@ -235,12 +228,12 @@ namespace EverythingToolbar
 
         public int PopupWidth
         {
-            get => _settings.PopupWidth;
+            get => settings.PopupWidth;
             set
             {
-                if (_settings.PopupWidth != value)
+                if (settings.PopupWidth != value)
                 {
-                    _settings.PopupWidth = value;
+                    settings.PopupWidth = value;
                     OnPropertyChanged();
                 }
             }
@@ -248,12 +241,12 @@ namespace EverythingToolbar
 
         public string EverythingPath
         {
-            get => _settings.EverythingPath;
+            get => settings.EverythingPath;
             set
             {
-                if (_settings.EverythingPath != value)
+                if (settings.EverythingPath != value)
                 {
-                    _settings.EverythingPath = value;
+                    settings.EverythingPath = value;
                     OnPropertyChanged();
                 }
             }
@@ -261,12 +254,12 @@ namespace EverythingToolbar
 
         public string ItemTemplate
         {
-            get => _settings.ItemTemplate;
+            get => settings.ItemTemplate;
             set
             {
-                if (_settings.ItemTemplate != value)
+                if (settings.ItemTemplate != value)
                 {
-                    _settings.ItemTemplate = value;
+                    settings.ItemTemplate = value;
                     OnPropertyChanged();
                 }
             }
@@ -274,12 +267,12 @@ namespace EverythingToolbar
 
         public bool IsAutoApplyCustomActions
         {
-            get => _settings.IsAutoApplyCustomActions;
+            get => settings.IsAutoApplyCustomActions;
             set
             {
-                if (_settings.IsAutoApplyCustomActions != value)
+                if (settings.IsAutoApplyCustomActions != value)
                 {
-                    _settings.IsAutoApplyCustomActions = value;
+                    settings.IsAutoApplyCustomActions = value;
                     OnPropertyChanged();
                 }
             }
@@ -287,12 +280,12 @@ namespace EverythingToolbar
 
         public int MaxTabItems
         {
-            get => _settings.MaxTabItems;
+            get => settings.MaxTabItems;
             set
             {
-                if (_settings.MaxTabItems != value)
+                if (settings.MaxTabItems != value)
                 {
-                    _settings.MaxTabItems = value;
+                    settings.MaxTabItems = value;
                     OnPropertyChanged();
                 }
             }
@@ -300,12 +293,12 @@ namespace EverythingToolbar
 
         public string FilterOrder
         {
-            get => _settings.FilterOrder;
+            get => settings.FilterOrder;
             set
             {
-                if (_settings.FilterOrder != value)
+                if (settings.FilterOrder != value)
                 {
-                    _settings.FilterOrder = value;
+                    settings.FilterOrder = value;
                     OnPropertyChanged();
                 }
             }
@@ -313,12 +306,12 @@ namespace EverythingToolbar
 
         public string FiltersPath
         {
-            get => _settings.FiltersPath;
+            get => settings.FiltersPath;
             set
             {
-                if (_settings.FiltersPath != value)
+                if (settings.FiltersPath != value)
                 {
-                    _settings.FiltersPath = value;
+                    settings.FiltersPath = value;
                     OnPropertyChanged();
                 }
             }
@@ -326,12 +319,12 @@ namespace EverythingToolbar
 
         public bool IsImportFilters
         {
-            get => _settings.IsImportFilters;
+            get => settings.IsImportFilters;
             set
             {
-                if (_settings.IsImportFilters != value)
+                if (settings.IsImportFilters != value)
                 {
-                    _settings.IsImportFilters = value;
+                    settings.IsImportFilters = value;
                     OnPropertyChanged();
                 }
             }
@@ -339,12 +332,12 @@ namespace EverythingToolbar
 
         public int ShortcutModifiers
         {
-            get => _settings.ShortcutModifiers;
+            get => settings.ShortcutModifiers;
             set
             {
-                if (_settings.ShortcutModifiers != value)
+                if (settings.ShortcutModifiers != value)
                 {
-                    _settings.ShortcutModifiers = value;
+                    settings.ShortcutModifiers = value;
                     OnPropertyChanged();
                 }
             }
@@ -352,12 +345,12 @@ namespace EverythingToolbar
 
         public int ShortcutKey
         {
-            get => _settings.ShortcutKey;
+            get => settings.ShortcutKey;
             set
             {
-                if (_settings.ShortcutKey != value)
+                if (settings.ShortcutKey != value)
                 {
-                    _settings.ShortcutKey = value;
+                    settings.ShortcutKey = value;
                     OnPropertyChanged();
                 }
             }
@@ -365,12 +358,12 @@ namespace EverythingToolbar
 
         public bool IsAnimationsDisabled
         {
-            get => _settings.IsAnimationsDisabled;
+            get => settings.IsAnimationsDisabled;
             set
             {
-                if (_settings.IsAnimationsDisabled != value)
+                if (settings.IsAnimationsDisabled != value)
                 {
-                    _settings.IsAnimationsDisabled = value;
+                    settings.IsAnimationsDisabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -378,12 +371,12 @@ namespace EverythingToolbar
 
         public bool IsHideEmptySearchResults
         {
-            get => _settings.IsHideEmptySearchResults;
+            get => settings.IsHideEmptySearchResults;
             set
             {
-                if (_settings.IsHideEmptySearchResults != value)
+                if (settings.IsHideEmptySearchResults != value)
                 {
-                    _settings.IsHideEmptySearchResults = value;
+                    settings.IsHideEmptySearchResults = value;
                     OnPropertyChanged();
                 }
             }
@@ -391,12 +384,12 @@ namespace EverythingToolbar
 
         public bool IsShowResultsCount
         {
-            get => _settings.IsShowResultsCount;
+            get => settings.IsShowResultsCount;
             set
             {
-                if (_settings.IsShowResultsCount != value)
+                if (settings.IsShowResultsCount != value)
                 {
-                    _settings.IsShowResultsCount = value;
+                    settings.IsShowResultsCount = value;
                     OnPropertyChanged();
                 }
             }
@@ -404,12 +397,12 @@ namespace EverythingToolbar
 
         public bool IsShowQuickToggles
         {
-            get => _settings.IsShowQuickToggles;
+            get => settings.IsShowQuickToggles;
             set
             {
-                if (_settings.IsShowQuickToggles != value)
+                if (settings.IsShowQuickToggles != value)
                 {
-                    _settings.IsShowQuickToggles = value;
+                    settings.IsShowQuickToggles = value;
                     OnPropertyChanged();
                 }
             }
@@ -417,12 +410,12 @@ namespace EverythingToolbar
 
         public bool IsEnableHistory
         {
-            get => _settings.IsEnableHistory;
+            get => settings.IsEnableHistory;
             set
             {
-                if (_settings.IsEnableHistory != value)
+                if (settings.IsEnableHistory != value)
                 {
-                    _settings.IsEnableHistory = value;
+                    settings.IsEnableHistory = value;
                     OnPropertyChanged();
                 }
             }
@@ -430,12 +423,12 @@ namespace EverythingToolbar
 
         public bool IsReplaceStartMenuSearch
         {
-            get => _settings.IsReplaceStartMenuSearch;
+            get => settings.IsReplaceStartMenuSearch;
             set
             {
-                if (_settings.IsReplaceStartMenuSearch != value)
+                if (settings.IsReplaceStartMenuSearch != value)
                 {
-                    _settings.IsReplaceStartMenuSearch = value;
+                    settings.IsReplaceStartMenuSearch = value;
                     OnPropertyChanged();
                 }
             }
@@ -443,12 +436,12 @@ namespace EverythingToolbar
 
         public bool IsRememberFilter
         {
-            get => _settings.IsRememberFilter;
+            get => settings.IsRememberFilter;
             set
             {
-                if (_settings.IsRememberFilter != value)
+                if (settings.IsRememberFilter != value)
                 {
-                    _settings.IsRememberFilter = value;
+                    settings.IsRememberFilter = value;
                     OnPropertyChanged();
                 }
             }
@@ -456,12 +449,12 @@ namespace EverythingToolbar
 
         public string LastFilter
         {
-            get => _settings.LastFilter;
+            get => settings.LastFilter;
             set
             {
-                if (_settings.LastFilter != value)
+                if (settings.LastFilter != value)
                 {
-                    _settings.LastFilter = value;
+                    settings.LastFilter = value;
                     OnPropertyChanged();
                 }
             }
@@ -469,12 +462,12 @@ namespace EverythingToolbar
 
         public bool IsThumbnailsEnabled
         {
-            get => _settings.IsThumbnailsEnabled;
+            get => settings.IsThumbnailsEnabled;
             set
             {
-                if (_settings.IsThumbnailsEnabled != value)
+                if (settings.IsThumbnailsEnabled != value)
                 {
-                    _settings.IsThumbnailsEnabled = value;
+                    settings.IsThumbnailsEnabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -482,12 +475,12 @@ namespace EverythingToolbar
 
         public string InstanceName
         {
-            get => _settings.InstanceName;
+            get => settings.InstanceName;
             set
             {
-                if (_settings.InstanceName != value)
+                if (settings.InstanceName != value)
                 {
-                    _settings.InstanceName = value;
+                    settings.InstanceName = value;
                     OnPropertyChanged();
                 }
             }
@@ -495,22 +488,22 @@ namespace EverythingToolbar
 
         public string IconName
         {
-            get => _settings.IconName;
+            get => settings.IconName;
             set
             {
-                _settings.IconName = value;
+                settings.IconName = value;
                 OnPropertyChanged();
             }
         }
 
         public string SkippedUpdate
         {
-            get => _settings.SkippedUpdate;
+            get => settings.SkippedUpdate;
             set
             {
-                if (_settings.SkippedUpdate != value)
+                if (settings.SkippedUpdate != value)
                 {
-                    _settings.SkippedUpdate = value;
+                    settings.SkippedUpdate = value;
                     OnPropertyChanged();
                 }
             }
@@ -518,12 +511,12 @@ namespace EverythingToolbar
 
         public bool IsUpdateNotificationsEnabled
         {
-            get => _settings.IsUpdateNotificationsEnabled;
+            get => settings.IsUpdateNotificationsEnabled;
             set
             {
-                if (_settings.IsUpdateNotificationsEnabled != value)
+                if (settings.IsUpdateNotificationsEnabled != value)
                 {
-                    _settings.IsUpdateNotificationsEnabled = value;
+                    settings.IsUpdateNotificationsEnabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -531,12 +524,12 @@ namespace EverythingToolbar
 
         public bool IsSetupAssistantDisabled
         {
-            get => _settings.IsSetupAssistantDisabled;
+            get => settings.IsSetupAssistantDisabled;
             set
             {
-                if (_settings.IsSetupAssistantDisabled != value)
+                if (settings.IsSetupAssistantDisabled != value)
                 {
-                    _settings.IsSetupAssistantDisabled = value;
+                    settings.IsSetupAssistantDisabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -544,12 +537,12 @@ namespace EverythingToolbar
 
         public bool IsTrayIconEnabled
         {
-            get => _settings.IsTrayIconEnabled;
+            get => settings.IsTrayIconEnabled;
             set
             {
-                if (_settings.IsTrayIconEnabled != value)
+                if (settings.IsTrayIconEnabled != value)
                 {
-                    _settings.IsTrayIconEnabled = value;
+                    settings.IsTrayIconEnabled = value;
                     OnPropertyChanged();
                 }
             }
@@ -557,12 +550,12 @@ namespace EverythingToolbar
 
         public bool IsAutoSelectFirstResult
         {
-            get => _settings.IsAutoSelectFirstResult;
+            get => settings.IsAutoSelectFirstResult;
             set
             {
-                if (_settings.IsAutoSelectFirstResult != value)
+                if (settings.IsAutoSelectFirstResult != value)
                 {
-                    _settings.IsAutoSelectFirstResult = value;
+                    settings.IsAutoSelectFirstResult = value;
                     OnPropertyChanged();
                 }
             }
@@ -570,12 +563,12 @@ namespace EverythingToolbar
 
         public bool IsSearchAsYouType
         {
-            get => _settings.IsSearchAsYouType;
+            get => settings.IsSearchAsYouType;
             set
             {
-                if (_settings.IsSearchAsYouType != value)
+                if (settings.IsSearchAsYouType != value)
                 {
-                    _settings.IsSearchAsYouType = value;
+                    settings.IsSearchAsYouType = value;
                     OnPropertyChanged();
                 }
             }
@@ -583,12 +576,12 @@ namespace EverythingToolbar
 
         public bool IsForceCenterAlignment
         {
-            get => _settings.IsForceCenterAlignment;
+            get => settings.IsForceCenterAlignment;
             set
             {
-                if (_settings.IsForceCenterAlignment != value)
+                if (settings.IsForceCenterAlignment != value)
                 {
-                    _settings.IsForceCenterAlignment = value;
+                    settings.IsForceCenterAlignment = value;
                     OnPropertyChanged();
                 }
             }
@@ -596,12 +589,12 @@ namespace EverythingToolbar
 
         public bool IsDoubleClickToOpen
         {
-            get => _settings.IsDoubleClickToOpen;
+            get => settings.IsDoubleClickToOpen;
             set
             {
-                if (_settings.IsDoubleClickToOpen != value)
+                if (settings.IsDoubleClickToOpen != value)
                 {
-                    _settings.IsDoubleClickToOpen = value;
+                    settings.IsDoubleClickToOpen = value;
                     OnPropertyChanged();
                 }
             }
@@ -609,12 +602,12 @@ namespace EverythingToolbar
 
         public bool ForceWin10Behavior
         {
-            get => _settings.ForceWin10Theme;
+            get => settings.ForceWin10Theme;
             set
             {
-                if (_settings.ForceWin10Theme != value)
+                if (settings.ForceWin10Theme != value)
                 {
-                    _settings.ForceWin10Theme = value;
+                    settings.ForceWin10Theme = value;
                     OnPropertyChanged();
                 }
             }
@@ -622,12 +615,12 @@ namespace EverythingToolbar
 
         public string ThemeOverride
         {
-            get => _settings.ThemeOverride;
+            get => settings.ThemeOverride;
             set
             {
-                if (_settings.ThemeOverride != value)
+                if (settings.ThemeOverride != value)
                 {
-                    _settings.ThemeOverride = value;
+                    settings.ThemeOverride = value;
                     OnPropertyChanged();
                 }
             }
@@ -635,12 +628,12 @@ namespace EverythingToolbar
 
         public string VersionBeforeUpdate
         {
-            get => _settings.VersionBeforeUpdate;
+            get => settings.VersionBeforeUpdate;
             set
             {
-                if (_settings.VersionBeforeUpdate != value)
+                if (settings.VersionBeforeUpdate != value)
                 {
-                    _settings.VersionBeforeUpdate = value;
+                    settings.VersionBeforeUpdate = value;
                     OnPropertyChanged();
                 }
             }

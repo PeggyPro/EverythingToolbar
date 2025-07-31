@@ -11,12 +11,10 @@
         public bool IsMatchPath { get; set; }
         public bool IsRegExEnabled { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            if (!(obj is Filter item))
-            {
+            if (obj is not Filter item)
                 return false;
-            }
 
             return Name.Equals(item.Name);
         }

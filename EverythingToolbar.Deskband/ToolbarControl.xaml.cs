@@ -24,7 +24,7 @@ namespace EverythingToolbar.Deskband
                 StartMenuIntegration.Instance.Enable();
         }
 
-        private void OnSearchWindowHiding(object sender, EventArgs e)
+        private void OnSearchWindowHiding(object? sender, EventArgs e)
         {
             Keyboard.Focus(KeyboardFocusCapture);
         }
@@ -46,7 +46,7 @@ namespace EverythingToolbar.Deskband
             SearchWindow.Instance.Show();
         }
 
-        private void FocusSearchBox(object sender, HotkeyEventArgs e)
+        private void FocusSearchBox(object? sender, HotkeyEventArgs e)
         {
             if (TaskbarStateManager.Instance.IsIcon)
             {
