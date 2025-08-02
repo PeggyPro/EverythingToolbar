@@ -22,17 +22,16 @@ namespace EverythingToolbar.Launcher
 
         public static string GetTaskbarShortcutPath()
         {
-            const string relativeTaskBarPath = @"Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar";
             var taskBarPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                relativeTaskBarPath
+                @"Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar"
             );
 
-            if (Directory.Exists(taskBarPath) && GetExecutableFilename() is { } executableFilename)
+            if (Directory.Exists(taskBarPath) && GetExecutablePath() is { } executablePath)
             {
                 try
                 {
-                    var thisExecutableName = Path.GetFileName(executableFilename);
+                    var executableFileName = Path.GetFileName(executablePath);
                     var lnkFiles = Directory.GetFiles(taskBarPath, "*.lnk");
                     var shell = new Shell();
                     foreach (var lnkFile in lnkFiles)
@@ -44,7 +43,7 @@ namespace EverythingToolbar.Launcher
                             var link = (ShellLinkObject)folderItem.GetLink;
                             var linkFileName = Path.GetFileName(link.Path);
 
-                            if (linkFileName == thisExecutableName)
+                            if (linkFileName == executableFileName)
                                 return lnkFile;
                         }
                     }
@@ -90,7 +89,7 @@ namespace EverythingToolbar.Launcher
             {
                 if (enabled)
                 {
-                    if (GetExecutableFilename() is { } executableFilename)
+                    if (GetExecutablePath() is { } executableFilename)
                         key?.SetValue("EverythingToolbar", "\"" + executableFilename + "\"");
                 }
                 else
@@ -106,7 +105,7 @@ namespace EverythingToolbar.Launcher
 
         public static void ChangeTaskbarPinIcon(string iconName, bool restartExplorer)
         {
-            if (GetExecutableFilename() is not { } executableFilename)
+            if (GetExecutablePath() is not { } executableFilename)
                 return;
 
             var taskbarShortcutPath = GetTaskbarShortcutPath();
@@ -156,7 +155,7 @@ namespace EverythingToolbar.Launcher
             return relativePath;
         }
 
-        private static string? GetExecutableFilename()
+        private static string? GetExecutablePath()
         {
             if (Process.GetCurrentProcess().MainModule is not { } mainModule)
                 return null;
