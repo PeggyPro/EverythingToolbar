@@ -127,8 +127,10 @@ namespace EverythingToolbar.Launcher
                 process.Kill();
         }
 
-        public static string GetThemedAppIconName()
+        public static string GetThemedAppIconPath(bool absolute = false)
         {
+            var relativePath = "Icons/Medium.ico";
+
             try
             {
                 using RegistryKey? key = Registry.CurrentUser.OpenSubKey(
@@ -137,17 +139,21 @@ namespace EverythingToolbar.Launcher
                 object? systemUsesLightTheme = key?.GetValue("SystemUsesLightTheme");
                 if (systemUsesLightTheme != null && (int)systemUsesLightTheme == 1)
                 {
-                    return "Icons/Light.ico";
+                    relativePath = "Icons/Light.ico";
                 }
                 else
                 {
-                    return "Icons/Dark.ico";
+                    relativePath = "Icons/Dark.ico";
                 }
             }
             catch (Exception)
             {
-                return "Icons/Medium.ico";
+                Logger.Error("Failed to get icon name.");
             }
+
+            if (absolute)
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
+            return relativePath;
         }
 
         private static string? GetExecutableFilename()

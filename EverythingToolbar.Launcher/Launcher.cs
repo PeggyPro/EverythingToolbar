@@ -167,7 +167,7 @@ namespace EverythingToolbar.Launcher
                 {
                     using var trayIcon = new NotifyIcon();
                     var app = new Application();
-                    trayIcon.Icon = new Icon(Utils.GetThemedAppIconName());
+                    trayIcon.Icon = new Icon(Utils.GetThemedAppIconPath(absolute: true));
                     trayIcon.ContextMenuStrip = new ContextMenuStrip();
                     var setupItem = new ToolStripMenuItem(
                         Resources.ContextMenuRunSetupAssistant,

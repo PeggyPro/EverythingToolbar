@@ -259,6 +259,11 @@ namespace EverythingToolbar.Controls
                 OpenFilePath(this, new RoutedEventArgs());
                 SearchResultsListView.SelectedIndex = -1;
             }
+            else if (Keyboard.Modifiers == ModifierKeys.Alt && (e.Key == Key.Enter || e.SystemKey == Key.Enter))
+            {
+                ShowFileProperties(this, new RoutedEventArgs());
+                SearchResultsListView.SelectedIndex = -1;
+            }
             else if (e.Key == Key.Enter)
             {
                 if (SearchResultsListView.SelectedIndex >= 0)

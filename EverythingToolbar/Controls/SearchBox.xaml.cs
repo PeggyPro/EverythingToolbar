@@ -101,6 +101,7 @@ namespace EverythingToolbar.Controls
                 || e.Key == Key.Down
                 || e.Key == Key.Escape
                 || e.Key == Key.Enter
+                || e.SystemKey == Key.Enter // When Alt is held
                 || (
                     e.Key is >= Key.D0 and <= Key.D9 or Key.I or Key.B or Key.U or Key.R
                     && Keyboard.Modifiers == ModifierKeys.Control

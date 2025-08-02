@@ -170,8 +170,8 @@
                     Margin="8,8,0,0"
                     Padding="4"
                     Content="{x:Static properties:Resources.AboutFAQ}"
-                    NavigateUri="https://github.com/srwi/EverythingToolbar/wiki/FAQ"
-                    ToolTip="https://github.com/srwi/EverythingToolbar/wiki/FAQ" />
+                    NavigateUri="https://github.com/srwi/EverythingToolbar/blob/develop/FAQ.md"
+                    ToolTip="https://github.com/srwi/EverythingToolbar/blob/develop/FAQ.md" />
                 <ui:HyperlinkButton
                     Margin="8,0,0,0"
                     Padding="4"

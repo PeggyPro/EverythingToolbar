@@ -158,6 +158,9 @@ namespace EverythingToolbar.Search
 
         public void SelectFilterFromIndex(int index)
         {
+            if (index < 0 || index >= FilterLoader.Instance.Filters.Count)
+                return;
+
             Filter = FilterLoader.Instance.Filters[index];
         }
 

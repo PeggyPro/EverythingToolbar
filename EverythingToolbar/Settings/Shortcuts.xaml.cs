@@ -13,7 +13,9 @@ namespace EverythingToolbar.Settings
     public partial class Shortcuts
     {
         private Key Key { get; set; }
+        private Key OriginalKey { get; set; }
         private ModifierKeys Modifiers { get; set; }
+        private ModifierKeys OriginalModifiers { get; set; }
         private ModifierKeys TempMods { get; set; }
 
         private static event EventHandler<WinKeyEventArgs>? WinKeyEventHandler;
@@ -171,6 +173,10 @@ namespace EverythingToolbar.Settings
 
             Modifiers = (ModifierKeys)ToolbarSettings.User.ShortcutModifiers;
             Key = (Key)ToolbarSettings.User.ShortcutKey;
+
+            OriginalKey = Key;
+            OriginalModifiers = Modifiers;
+
             UpdateTextBox();
         }
 
@@ -181,7 +187,10 @@ namespace EverythingToolbar.Settings
             if (ToolbarSettings.User.IsReplaceStartMenuSearch)
                 StartMenuIntegration.Instance.Enable();
 
-            ApplyShortcut();
+            if (Key != OriginalKey || Modifiers != OriginalModifiers)
+            {
+                ApplyShortcut();
+            }
         }
 
         private void ApplyShortcut()

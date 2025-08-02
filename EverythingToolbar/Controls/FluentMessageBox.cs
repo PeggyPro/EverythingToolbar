@@ -38,6 +38,7 @@ namespace EverythingToolbar.Controls
                 Margin = new Thickness(20),
                 TextWrapping = TextWrapping.Wrap,
                 VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
             };
         }
 
@@ -66,21 +67,35 @@ namespace EverythingToolbar.Controls
             var messageBox = CreateBase(title);
 
             messageBox.IsPrimaryButtonEnabled = false;
-            messageBox.Content = new StackPanel
+
+            var symbolIcon = new SymbolIcon
             {
-                Orientation = Orientation.Horizontal,
+                Symbol = SymbolRegular.Warning28,
+                FontSize = 32,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 20, 0),
+            };
+            Grid.SetColumn(symbolIcon, 0);
+
+            var textBlock = new TextBlock
+            {
+                Text = content,
+                FontSize = 14,
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+            };
+            Grid.SetColumn(textBlock, 1);
+
+            messageBox.Content = new Grid
+            {
                 Margin = new Thickness(20, 0, 20, 0),
-                Children =
+                ColumnDefinitions =
                 {
-                    new SymbolIcon
-                    {
-                        Symbol = SymbolRegular.Warning28,
-                        FontSize = 32,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        Margin = new Thickness(0, 0, 12, 0),
-                    },
-                    CreateTextBlock(content),
+                    new ColumnDefinition { Width = GridLength.Auto },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
                 },
+                Children = { symbolIcon, textBlock },
             };
             return messageBox;
         }

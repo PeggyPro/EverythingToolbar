@@ -93,7 +93,7 @@ namespace EverythingToolbar.Launcher
         {
             try
             {
-                var iconPath = Utils.GetThemedAppIconName();
+                var iconPath = Utils.GetThemedAppIconPath();
                 var iconUri = new Uri("pack://application:,,,/" + iconPath);
                 Icon = new BitmapImage(iconUri);
             }
@@ -184,7 +184,7 @@ namespace EverythingToolbar.Launcher
             }
             else if (_iconUpdateRequired)
             {
-                ToolbarSettings.User.IconName = Utils.GetThemedAppIconName();
+                ToolbarSettings.User.IconName = Utils.GetThemedAppIconPath();
             }
         }
 

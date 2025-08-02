@@ -82,6 +82,11 @@ namespace EverythingToolbar
                 ToolbarSettings.User.PopupWidth = (int)Width;
             }
 
+            // Push outside of screens to hide Windows' closing animation
+            ClearAnimations();
+            Top = 100000;
+            Left = 100000;
+
             base.Hide();
 
             _dwmFlushOnRender = false;
@@ -334,7 +339,11 @@ namespace EverythingToolbar
                     property = TopProperty;
                     break;
             }
-            var animation = new DoubleAnimation { To = target, Duration = TimeSpan.FromMilliseconds(30) };
+            var animation = new DoubleAnimation
+            {
+                To = target,
+                Duration = ToolbarSettings.User.IsAnimationsDisabled ? TimeSpan.Zero : TimeSpan.FromMilliseconds(30),
+            };
             animation.Completed += OnHidden;
             BeginAnimation(property, animation);
         }
