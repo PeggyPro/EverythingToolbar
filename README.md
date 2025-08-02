@@ -77,8 +77,6 @@ Choose one of the following installation methods:
 
 > **Important:** For Everything 1.5a users, set the instance name to `1.5a` in EverythingToolbar's advanced settings (**Settings** → **Advanced** → **Everything instance name**). ([Screenshot](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/named_instance.png))
 
-For troubleshooting and additional setup help, see the [FAQ](FAQ.md).
-
 ## ⚙️ Setup
 
 ### Launcher (Taskbar Icon)
@@ -99,6 +97,10 @@ After installation on Windows 10:
 2. Unlock the taskbar to adjust size and position ([demonstration video](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/deskband_resizing_demo.gif))
 
 > **Windows 11 users**: The search icon setup assistant starts automatically after installation. To use the deskband instead (only recommended with ExplorerPatcher/StartAllBack), close the assistant and end EverythingToolbar's background process via the system tray.
+
+-----------------------------
+
+For troubleshooting and additional setup help, see the [FAQ](FAQ.md).
 
 ## 🛠️ Development
 
