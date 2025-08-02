@@ -1,4 +1,4 @@
-# <img src="EverythingToolbar/Images/AppIcon.ico" width="32" height="32" alt="" style="vertical-align: middle"> EverythingToolbar
+# <img src="EverythingToolbar/Images/AppIcon.ico" width="24"> EverythingToolbar
 
 <a href="https://paypal.me/rumswinkel"><img src="https://img.shields.io/static/v1?label=Donate&message=%E2%9D%A4&logo=PayPal&color=%23009cde" height="25" /></a>
 <a href="https://ko-fi.com/stephanrwi"><img src="https://img.shields.io/static/v1?label=Buy%20me%20a%20coffee&message=%E2%98%95&logo=Ko-fi&color=%23FF5E5B" height="25" /></a>
@@ -7,7 +7,7 @@
 
 Instant file search integration for the Windows taskbar powered by [Everything](https://www.voidtools.com/).
 
-<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/demo.gif" alt="EverythingToolbar in action">
+<img src="https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/demo.gif" alt="EverythingToolbar in action" width="80%">
 
 ## 🌟 Features
 
