@@ -66,13 +66,13 @@
                         <controls:SettingItem.SettingContent>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <ui:ProgressRing IsIndeterminate="True" Width="24" Height="24" Margin="0,0,15,0"
-                                                 Visibility="{Binding CheckingForUpdatesVisible, RelativeSource={RelativeSource AncestorType=Page}, Converter={c:BoolToVisibilityConverter}}" />
+                                                 Visibility="{Binding CheckingForUpdatesVisible, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={c:BoolToVisibilityConverter}}" />
                                 <ui:Button Content="{x:Static properties:Resources.SettingsCheckNow}"
                                            Click="OnCheckForUpdatesClicked"
-                                           Visibility="{Binding DownloadUpdateButtonVisible, RelativeSource={RelativeSource AncestorType=Page}, Converter={c:BoolToVisibilityConverter}, ConverterParameter=true}" />
+                                           Visibility="{Binding DownloadUpdateButtonVisible, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={c:BoolToVisibilityConverter}, ConverterParameter=true}" />
                                 <ui:Button Content="{x:Static properties:Resources.SettingsDownloadLatestVersion}"
                                            Click="OnDownloadUpdateClicked"
-                                           Visibility="{Binding DownloadUpdateButtonVisible, RelativeSource={RelativeSource AncestorType=Page}, Converter={c:BoolToVisibilityConverter}}" />
+                                           Visibility="{Binding DownloadUpdateButtonVisible, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Converter={c:BoolToVisibilityConverter}}" />
                                 <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsUpdateNotificationsEnabled, Mode=TwoWay}"
                                                  Margin="15, 0, 0, 0" />
                             </StackPanel>
@@ -80,7 +80,7 @@
                     </controls:SettingItem>
                     <ui:InfoBar Name="NoUpdatesInfoBar"
                                 Message="{x:Static properties:Resources.SettingsLatestVersionMessage}"
-                                IsOpen="{Binding NoUpdatesBannerOpen, RelativeSource={RelativeSource AncestorType=Page}, Mode=TwoWay}" />
+                                IsOpen="{Binding NoUpdatesBannerOpen, RelativeSource={RelativeSource AncestorType={x:Type Page}}, Mode=TwoWay}" />
                 </StackPanel>
             </Border>
             <ui:TextBlock FontTypography="BodyStrong"
