@@ -104,6 +104,9 @@ The behavior of the <kbd>Home</kbd> and <kbd>End</kbd> keys depends on your sett
 **If `Settings → Search → Select first result` is disabled:**
 - <kbd>Home</kbd> and <kbd>End</kbd> keys move the cursor to the beginning or end of the search box text
 
+### ❓ My taskbar is set to auto-hide and I cannot get the deskband search bar to show up. Why?
+This behavior is by design. Unfortunately, there are some limitations that prevent the taskbar (and with that the search box) from staying visible while the user is interacting with the search window. For that reason the deskband will only ever show a toggle button when the taskbar is set to auto-hide.
+
 ### ❓ How can I support the development of EverythingToolbar? 💖
 If you find EverythingToolbar useful and would like to support its development, you can make a donation through the following platforms:
 
