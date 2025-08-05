@@ -417,10 +417,12 @@ namespace EverythingToolbar
 
             var hwnd = new WindowInteropHelper(this).Handle;
             var taskbarHwnd = NativeMethods.FindTaskbarHandle();
-            var targetHwnd = taskbarHwnd == IntPtr.Zero ? hwndTopmost : taskbarHwnd;
 
-            // Set window above other windows but below the taskbar
-            NativeMethods.SetWindowPos(hwnd, targetHwnd, 0, 0, 0, 0, flags);
+            NativeMethods.SetWindowPos(hwnd, hwndTopmost, 0, 0, 0, 0, flags);
+
+            // The taskbar should always be above the search window
+            if (taskbarHwnd != IntPtr.Zero)
+                NativeMethods.SetWindowPos(taskbarHwnd, hwndTopmost, 0, 0, 0, 0, flags);
         }
     }
 }
