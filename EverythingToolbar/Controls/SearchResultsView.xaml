@@ -12,6 +12,7 @@
              Loaded="OnLoaded">
     <UserControl.Resources>
         <ResourceDictionary>
+
             <ContextMenu x:Key="ListViewItemContextMenu"
                          Opened="OnContextMenuOpened">
                 <MenuItem Header="{x:Static properties:Resources.ContextMenuOpen}"
@@ -50,6 +51,74 @@
                           Icon="&#xE712;" />
             </ContextMenu>
 
+            <Style x:Key="ListViewItemStyle"
+                   TargetType="{x:Type ListViewItem}">
+                <Setter Property="FocusVisualStyle"
+                        Value="{x:Null}" />
+                <Setter Property="SnapsToDevicePixels"
+                        Value="True" />
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="Margin"
+                        Value="{DynamicResource ListViewItemMargin}" />
+                <Setter Property="ContextMenu"
+                        Value="{StaticResource ListViewItemContextMenu}" />
+                <EventSetter Event="PreviewMouseLeftButtonUp"
+                             Handler="SingleClickSearchResult" />
+                <EventSetter Event="PreviewMouseDoubleClick"
+                             Handler="DoubleClickSearchResult" />
+                <EventSetter Event="PreviewMouseDown"
+                             Handler="OnListViewItemMouseDown" />
+                <EventSetter Event="MouseMove"
+                             Handler="OnListViewItemMouseMove" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{DynamicResource ListViewItemCornerRadius}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver"
+                                                   Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource SearchResultBackgroundHover}" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive"
+                                                   Value="False" />
+                                        <Condition Property="IsSelected"
+                                                   Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource SearchResultBackgroundActive}" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Selector.IsSelectionActive"
+                                                   Value="True" />
+                                        <Condition Property="IsSelected"
+                                                   Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource SearchResultBackgroundActive}" />
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -61,7 +130,7 @@
                   ContextMenuOpening="OnContextMenuOpening"
                   Background="{DynamicResource SearchResultsViewBackground}"
                   ItemTemplate="{DynamicResource SearchResultsViewTemplate}"
-                  ItemContainerStyle="{DynamicResource ListViewItemStyle}"
+                  ItemContainerStyle="{StaticResource ListViewItemStyle}"
                   IsTextSearchEnabled="False"
                   IsSynchronizedWithCurrentItem="True"
                   VirtualizingPanel.IsVirtualizing="True"

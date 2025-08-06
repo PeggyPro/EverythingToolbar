@@ -4,8 +4,4 @@
     <Thickness x:Key="ListViewItemMargin" />
     <CornerRadius x:Key="ListViewItemCornerRadius" />
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="../../../Styles/ListViewItem.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
 </ResourceDictionary>

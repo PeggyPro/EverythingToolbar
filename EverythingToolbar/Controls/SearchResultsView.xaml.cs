@@ -59,9 +59,6 @@ namespace EverythingToolbar.Controls
         {
             UpdateSearchResultsProvider(SearchState.Instance);
 
-            // Mouse events and context menu must be added to the ItemContainerStyle each time it gets updated
-            RegisterItemContainerStyleProperties();
-
             AutoSelectFirstResult();
             AttachToScrollViewer();
         }
@@ -194,45 +191,6 @@ namespace EverythingToolbar.Controls
                     return result;
             }
             return null;
-        }
-
-        private void RegisterItemContainerStyleProperties()
-        {
-            SearchResultsListView.ItemContainerStyle ??= new Style(typeof(ListViewItem));
-
-            var newStyle = new Style(typeof(ListViewItem), SearchResultsListView.ItemContainerStyle);
-            newStyle.Setters.Add(
-                new EventSetter
-                {
-                    Event = PreviewMouseLeftButtonUpEvent,
-                    Handler = new MouseButtonEventHandler(SingleClickSearchResult),
-                }
-            );
-            newStyle.Setters.Add(
-                new EventSetter
-                {
-                    Event = PreviewMouseDoubleClickEvent,
-                    Handler = new MouseButtonEventHandler(DoubleClickSearchResult),
-                }
-            );
-            newStyle.Setters.Add(
-                new EventSetter
-                {
-                    Event = PreviewMouseDownEvent,
-                    Handler = new MouseButtonEventHandler(OnListViewItemMouseDown),
-                }
-            );
-            newStyle.Setters.Add(
-                new EventSetter { Event = MouseMoveEvent, Handler = new MouseEventHandler(OnListViewItemMouseMove) }
-            );
-            newStyle.Setters.Add(
-                new Setter
-                {
-                    Property = ContextMenuProperty,
-                    Value = new Binding { Source = Resources["ListViewItemContextMenu"] },
-                }
-            );
-            SearchResultsListView.ItemContainerStyle = newStyle;
         }
 
         private void OnKeyPressed(object? sender, KeyEventArgs e)

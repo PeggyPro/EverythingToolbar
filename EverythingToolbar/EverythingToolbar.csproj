@@ -26,9 +26,6 @@
     <Content Include="Styles\ContextMenu.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Styles\ListViewItem.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Styles\PillComboBox.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
