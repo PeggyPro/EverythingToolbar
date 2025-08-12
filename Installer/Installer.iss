@@ -67,15 +67,16 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 var
   InstallTypePage: TInputOptionWizardPage;
   AdminNoticeLabel: TNewStaticText;
+  SelectedInstallMode: Integer;
 
 function IsLauncherSelected: Boolean;
 begin
-  Result := InstallTypePage.SelectedValueIndex = 0;
+  Result := SelectedInstallMode = 0;
 end;
 
 function IsDeskbandSelected: Boolean;
 begin
-  Result := InstallTypePage.SelectedValueIndex = 1;
+  Result := SelectedInstallMode = 1;
 end;
 
 function IsWindows11OrLater: Boolean;
@@ -92,13 +93,37 @@ end;
 
 function InitializeUninstall: Boolean;
 begin
-  // For some reason CloseApplications=force does not work reliably, so we kill the app manually
   KillAppIfRunning;
   Result := True;
 end;
 
 function InitializeSetup: Boolean;
+var
+  modeArg: String;
 begin
+  // Always read /mode=launcher or /mode=deskband from CLI, default to launcher
+  modeArg := LowerCase(ExpandConstant('{param:mode|launcher}'));
+  if modeArg = 'launcher' then
+    SelectedInstallMode := 0
+  else if modeArg = 'deskband' then
+    SelectedInstallMode := 1
+  else
+    // fallback to default logic if unknown value
+    if not IsWindows11OrLater and IsAdminInstallMode then
+      SelectedInstallMode := 1
+    else
+      SelectedInstallMode := 0;
+
+  // Enforce admin for deskband in all modes
+  if (IsDeskbandSelected) and not IsAdminInstallMode then
+  begin
+    MsgBox('The Deskband installation requires administrator privileges. ' +
+           'Please rerun the installer as administrator or use /mode=launcher.',
+           mbError, MB_OK);
+    Result := False;
+    exit;
+  end;
+
   AddDotNet80DesktopDependency;
   Result := UninstallWixVersion();
 end;
@@ -115,11 +140,8 @@ begin
                       'Integrates the search bar directly into the taskbar. Only works on Windows 10 or ' +
                       'Windows 11 with third-party tools that restore deskband support.'#13#10'');
 
-  // Set default selection based on Windows version and admin privileges
-  if not IsWindows11OrLater and IsAdminInstallMode then
-    InstallTypePage.SelectedValueIndex := 1  // Deskband
-  else
-    InstallTypePage.SelectedValueIndex := 0; // Launcher
+  // Set selection from CLI or fallback logic
+  InstallTypePage.SelectedValueIndex := SelectedInstallMode;
 
   AdminNoticeLabel := TNewStaticText.Create(InstallTypePage);
   AdminNoticeLabel.Parent := InstallTypePage.Surface;
@@ -132,11 +154,11 @@ begin
   AdminNoticeLabel.Font.Style := [fsBold];
   AdminNoticeLabel.Font.Color := clRed;
 
-  // Update visibility and state based on admin privileges
   if not IsAdminInstallMode then
   begin
     InstallTypePage.CheckListBox.ItemEnabled[1] := False;
     InstallTypePage.SelectedValueIndex := 0;
+    SelectedInstallMode := 0;
     AdminNoticeLabel.Caption := 'Note: The deskband option requires the installer to be run as administrator. ';
     AdminNoticeLabel.Visible := True;
   end
@@ -152,12 +174,6 @@ begin
 
   if CurPageID = InstallTypePage.ID then
   begin
-    if (InstallTypePage.SelectedValueIndex = 1) and not IsAdminInstallMode then
-    begin
-      MsgBox('The Deskband installation requires administrator privileges. ' +
-             'Please select the Launcher option or restart the installer as administrator.',
-             mbError, MB_OK);
-      Result := False;
-    end;
+    SelectedInstallMode := InstallTypePage.SelectedValueIndex;
   end;
 end;
