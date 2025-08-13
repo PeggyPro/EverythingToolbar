@@ -32,26 +32,26 @@ jobs:
         run: choco install innosetup -y --version 6.4.0
 
       - name: Build installer
-        run: iscc /F"EverythingToolbar-${{ github.ref_name }}" "Installer\Installer.iss"
+        run: iscc /F"EverythingToolbar-${{ github.ref_name }}-x64" "Installer\Installer.iss"
 
       - name: Generate SHA-256 checksum
         shell: bash
-        run: sha256sum Installer/output/EverythingToolbar-${{ github.ref_name }}.exe > Installer/output/EverythingToolbar-${{ github.ref_name }}.sha256
+        run: sha256sum Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.exe > Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.sha256
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: EverythingToolbar ${{ github.ref_name }}
           path: |
-            Installer/output/EverythingToolbar-${{ github.ref_name }}.exe
-            Installer/output/EverythingToolbar-${{ github.ref_name }}.sha256
+            Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.exe
+            Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.sha256
 
       - name: Create release draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${{ github.ref_name }}" `
-            "Installer/output/EverythingToolbar-${{ github.ref_name }}.exe" `
-            "Installer/output/EverythingToolbar-${{ github.ref_name }}.sha256" `
+            "Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.exe" `
+            "Installer/output/EverythingToolbar-${{ github.ref_name }}-x64.sha256" `
             --draft `
             --title "${{ github.ref_name }}"
