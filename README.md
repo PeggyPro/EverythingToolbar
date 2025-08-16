@@ -92,7 +92,7 @@ After installation on Windows 11, the setup assistant will guide you through the
 *Recommended for Windows 10 or when using [ExplorerPatcher](https://github.com/valinet/ExplorerPatcher) / [StartAllBack](https://www.startallback.com/)*
 
 After installation on Windows 10:
-1. Right-click the taskbar and select EverythingToolbar from the context menu
+1. Right-click the taskbar and select EverythingToolbar from the _Toolbars_ context menu
    > You may need to open the context menu twice for EverythingToolbar to appear
 2. Unlock the taskbar to adjust size and position ([demonstration video](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/deskband_resizing_demo.gif))
 
