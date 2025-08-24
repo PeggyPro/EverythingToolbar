@@ -91,6 +91,23 @@ begin
   Exec('taskkill.exe', '/F /IM "{#MyAppExeName}"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;
 
+function IsAppInstalled: Boolean;
+var
+  sUnInstPath: String;
+  sUnInstallString: String;
+begin
+  Result := False;
+  sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{#SetupSetting("AppId")}_is1');
+  if RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
+  begin
+    Result := True;
+  end
+  else if RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString) then
+  begin
+    Result := True;
+  end;
+end;
+
 function InitializeUninstall: Boolean;
 begin
   KillAppIfRunning;
@@ -101,6 +118,15 @@ function InitializeSetup: Boolean;
 var
   modeArg: String;
 begin
+  if IsAppInstalled then
+  begin
+    MsgBox('EverythingToolbar is already installed on this computer.' + #13#10 + #13#10 +
+           'To reinstall or update, please uninstall the existing version first using Windows Settings or Control Panel.',
+           mbInformation, MB_OK);
+    Result := False;
+    Exit;
+  end;
+
   // Always read /mode=launcher or /mode=deskband from CLI, default to launcher
   modeArg := LowerCase(ExpandConstant('{param:mode|launcher}'));
   if modeArg = 'launcher' then
