@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -49,6 +50,7 @@ namespace EverythingToolbar.Search
         }
 
         private readonly SearchState _searchState;
+        private readonly TaskScheduler _taskScheduler;
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<SearchResultProvider>();
         private static readonly object SyncLock = new();
         private static readonly Queue<QueryQueueItem> QueryQueue = new();
@@ -71,9 +73,10 @@ namespace EverythingToolbar.Search
             }
         }
 
-        public SearchResultProvider(SearchState searchState)
+        public SearchResultProvider(SearchState searchState, SynchronizationContext synchronizationContext)
         {
             _searchState = searchState;
+            _taskScheduler = new SynchronizationContextTaskScheduler(synchronizationContext);
 
             if (!_initialized)
                 _initialized = Initialize();
@@ -277,10 +280,7 @@ namespace EverythingToolbar.Search
                     QueryQueue.Enqueue(countQuery);
                     Dispatcher.CurrentDispatcher.BeginInvoke(ProcessNextQuery);
 
-                    countCompletionSource.Task.ContinueWith(
-                        _ => IsBusy = false,
-                        TaskScheduler.FromCurrentSynchronizationContext()
-                    );
+                    countCompletionSource.Task.ContinueWith(_ => IsBusy = false, _taskScheduler);
 
                     return countCompletionSource.Task;
                 }
@@ -317,10 +317,7 @@ namespace EverythingToolbar.Search
                     QueryQueue.Enqueue(rangeQuery);
                     Dispatcher.CurrentDispatcher.BeginInvoke(ProcessNextQuery);
 
-                    rangeCompletionSource.Task.ContinueWith(
-                        _ => IsBusy = false,
-                        TaskScheduler.FromCurrentSynchronizationContext()
-                    );
+                    rangeCompletionSource.Task.ContinueWith(_ => IsBusy = false, _taskScheduler);
 
                     return rangeCompletionSource.Task;
                 }

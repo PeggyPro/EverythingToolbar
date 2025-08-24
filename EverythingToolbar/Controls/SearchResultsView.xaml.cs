@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -37,6 +38,7 @@ namespace EverythingToolbar.Controls
         private Point _dragStart;
         private bool _isScrollBarDragging;
         private VirtualizingCollection<SearchResult>? _searchResultsCollection;
+        private SynchronizationContext _synchronizationContext = new();
         private readonly DispatcherTimer _busyIndicatorTimer;
         private const int BusyIndicatorDelayMilliseconds = 2000;
 
@@ -57,6 +59,8 @@ namespace EverythingToolbar.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
+
             UpdateSearchResultsProvider(SearchState.Instance);
 
             AutoSelectFirstResult();
@@ -72,11 +76,15 @@ namespace EverythingToolbar.Controls
                 return;
             }
 
-            SearchResultProvider newProvider = new(searchState);
+            SearchResultProvider newProvider = new(searchState, _synchronizationContext);
 
             if (_searchResultsCollection == null)
             {
-                _searchResultsCollection = new VirtualizingCollection<SearchResult>(newProvider, PageSize);
+                _searchResultsCollection = new VirtualizingCollection<SearchResult>(
+                    newProvider,
+                    PageSize,
+                    _synchronizationContext
+                );
                 _searchResultsCollection.CollectionChanged += (_, args) =>
                 {
                     if (args.Action == NotifyCollectionChangedAction.Reset)

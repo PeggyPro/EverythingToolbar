@@ -12,8 +12,14 @@ namespace EverythingToolbar.Search
 {
     public sealed class VirtualizingCollection<T> : IList<T>, IList, INotifyCollectionChanged, INotifyPropertyChanged
     {
-        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize)
+        public VirtualizingCollection(
+            IItemsProvider<T> itemsProvider,
+            int pageSize,
+            SynchronizationContext currentSynchronizationContext
+        )
         {
+            _taskScheduler = new SynchronizationContextTaskScheduler(currentSynchronizationContext);
+
             PageSize = pageSize;
 
             ItemsProvider = itemsProvider;
@@ -22,6 +28,7 @@ namespace EverythingToolbar.Search
             LoadCount();
         }
 
+        private readonly TaskScheduler _taskScheduler;
         private int _providerVersion;
 
         private int PageSize { get; }
@@ -109,7 +116,7 @@ namespace EverythingToolbar.Search
                         },
                         CancellationToken.None,
                         TaskContinuationOptions.None,
-                        TaskScheduler.FromCurrentSynchronizationContext()
+                        _taskScheduler
                     );
             }
             else
@@ -176,7 +183,7 @@ namespace EverythingToolbar.Search
                     },
                     CancellationToken.None,
                     TaskContinuationOptions.None,
-                    TaskScheduler.FromCurrentSynchronizationContext()
+                    _taskScheduler
                 );
         }
 
