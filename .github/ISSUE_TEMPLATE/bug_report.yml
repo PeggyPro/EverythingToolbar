@@ -17,7 +17,18 @@ body:
   attributes:
     label: EverythingToolbar Version
     description: What version of EverythingToolbar are you using?
-    placeholder: "e.g. 1.5.0"
+    placeholder: "e.g. 2.0.0"
+  validations:
+    required: true
+- type: dropdown
+  id: variant
+  attributes:
+    label: Variant
+    description: What variant of EverythingToolbar are you using? [What are the different variants?](https://github.com/srwi/EverythingToolbar/blob/develop/FAQ.md#-what-is-the-difference-between-the-deskband-and-launcher-variants-of-everythingtoolbar)
+    options:
+      - Not applicable / Don't know
+      - Search icon / Launcher
+      - Deskband
   validations:
     required: true
 - id: et_version
@@ -66,10 +77,18 @@ body:
 - type: textarea
   attributes:
     label: Log output
-    description: To copy the log file output press <kbd>Win</kbd>+<kbd>R</kbd>, run `%TEMP%\EverythingToolbar.log` and paste the file content below.
+    description: To copy the log file output press <kbd>Win</kbd>+<kbd>R</kbd>, run `%TEMP%\EverythingToolbar.log` and paste the file content below. Please provide the log file even if you think it does not contain relevant information.
   validations:
     required: true
 - type: textarea
   attributes:
     label: Additional Information
-    description: If your problem needs further explanation please add more information here.
+    description: Are there any other details that may be relevant to the issue like unusual system configurations or third party software that may be involved?
+- type: checkboxes
+  id: ensure_effort
+  attributes:
+    label: Final Checklist
+    description: Before submitting, please confirm the following to help provide better support.
+    options:
+      - label: I have provided detailed, clear information in all required fields above and put genuine effort into this bug report.
+        required: true
