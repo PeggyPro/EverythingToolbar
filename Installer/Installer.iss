@@ -68,6 +68,8 @@ var
   InstallTypePage: TInputOptionWizardPage;
   AdminNoticeLabel: TNewStaticText;
   SelectedInstallMode: Integer;
+  IsUpgrade: Boolean;
+  SkipInstallTypePage: Boolean;
 
 function IsLauncherSelected: Boolean;
 begin
@@ -91,13 +93,13 @@ begin
   Exec('taskkill.exe', '/F /IM "{#MyAppExeName}"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;
 
-function IsSameVersionInstalled: Boolean;
+function GetInstalledVersion(var sInstalledVersion: String): Boolean;
 var
   sUnInstPath: String;
   sUnInstallString: String;
-  sInstalledVersion: String;
 begin
   Result := False;
+  sInstalledVersion := '';
   sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{#SetupSetting("AppId")}_is1');
 
   // Check HKLM first
@@ -105,7 +107,8 @@ begin
   begin
     if RegQueryStringValue(HKLM, sUnInstPath, 'DisplayVersion', sInstalledVersion) then
     begin
-      Result := (sInstalledVersion = '{#MyAppVersion}');
+      Result := True;
+      Exit;
     end;
   end
   // Check HKCU if not found in HKLM
@@ -113,9 +116,33 @@ begin
   begin
     if RegQueryStringValue(HKCU, sUnInstPath, 'DisplayVersion', sInstalledVersion) then
     begin
-      Result := (sInstalledVersion = '{#MyAppVersion}');
+      Result := True;
+      Exit;
     end;
   end;
+end;
+
+function IsSameVersionInstalled: Boolean;
+var
+  sInstalledVersion: String;
+begin
+  Result := False;
+  if GetInstalledVersion(sInstalledVersion) then
+  begin
+    Result := (sInstalledVersion = '{#MyAppVersion}');
+  end;
+end;
+
+function SetSelectedModeFromPrevious: Boolean;
+begin
+  // Detect previous deskband install by presence of the registered CLSID
+  // and store the corresponding selection in SelectedInstallMode (0 = launcher, 1 = deskband)
+  if RegKeyExists(HKCR, 'CLSID\{9D39B79C-E03C-4757-B1B6-ECCE843748F3}') then
+    SelectedInstallMode := 1
+  else
+    SelectedInstallMode := 0;
+
+  Result := True;
 end;
 
 function InitializeUninstall: Boolean;
@@ -127,7 +154,13 @@ end;
 function InitializeSetup: Boolean;
 var
   modeArg: String;
+  modeArgSupplied: Boolean;
+  sPrevVersion: String;
 begin
+  IsUpgrade := False;
+  SkipInstallTypePage := False;
+
+  // If exactly the same version is installed, cancel
   if IsSameVersionInstalled then
   begin
     MsgBox('EverythingToolbar version {#MyAppVersion} is already installed on this computer.' + #13#10 + #13#10 +
@@ -137,18 +170,35 @@ begin
     Exit;
   end;
 
-  // Always read /mode=launcher or /mode=deskband from CLI, default to launcher
+  // Detect whether an older version is installed (upgrade scenario)
+  if GetInstalledVersion(sPrevVersion) then
+  begin
+    IsUpgrade := True;
+  end;
+
+  // Read whether a /mode param was supplied (bool) and fallback param (launcher default)
+  modeArgSupplied := (ExpandConstant('{param:mode}') <> '');
   modeArg := LowerCase(ExpandConstant('{param:mode|launcher}'));
-  if modeArg = 'launcher' then
-    SelectedInstallMode := 0
-  else if modeArg = 'deskband' then
-    SelectedInstallMode := 1
+
+  if IsUpgrade and (not modeArgSupplied) then
+  begin
+    // Auto-select previously installed mode and skip the selection page
+    SetSelectedModeFromPrevious();
+    SkipInstallTypePage := True;
+  end
   else
-    // fallback to default logic if unknown value
-    if not IsWindows11OrLater and IsAdminInstallMode then
+  begin
+    // Respect explicit CLI option or fallback logic
+    if modeArg = 'launcher' then
+      SelectedInstallMode := 0
+    else if modeArg = 'deskband' then
       SelectedInstallMode := 1
     else
-      SelectedInstallMode := 0;
+      if not IsWindows11OrLater and IsAdminInstallMode then
+        SelectedInstallMode := 1
+      else
+        SelectedInstallMode := 0;
+  end;
 
   // Enforce admin for deskband in all modes
   if (IsDeskbandSelected) and not IsAdminInstallMode then
@@ -166,6 +216,13 @@ end;
 
 procedure InitializeWizard;
 begin
+  // If this is an upgrade and we already know the previous mode, skip the selection page
+  if SkipInstallTypePage then
+  begin
+    // Nothing to show; selection was already set in InitializeSetup
+    exit;
+  end;
+
   InstallTypePage := CreateInputOptionPage(wpWelcome,
     'Choose Installation Type', 'Select how you want to install EverythingToolbar',
     'Please specify which installation method you would like to use, then click Next.',
@@ -208,7 +265,7 @@ function NextButtonClick(CurPageID: Integer): Boolean;
 begin
   Result := True;
 
-  if CurPageID = InstallTypePage.ID then
+  if Assigned(InstallTypePage) and (CurPageID = InstallTypePage.ID) then
   begin
     SelectedInstallMode := InstallTypePage.SelectedValueIndex;
   end;
