@@ -91,20 +91,30 @@ begin
   Exec('taskkill.exe', '/F /IM "{#MyAppExeName}"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
 end;
 
-function IsAppInstalled: Boolean;
+function IsSameVersionInstalled: Boolean;
 var
   sUnInstPath: String;
   sUnInstallString: String;
+  sInstalledVersion: String;
 begin
   Result := False;
   sUnInstPath := ExpandConstant('Software\Microsoft\Windows\CurrentVersion\Uninstall\{#SetupSetting("AppId")}_is1');
+
+  // Check HKLM first
   if RegQueryStringValue(HKLM, sUnInstPath, 'UninstallString', sUnInstallString) then
   begin
-    Result := True;
+    if RegQueryStringValue(HKLM, sUnInstPath, 'DisplayVersion', sInstalledVersion) then
+    begin
+      Result := (sInstalledVersion = '{#MyAppVersion}');
+    end;
   end
+  // Check HKCU if not found in HKLM
   else if RegQueryStringValue(HKCU, sUnInstPath, 'UninstallString', sUnInstallString) then
   begin
-    Result := True;
+    if RegQueryStringValue(HKCU, sUnInstPath, 'DisplayVersion', sInstalledVersion) then
+    begin
+      Result := (sInstalledVersion = '{#MyAppVersion}');
+    end;
   end;
 end;
 
@@ -118,10 +128,10 @@ function InitializeSetup: Boolean;
 var
   modeArg: String;
 begin
-  if IsAppInstalled then
+  if IsSameVersionInstalled then
   begin
-    MsgBox('EverythingToolbar is already installed on this computer.' + #13#10 + #13#10 +
-           'To reinstall or update, please uninstall the existing version first using Windows Settings or Control Panel.',
+    MsgBox('EverythingToolbar version {#MyAppVersion} is already installed on this computer.' + #13#10 + #13#10 +
+           'Installation will be cancelled.',
            mbInformation, MB_OK);
     Result := False;
     Exit;
