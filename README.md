@@ -72,8 +72,7 @@ EverythingToolbar works seamlessly on Windows 10 and Windows 11, and integrates 
 Choose one of the following installation methods:
 
 - **Installer**: Download from [GitHub Releases](https://github.com/srwi/EverythingToolbar/releases)
-- **Chocolatey**: `choco install everythingtoolbar`
-- **winget**: `winget install stnkl.everythingtoolbar`
+- **winget**: `winget install srwi.everythingtoolbar.launcher` or `winget install srwi.everythingtoolbar.deskband`
 
 > **Important:** For Everything 1.5a users, set the instance name to `1.5a` in EverythingToolbar's advanced settings (**Settings** → **Advanced** → **Everything instance name**). ([Screenshot](https://raw.githubusercontent.com/srwi/EverythingToolbar/develop/.github/images/named_instance.png))
 
