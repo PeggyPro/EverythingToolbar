@@ -1,15 +1,11 @@
-#include "InnoDependencyInstaller/CodeDependencies.iss"
+﻿#include "InnoDependencyInstaller/CodeDependencies.iss"
 #include "WixUninstaller.iss"
 #include "DotNetInstaller.iss"
-
-#define LauncherBuildDir "..\EverythingToolbar.Launcher\bin\x64\Release\net8.0-windows10.0.17763.0"
-#define DeskbandBuildDir "..\EverythingToolbar.Deskband\bin\x64\Release\net8.0-windows10.0.17763.0"
 
 #define MyAppName "EverythingToolbar"
 #define MyAppPublisher "Stephan Rumswinkel"
 #define MyAppURL "https://www.github.com/srwi/EverythingToolbar"
 #define MyAppExeName "EverythingToolbar.Launcher.exe"
-#define MyAppVersion GetVersionNumbersString(LauncherBuildDir + "\" + MyAppExeName)
 
 [Setup]
 AppId={{b5f0ac2d-98da-4392-9d12-78444db9caa9}
@@ -22,13 +18,13 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-ArchitecturesAllowed=x64compatible
-ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed={#ArchitecturesAllowed}
+ArchitecturesInstallIn64BitMode={#ArchitecturesInstallIn64BitMode}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=output
-OutputBaseFilename=EverythingToolbar-{#MyAppVersion}-x64
+OutputBaseFilename={#OutputBaseName}
 SetupIconFile=..\EverythingToolbar\Images\AppIcon.ico
 SolidCompression=yes
 WizardStyle=modern
@@ -270,3 +266,4 @@ begin
     SelectedInstallMode := InstallTypePage.SelectedValueIndex;
   end;
 end;
+

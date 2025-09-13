@@ -32,7 +32,7 @@ jobs:
         run: choco install innosetup -y --version 6.4.0
 
       - name: Build installer
-        run: iscc /F"EverythingToolbar-${{ github.ref_name }}-x64" "Installer\Installer.iss"
+        run: iscc /F"EverythingToolbar-${{ github.ref_name }}-x64" "Installer\Installer-x64.iss"
 
       - name: Generate SHA-256 checksum
         shell: bash

@@ -29,7 +29,7 @@ jobs:
         run: choco install innosetup -y --version 6.4.0
 
       - name: Build installer
-        run: iscc "Installer\Installer.iss"
+        run: iscc "Installer\Installer-x64.iss"
 
       - name: Upload installer artifact
         if: github.event_name == 'workflow_dispatch'
