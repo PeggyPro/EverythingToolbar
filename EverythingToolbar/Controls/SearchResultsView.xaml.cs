@@ -49,6 +49,7 @@ namespace EverythingToolbar.Controls
             SearchState.Instance.PropertyChanged += (_, _) => UpdateSearchResultsProvider(SearchState.Instance);
             EventDispatcher.Instance.GlobalKeyEvent += OnKeyPressed;
             SearchResultsListView.PreviewKeyDown += OnKeyPressed;
+            SearchResultsListView.PreviewMouseLeftButtonDown += OnPreviewLeftMouseButtonDown;
 
             _busyIndicatorTimer = new DispatcherTimer
             {
@@ -199,6 +200,20 @@ namespace EverythingToolbar.Controls
                     return result;
             }
             return null;
+        }
+
+        private void OnPreviewLeftMouseButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Prevents deselecting an item when Ctrl is held down and clicking on an already selected item
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                if (e.OriginalSource is not DependencyObject source)
+                    return;
+
+                ListViewItem? item = ItemsControl.ContainerFromElement(SearchResultsListView, source) as ListViewItem;
+                if (item?.IsSelected == true)
+                    e.Handled = true;
+            }
         }
 
         private void OnKeyPressed(object? sender, KeyEventArgs e)
