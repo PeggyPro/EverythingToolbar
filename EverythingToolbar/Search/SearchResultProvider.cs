@@ -250,7 +250,7 @@ namespace EverythingToolbar.Search
         {
             lock (SyncLock)
             {
-                var search = _searchState.Filter.GetSearchPrefix() + _searchState.SearchTerm;
+                var search = _searchState.BuildSearchTerm();
                 Everything_SetSearchW(search);
                 Everything_SetRequestFlags(
                     (uint)(
@@ -515,7 +515,7 @@ namespace EverythingToolbar.Search
                 }
             }
 
-            var searchTerm = searchState.Filter.GetSearchPrefix() + searchState.SearchTerm;
+            var searchTerm = searchState.BuildSearchTerm();
             var args = "";
             if (!string.IsNullOrEmpty(ToolbarSettings.User.InstanceName))
                 args += " -instance \"" + ToolbarSettings.User.InstanceName + "\"";

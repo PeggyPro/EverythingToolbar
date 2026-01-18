@@ -2,28 +2,18 @@
 using System.Runtime.CompilerServices;
 using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
+using System.Collections.Generic;
 
 namespace EverythingToolbar.Search
 {
     public sealed class SearchState : INotifyPropertyChanged
     {
-        public static readonly SearchState Instance = new SearchState();
+        public static readonly SearchState Instance = new ();
 
         private string _searchTerm = "";
         public string SearchTerm
         {
-            get
-            {
-                var searchTermWithReplacedMacros = _searchTerm;
-                foreach (var f in FilterLoader.Instance.Filters)
-                {
-                    if (string.IsNullOrEmpty(f.Macro))
-                        continue;
-
-                    searchTermWithReplacedMacros = searchTermWithReplacedMacros.Replace(f.Macro + ":", f.Search + " ");
-                }
-                return searchTermWithReplacedMacros;
-            }
+            get => _searchTerm;
             set
             {
                 if (_searchTerm != value)
@@ -162,6 +152,39 @@ namespace EverythingToolbar.Search
                 return;
 
             Filter = FilterLoader.Instance.Filters[index];
+        }
+
+        private string ApplyMacros(string searchTerm)
+        {
+            var result = searchTerm;
+
+            foreach (var f in FilterLoader.Instance.Filters)
+            {
+                if (string.IsNullOrEmpty(f.Macro))
+                    continue;
+
+                result = result.Replace(f.Macro + ":", f.Search + " ");
+            }
+
+            var defaultMacros = new Dictionary<string, string>
+            {
+                // Macros quot:, gt: and lt: are not supported by the SDK
+                { "apos:", "'" },
+                { "amp:", "&" }
+            };
+            foreach (var defaultMacro in defaultMacros)
+            {
+                result = result.Replace(defaultMacro.Key, defaultMacro.Value);
+            }
+
+            return result;
+        }
+
+        public string BuildSearchTerm()
+        {
+            var rawSearchTerm = Filter.GetSearchPrefix() + SearchTerm;
+            var searchTermWithAppliedMacros = ApplyMacros(rawSearchTerm);
+            return searchTermWithAppliedMacros;
         }
 
         private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
