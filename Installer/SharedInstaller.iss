@@ -248,7 +248,7 @@ begin
     InstallTypePage.CheckListBox.ItemEnabled[1] := False;
     InstallTypePage.SelectedValueIndex := 0;
     SelectedInstallMode := 0;
-    AdminNoticeLabel.Caption := 'Note: The deskband option requires the installer to be run as administrator. ';
+    AdminNoticeLabel.Caption := 'Note: To use the Deskband option, you must select “Install for all users.”';
     AdminNoticeLabel.Visible := True;
   end
   else
