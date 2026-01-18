@@ -66,9 +66,11 @@ namespace EverythingToolbar.Helpers
             var filters = new ObservableCollection<Filter>();
 
             if (string.IsNullOrWhiteSpace(ToolbarSettings.User.FiltersPath))
-                ToolbarSettings.User.FiltersPath =
-                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Everything",
-                        "Filters.csv");
+                ToolbarSettings.User.FiltersPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "Everything",
+                    "Filters.csv"
+                );
 
             if (!File.Exists(ToolbarSettings.User.FiltersPath))
             {

@@ -1,14 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
-using System.Collections.Generic;
 
 namespace EverythingToolbar.Search
 {
     public sealed class SearchState : INotifyPropertyChanged
     {
-        public static readonly SearchState Instance = new ();
+        public static readonly SearchState Instance = new();
 
         private string _searchTerm = "";
         public string SearchTerm
@@ -170,7 +170,7 @@ namespace EverythingToolbar.Search
             {
                 // Macros quot:, gt: and lt: are not supported by the SDK
                 { "apos:", "'" },
-                { "amp:", "&" }
+                { "amp:", "&" },
             };
             foreach (var defaultMacro in defaultMacros)
             {
