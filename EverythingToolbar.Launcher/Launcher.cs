@@ -72,6 +72,19 @@ namespace EverythingToolbar.Launcher
                 {
                     if (e.PropertyName == nameof(ToolbarSettings.User.IsTrayIconEnabled))
                     {
+                        if (!ToolbarSettings.User.IsTrayIconEnabled && !Utils.IsTaskbarPinned())
+                        {
+                            await FluentMessageBox
+                                .CreateError(
+                                    Properties.Resources.TrayIconDisableErrorText,
+                                    Properties.Resources.TrayIconDisableErrorTitle
+                                )
+                                .ShowDialogAsync();
+
+                            ToolbarSettings.User.IsTrayIconEnabled = true;
+                            return;
+                        }
+                        
                         _notifyIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;
                     }
                     else if (e.PropertyName == nameof(ToolbarSettings.User.IconName))

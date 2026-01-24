@@ -212,5 +212,23 @@ namespace EverythingToolbar.Launcher.Properties {
                 return ResourceManager.GetString("SetupAssistantTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The system tray icon cannot be disabled when EverythingToolbar is not pinned to the taskbar. Please pin EverythingToolbar to the taskbar first, or keep the system tray icon enabled to access settings and functionality..
+        /// </summary>
+        public static string TrayIconDisableErrorText {
+            get {
+                return ResourceManager.GetString("TrayIconDisableErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot disable system tray icon.
+        /// </summary>
+        public static string TrayIconDisableErrorTitle {
+            get {
+                return ResourceManager.GetString("TrayIconDisableErrorTitle", resourceCulture);
+            }
+        }
     }
 }
