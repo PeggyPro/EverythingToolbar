@@ -84,7 +84,7 @@ namespace EverythingToolbar.Launcher
                             ToolbarSettings.User.IsTrayIconEnabled = true;
                             return;
                         }
-                        
+
                         _notifyIcon.Visible = ToolbarSettings.User.IsTrayIconEnabled;
                     }
                     else if (e.PropertyName == nameof(ToolbarSettings.User.IconName))

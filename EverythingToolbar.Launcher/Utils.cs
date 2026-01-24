@@ -77,10 +77,10 @@ namespace EverythingToolbar.Launcher
         {
             using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
             var registryValue = key?.GetValue("EverythingToolbar") as string;
-            
+
             if (string.IsNullOrEmpty(registryValue))
                 return false;
-                
+
             return File.Exists(registryValue.Trim('"'));
         }
 
