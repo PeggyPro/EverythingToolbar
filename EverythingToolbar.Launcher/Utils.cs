@@ -76,7 +76,12 @@ namespace EverythingToolbar.Launcher
         public static bool GetAutostartState()
         {
             using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
-            return key?.GetValue("EverythingToolbar") != null;
+            var registryValue = key?.GetValue("EverythingToolbar") as string;
+            
+            if (string.IsNullOrEmpty(registryValue))
+                return false;
+                
+            return File.Exists(registryValue.Trim('"'));
         }
 
         public static void SetAutostartState(bool enabled)
