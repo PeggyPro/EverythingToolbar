@@ -98,10 +98,10 @@ You can preview the selected file by pressing the <kbd>Space</kbd> key. However,
 ### ❓ How do I navigate the search box text using the Home and End keys?
 The behavior of the <kbd>Home</kbd> and <kbd>End</kbd> keys depends on your settings:
 
-**If `Settings → Search → Select first result` is enabled:**
+**If `Settings → Search → Home/End keys navigate results` is enabled:**
 - <kbd>Home</kbd> and <kbd>End</kbd> keys select the first or last search result
 
-**If `Settings → Search → Select first result` is disabled:**
+**If `Settings → Search → Home/End keys navigate results` is disabled:**
 - <kbd>Home</kbd> and <kbd>End</kbd> keys move the cursor to the beginning or end of the search box text
 
 ### ❓ My taskbar is set to auto-hide and I cannot get the deskband search bar to show up. Why?

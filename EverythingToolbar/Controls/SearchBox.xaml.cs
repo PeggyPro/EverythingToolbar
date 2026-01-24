@@ -94,7 +94,7 @@ namespace EverythingToolbar.Controls
             else if (
                 e.Key is Key.Home or Key.End
                     && Keyboard.Modifiers != ModifierKeys.Shift
-                    && ToolbarSettings.User.IsAutoSelectFirstResult
+                    && ToolbarSettings.User.IsHomeEndNavigateResults
                 || e.Key == Key.PageDown
                 || e.Key == Key.PageUp
                 || e.Key == Key.Up

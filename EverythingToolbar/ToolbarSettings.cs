@@ -108,6 +108,9 @@ namespace EverythingToolbar
         bool IsAutoSelectFirstResult { get; set; }
 
         [Option(DefaultValue = true)]
+        bool IsHomeEndNavigateResults { get; set; }
+
+        [Option(DefaultValue = true)]
         bool IsSearchAsYouType { get; set; }
 
         [Option(DefaultValue = false)]
@@ -556,6 +559,19 @@ namespace EverythingToolbar
                 if (settings.IsAutoSelectFirstResult != value)
                 {
                     settings.IsAutoSelectFirstResult = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsHomeEndNavigateResults
+        {
+            get => settings.IsHomeEndNavigateResults;
+            set
+            {
+                if (settings.IsHomeEndNavigateResults != value)
+                {
+                    settings.IsHomeEndNavigateResults = value;
                     OnPropertyChanged();
                 }
             }

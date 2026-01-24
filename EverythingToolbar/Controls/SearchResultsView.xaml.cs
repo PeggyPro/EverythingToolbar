@@ -359,7 +359,7 @@ namespace EverythingToolbar.Controls
 
             // Restore focus to text box
             if (
-                ToolbarSettings.User.IsAutoSelectFirstResult
+                ToolbarSettings.User.IsHomeEndNavigateResults
                 && currentFocus is TextBox restoredTextBox
                 && caretIndex >= 0
             )

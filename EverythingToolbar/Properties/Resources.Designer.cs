@@ -870,6 +870,24 @@ namespace EverythingToolbar.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home/End keys navigate results.
+        /// </summary>
+        public static string SettingsHomeEndNavigateResults {
+            get {
+                return ResourceManager.GetString("SettingsHomeEndNavigateResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home/End keys will navigate search results instead of moving the cursor.
+        /// </summary>
+        public static string SettingsHomeEndNavigateResultsHelp {
+            get {
+                return ResourceManager.GetString("SettingsHomeEndNavigateResultsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Everything instance name.
         /// </summary>
         public static string SettingsInstanceName {
