@@ -168,4 +168,10 @@
   <data name="SetupAssistantDone" xml:space="preserve">
     <value>Fertig</value>
   </data>
+  <data name="TrayIconDisableErrorText" xml:space="preserve">
+    <value>Das Infobereichsymbol kann nicht deaktiviert werden, wenn EverythingToolbar nicht an die Taskleiste angeheftet ist. Bitte heften Sie EverythingToolbar zuerst an die Taskleiste an oder lassen Sie das Infobereichsymbol aktiviert.</value>
+  </data>
+  <data name="TrayIconDisableErrorTitle" xml:space="preserve">
+    <value>Infobereichsymbol kann nicht deaktiviert werden</value>
+  </data>
 </root>

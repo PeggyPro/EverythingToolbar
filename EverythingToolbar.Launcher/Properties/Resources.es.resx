@@ -148,16 +148,16 @@
     <value>Preferences</value>
   </data>
   <data name="SetupAssistantHideWindowsSearch" xml:space="preserve">
-    <value>Hide Windows search icon</value>
+    <value>Ocultar icono de búsqueda de Windows</value>
   </data>
   <data name="SetupAssistantHideWindowsSearchHelp" xml:space="preserve">
     <value>Hides the original Windows search icon from the taskbar</value>
   </data>
   <data name="SetupAssistantEnableSystemTray" xml:space="preserve">
-    <value>Enable system tray icon</value>
+    <value>Habilita el icono de la bandeja del sistema</value>
   </data>
   <data name="SetupAssistantEnableSystemTrayHelp" xml:space="preserve">
-    <value>Enables the system tray icon for quick access to settings</value>
+    <value>Habilita el icono de la bandeja del sistema para un acceso rápido a la configuración</value>
   </data>
   <data name="SetupAssistantEnableAutostart" xml:space="preserve">
     <value>Enable autostart</value>
@@ -167,5 +167,11 @@
   </data>
   <data name="SetupAssistantDone" xml:space="preserve">
     <value>Done</value>
+  </data>
+  <data name="TrayIconDisableErrorText" xml:space="preserve">
+    <value>The system tray icon cannot be disabled when EverythingToolbar is not pinned to the taskbar. Please pin EverythingToolbar to the taskbar first, or keep the system tray icon enabled to access settings and functionality.</value>
+  </data>
+  <data name="TrayIconDisableErrorTitle" xml:space="preserve">
+    <value>Cannot disable system tray icon</value>
   </data>
 </root>
