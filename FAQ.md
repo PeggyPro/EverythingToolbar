@@ -107,6 +107,9 @@ The behavior of the <kbd>Home</kbd> and <kbd>End</kbd> keys depends on your sett
 ### ❓ My taskbar is set to auto-hide and I cannot get the deskband search bar to show up. Why?
 This behavior is by design. Unfortunately, there are some limitations that prevent the taskbar (and with that the search box) from staying visible while the user is interacting with the search window. For that reason the deskband will only ever show a toggle button when the taskbar is set to auto-hide.
 
+### ❓ Can I change the operator precedence in search queries?
+No, EverythingToolbar relies on the Everything SDK for search functionality, which does not support changing operator precedence. The default precedence is `OR > AND`.
+
 ### ❓ How can I support the development of EverythingToolbar? 💖
 If you find EverythingToolbar useful and would like to support its development, you can make a donation through the following platforms:
 
