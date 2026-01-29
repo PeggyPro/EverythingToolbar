@@ -37,6 +37,7 @@ namespace EverythingToolbar.Controls
         private const int PageSize = 256;
         private Point _dragStart;
         private bool _isScrollBarDragging;
+        private int? _touchId;
         private VirtualizingCollection<SearchResult>? _searchResultsCollection;
         private SynchronizationContext _synchronizationContext = new();
         private readonly DispatcherTimer _busyIndicatorTimer;
@@ -537,21 +538,49 @@ namespace EverythingToolbar.Controls
 
         private void OnListViewItemMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed || SelectedItem == null)
+            if (e.LeftButton != MouseButtonState.Pressed)
                 return;
 
-            var diff = _dragStart - PointToScreen(Mouse.GetPosition(this));
+            TryStartDragDrop(PointToScreen(Mouse.GetPosition(this)));
+        }
 
-            if (
-                Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance
-                || Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance
-            )
-            {
-                string[] files = [SelectedItem.FullPathAndFileName];
-                var data = new DataObject(DataFormats.FileDrop, files);
-                data.SetData(DataFormats.Text, files[0]);
-                DragDrop.DoDragDrop(SearchResultsListView, data, DragDropEffects.All);
-            }
+        private void OnListViewItemTouchDown(object sender, TouchEventArgs e)
+        {
+            _touchId = e.TouchDevice.Id;
+            _dragStart = PointToScreen(e.GetTouchPoint(this).Position);
+        }
+
+        private void OnListViewItemTouchMove(object sender, TouchEventArgs e)
+        {
+            if (_touchId != e.TouchDevice.Id)
+                return;
+
+            if (TryStartDragDrop(PointToScreen(e.GetTouchPoint(this).Position)))
+                _touchId = null;
+        }
+
+        private void OnListViewItemTouchUp(object sender, TouchEventArgs e)
+        {
+            if (_touchId == e.TouchDevice.Id)
+                _touchId = null;
+        }
+
+        private bool TryStartDragDrop(Point currentPosition)
+        {
+            if (SelectedItem == null)
+                return false;
+
+            var diff = _dragStart - currentPosition;
+
+            if (Math.Abs(diff.X) <= SystemParameters.MinimumHorizontalDragDistance
+                && Math.Abs(diff.Y) <= SystemParameters.MinimumVerticalDragDistance)
+                return false;
+
+            string[] files = [SelectedItem.FullPathAndFileName];
+            var data = new DataObject(DataFormats.FileDrop, files);
+            data.SetData(DataFormats.Text, files[0]);
+            DragDrop.DoDragDrop(SearchResultsListView, data, DragDropEffects.All);
+            return true;
         }
 
         private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)

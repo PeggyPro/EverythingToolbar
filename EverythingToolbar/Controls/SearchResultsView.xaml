@@ -71,6 +71,12 @@
                              Handler="OnListViewItemMouseDown" />
                 <EventSetter Event="MouseMove"
                              Handler="OnListViewItemMouseMove" />
+                <EventSetter Event="TouchDown"
+                             Handler="OnListViewItemTouchDown" />
+                <EventSetter Event="TouchMove"
+                             Handler="OnListViewItemTouchMove" />
+                <EventSetter Event="TouchUp"
+                             Handler="OnListViewItemTouchUp" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListViewItem}">
