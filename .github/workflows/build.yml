@@ -27,12 +27,8 @@ jobs:
       - name: Restore NuGet dependencies
         run: nuget restore
         
-      - name: Decode certificate
-        shell: bash
-        run: echo ${{ secrets.PFX_CERTIFICATE_FILE }} | base64 --decode  > ./EverythingToolbar.snk
-        
       - name: Build all
-        run: MSBuild $Env:GITHUB_WORKSPACE /p:Configuration=Release /p:Platform=${{ matrix.arch }}
+        run: MSBuild $Env:GITHUB_WORKSPACE /p:Configuration=Release /p:Platform=${{ matrix.arch }} /p:SignAssembly=false /p:DelaySign=false
         
       - name: Install Inno Setup
         run: choco install innosetup -y --version 6.5.4 --allow-downgrade
