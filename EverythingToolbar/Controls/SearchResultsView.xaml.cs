@@ -572,8 +572,10 @@ namespace EverythingToolbar.Controls
 
             var diff = _dragStart - currentPosition;
 
-            if (Math.Abs(diff.X) <= SystemParameters.MinimumHorizontalDragDistance
-                && Math.Abs(diff.Y) <= SystemParameters.MinimumVerticalDragDistance)
+            if (
+                Math.Abs(diff.X) <= SystemParameters.MinimumHorizontalDragDistance
+                && Math.Abs(diff.Y) <= SystemParameters.MinimumVerticalDragDistance
+            )
                 return false;
 
             string[] files = [SelectedItem.FullPathAndFileName];

@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using EverythingToolbar;
+using Microsoft.Win32;
 
 namespace Peter
 {
@@ -39,6 +41,8 @@ namespace Peter
         public ShellContextMenu()
         {
             CreateHandle(new CreateParams());
+
+            InitializeDarkModeSupport();
         }
         #endregion
 
@@ -433,6 +437,8 @@ namespace Peter
                     return;
                 }
 
+                ApplyDarkModeToWindow();
+
                 pMenu = CreatePopupMenu();
 
                 _oContextMenu.QueryContextMenu(
@@ -539,6 +545,115 @@ namespace Peter
         // The DestroyMenu function destroys the specified menu and frees any memory that the menu occupies.
         [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern bool DestroyMenu(IntPtr hMenu);
+
+        #endregion
+
+        #region Dark Mode Support
+
+        [DllImport("uxtheme.dll", EntryPoint = "#135", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern int SetPreferredAppMode(PreferredAppMode preferredAppMode);
+
+        [DllImport("uxtheme.dll", EntryPoint = "#136", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern void FlushMenuThemes();
+
+        [DllImport("uxtheme.dll", EntryPoint = "#133", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool AllowDarkModeForWindow(IntPtr hWnd, bool allow);
+
+        [DllImport("uxtheme.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern int SetWindowTheme(IntPtr hWnd, string pszSubAppName, string? pszSubIdList);
+
+        private enum PreferredAppMode
+        {
+            Default,
+            AllowDark,
+            ForceDark,
+            ForceLight,
+            Max,
+        }
+
+        private static bool _darkModeInitialized;
+        private static bool _isDarkMode;
+
+        /// <summary>
+        /// Initializes dark mode support for the application.
+        /// Should be called once at application startup.
+        /// </summary>
+        public static void InitializeDarkModeSupport()
+        {
+            if (_darkModeInitialized)
+                return;
+
+            try
+            {
+                // Check if we're on Windows 10 1903 or later (build 18362+)
+                if (Environment.OSVersion.Version.Build >= 18362)
+                {
+                    SetPreferredAppMode(PreferredAppMode.AllowDark);
+                    _darkModeInitialized = true;
+                }
+            }
+            catch
+            {
+                // Silently fail on older Windows versions
+            }
+        }
+
+        /// <summary>
+        /// Detects whether dark mode should be used based on system settings and user preferences.
+        /// </summary>
+        private static bool ShouldUseDarkMode()
+        {
+            try
+            {
+                // First check user's theme override setting
+                var themeOverride = ToolbarSettings.User.ThemeOverride?.ToLower() ?? "";
+                if (themeOverride == "light")
+                    return false;
+                if (themeOverride == "dark")
+                    return true;
+
+                // Fall back to system theme detection
+                using var key = Registry.CurrentUser.OpenSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+                );
+                var appsUseLightTheme = key?.GetValue("AppsUseLightTheme");
+                if (appsUseLightTheme is int lightTheme)
+                {
+                    return lightTheme == 0; // 0 = dark mode, 1 = light mode
+                }
+            }
+            catch
+            {
+                // Default to light mode on error
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Applies dark mode styling to the context menu window.
+        /// </summary>
+        private void ApplyDarkModeToWindow()
+        {
+            if (!_darkModeInitialized)
+                InitializeDarkModeSupport();
+
+            _isDarkMode = ShouldUseDarkMode();
+
+            if (Handle != IntPtr.Zero)
+            {
+                try
+                {
+                    AllowDarkModeForWindow(Handle, _isDarkMode);
+                    SetWindowTheme(Handle, _isDarkMode ? "DarkMode_Explorer" : "Explorer", null);
+                    FlushMenuThemes();
+                }
+                catch
+                {
+                    // Silently fail - dark mode is a nice-to-have feature
+                }
+            }
+        }
 
         #endregion
 
