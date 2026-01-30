@@ -20,6 +20,10 @@ namespace EverythingToolbar.Deskband
 
         protected override void OnAttached()
         {
+            // Start with window outside of screen area to prevent flickering when loading for the first time
+            AssociatedObject.Left = 100000;
+            AssociatedObject.Top = 100000;
+
             AssociatedObject.Showing += OnShowing;
             AssociatedObject.Hiding += OnHiding;
 
