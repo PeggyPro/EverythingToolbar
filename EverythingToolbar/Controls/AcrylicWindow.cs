@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shell;
+using EverythingToolbar.Behaviors;
 using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar.Controls
@@ -163,6 +164,13 @@ namespace EverythingToolbar.Controls
 
         protected AcrylicWindow()
         {
+            // Use layered window when Windows transparency is disabled to prevent white flash on open
+            if (!Utils.IsWindowsTransparencyEnabled())
+            {
+                WindowStyle = WindowStyle.None;
+                AllowsTransparency = true;
+            }
+
             WindowChrome.SetWindowChrome(
                 this,
                 new WindowChrome
@@ -178,6 +186,23 @@ namespace EverythingToolbar.Controls
 
             Loaded += OnWindowLoaded;
             SourceInitialized += OnSourceInitialized;
+
+            ThemeAwareness.ResourceChanged += OnThemeChanged;
+        }
+
+        private void OnThemeChanged(object? sender, ResourcesChangedEventArgs e)
+        {
+            if (!Utils.IsWindowsTransparencyEnabled())
+                UpdateBackgroundColor();
+        }
+
+        private void UpdateBackgroundColor()
+        {
+            var hwndSource = PresentationSource.FromVisual(this) as HwndSource;
+            if (hwndSource?.CompositionTarget != null)
+            {
+                hwndSource.CompositionTarget.BackgroundColor = GetThemeBackgroundColor();
+            }
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -189,6 +214,17 @@ namespace EverythingToolbar.Controls
         {
             ApplyAcrylicEffect();
             ApplyWindowCorner();
+        }
+
+        private static Color GetThemeBackgroundColor()
+        {
+            var isLightTheme = Utils.IsLightTheme();
+            var isWindows11 = Utils.GetWindowsVersion() >= Utils.WindowsVersion.Windows11;
+
+            if (isWindows11)
+                return isLightTheme ? Color.FromRgb(0xf0, 0xf0, 0xf0) : Color.FromRgb(0x25, 0x25, 0x25);
+            else
+                return isLightTheme ? Color.FromRgb(0xee, 0xee, 0xee) : Color.FromRgb(0x22, 0x22, 0x22);
         }
 
         private static void OnAcrylicPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -230,7 +266,9 @@ namespace EverythingToolbar.Controls
                     DataSize = (uint)Marshal.SizeOf<AccentPolicy>(),
                 };
 
-                hwndSource.CompositionTarget!.BackgroundColor = Colors.Transparent;
+                hwndSource.CompositionTarget!.BackgroundColor = Utils.IsWindowsTransparencyEnabled()
+                    ? Colors.Transparent
+                    : GetThemeBackgroundColor();
 
                 var margins = new Margins
                 {

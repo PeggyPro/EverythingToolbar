@@ -603,31 +603,7 @@ namespace Peter
         /// </summary>
         private static bool ShouldUseDarkMode()
         {
-            try
-            {
-                // First check user's theme override setting
-                var themeOverride = ToolbarSettings.User.ThemeOverride?.ToLower() ?? "";
-                if (themeOverride == "light")
-                    return false;
-                if (themeOverride == "dark")
-                    return true;
-
-                // Fall back to system theme detection
-                using var key = Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-                );
-                var appsUseLightTheme = key?.GetValue("AppsUseLightTheme");
-                if (appsUseLightTheme is int lightTheme)
-                {
-                    return lightTheme == 0; // 0 = dark mode, 1 = light mode
-                }
-            }
-            catch
-            {
-                // Default to light mode on error
-            }
-
-            return false;
+            return !EverythingToolbar.Helpers.Utils.IsLightTheme();
         }
 
         /// <summary>

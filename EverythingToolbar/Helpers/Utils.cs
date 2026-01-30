@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.Win32;
 using NLog;
+using Wpf.Ui.Appearance;
 
 namespace EverythingToolbar.Helpers
 {
@@ -105,6 +106,31 @@ namespace EverythingToolbar.Helpers
                 return readable.ToString($"0.# {suffix}");
             else
                 return readable.ToString($"0.## {suffix}");
+        }
+
+        public static bool IsWindowsTransparencyEnabled()
+        {
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(
+                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                var value = key?.GetValue("EnableTransparency");
+                return value is int intValue && intValue == 1;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
+        public static bool IsLightTheme()
+        {
+            if (ToolbarSettings.User.ThemeOverride.ToLower() == "light")
+                return true;
+            if (ToolbarSettings.User.ThemeOverride.ToLower() == "dark")
+                return false;
+
+            return SystemThemeManager.GetCachedSystemTheme() == SystemTheme.Light;
         }
     }
 }
