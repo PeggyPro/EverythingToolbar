@@ -113,7 +113,8 @@ namespace EverythingToolbar.Helpers
             try
             {
                 using var key = Registry.CurrentUser.OpenSubKey(
-                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+                );
                 var value = key?.GetValue("EnableTransparency");
                 return value is int intValue && intValue == 1;
             }
