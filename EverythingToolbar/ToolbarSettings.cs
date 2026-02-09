@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using Config.Net;
+using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
 
 namespace EverythingToolbar
@@ -13,6 +14,9 @@ namespace EverythingToolbar
 
         [Option(DefaultValue = false)]
         bool IsRegExEnabled { get; set; }
+
+        [Option(DefaultValue = FocusBehavior.Repeat)]
+        FocusBehavior ListFocusBehavior { get; set; }
 
         [Option(DefaultValue = false)]
         bool IsMatchPath { get; set; }
@@ -109,6 +113,8 @@ namespace EverythingToolbar
 
         [Option(DefaultValue = true)]
         bool IsHomeEndNavigateResults { get; set; }
+
+
 
         [Option(DefaultValue = true)]
         bool IsSearchAsYouType { get; set; }
@@ -572,6 +578,21 @@ namespace EverythingToolbar
                 if (settings.IsHomeEndNavigateResults != value)
                 {
                     settings.IsHomeEndNavigateResults = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
+        public FocusBehavior ListFocusBehavior
+        {
+            get => settings.ListFocusBehavior;
+            set
+            {
+                if (settings.ListFocusBehavior != value)
+                {
+                    settings.ListFocusBehavior = value;
                     OnPropertyChanged();
                 }
             }

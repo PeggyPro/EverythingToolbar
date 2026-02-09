@@ -269,24 +269,67 @@ namespace EverythingToolbar.Controls
             }
             else if (e.Key == Key.Up)
             {
-                if (
-                    SearchResultsListView.SelectedIndex == 0
-                    && (!ToolbarSettings.User.IsAutoSelectFirstResult || !ToolbarSettings.User.IsSearchAsYouType)
-                )
+                if (SearchResultsListView.SelectedIndex > 0)
                 {
-                    SearchResultsListView.SelectedIndex = -1;
-                    EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+                    SelectPreviousSearchResult();
+                }
+                else if (SearchResultsListView.SelectedIndex == 0)
+                {
+                    switch (ToolbarSettings.User.ListFocusBehavior)
+                    {
+                        case FocusBehavior.Repeat:
+                            ForwardKeyPressToControl(SearchResultsListView, Key.End);
+                            break;
+                        case FocusBehavior.RepeatWithSearch:
+                            SearchResultsListView.SelectedIndex = -1;
+                            EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+                            break;
+                        case FocusBehavior.Clamp:
+                        default:
+                            if (!ToolbarSettings.User.IsAutoSelectFirstResult)
+                            {
+                                SearchResultsListView.SelectedIndex = -1;
+                                EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+                            }
+                            break;
+                    }
                 }
                 else
                 {
-                    SelectPreviousSearchResult();
+                    // SelectedIndex == -1 (e.g. from SearchBox)
+                    if (ToolbarSettings.User.ListFocusBehavior != FocusBehavior.Clamp)
+                    {
+                        // Wrap to end
+                        SearchResultsListView.Focus();
+                        ForwardKeyPressToControl(SearchResultsListView, Key.End);
+                    }
                 }
 
                 e.Handled = true;
             }
             else if (e.Key == Key.Down)
             {
-                SelectNextSearchResult();
+                if (SearchResultsListView.SelectedIndex == SearchResultsListView.Items.Count - 1)
+                {
+                    switch (ToolbarSettings.User.ListFocusBehavior)
+                    {
+                        case FocusBehavior.Repeat:
+                            SelectNthSearchResult(0);
+                            break;
+                        case FocusBehavior.RepeatWithSearch:
+                            SearchResultsListView.SelectedIndex = -1;
+                            EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+                            break;
+                        case FocusBehavior.Clamp:
+                        default:
+                            // Do nothing
+                            break;
+                    }
+                }
+                else
+                {
+                    SelectNextSearchResult();
+                }
                 e.Handled = true;
             }
             else if (e.Key == Key.PageUp || e.Key == Key.PageDown || e.Key == Key.Home || e.Key == Key.End)
