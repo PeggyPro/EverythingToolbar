@@ -4,6 +4,6 @@ namespace EverythingToolbar.Data
     {
         Clamp,
         Repeat,
-        RepeatWithSearch
+        RepeatWithSearch,
     }
 }

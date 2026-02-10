@@ -114,8 +114,6 @@ namespace EverythingToolbar
         [Option(DefaultValue = true)]
         bool IsHomeEndNavigateResults { get; set; }
 
-
-
         [Option(DefaultValue = true)]
         bool IsSearchAsYouType { get; set; }
 
@@ -582,8 +580,6 @@ namespace EverythingToolbar
                 }
             }
         }
-
-
 
         public FocusBehavior ListFocusBehavior
         {

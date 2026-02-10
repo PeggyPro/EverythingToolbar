@@ -23,10 +23,10 @@ namespace EverythingToolbar.Settings
     public class SearchViewModel
     {
         public List<KeyValuePair<string, FocusBehavior>> FocusBehaviorItems { get; } =
-        [
-            new(Resources.FocusBehaviorClamp, FocusBehavior.Clamp),
-            new(Resources.FocusBehaviorRepeat, FocusBehavior.Repeat),
-            new(Resources.FocusBehaviorRepeatWithSearch, FocusBehavior.RepeatWithSearch),
-        ];
+            [
+                new(Resources.FocusBehaviorClamp, FocusBehavior.Clamp),
+                new(Resources.FocusBehaviorRepeat, FocusBehavior.Repeat),
+                new(Resources.FocusBehaviorRepeatWithSearch, FocusBehavior.RepeatWithSearch),
+            ];
     }
 }

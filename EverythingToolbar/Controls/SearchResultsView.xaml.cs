@@ -296,10 +296,8 @@ namespace EverythingToolbar.Controls
                 }
                 else
                 {
-                    // SelectedIndex == -1 (e.g. from SearchBox)
                     if (ToolbarSettings.User.ListFocusBehavior != FocusBehavior.Clamp)
                     {
-                        // Wrap to end
                         SearchResultsListView.Focus();
                         ForwardKeyPressToControl(SearchResultsListView, Key.End);
                     }
