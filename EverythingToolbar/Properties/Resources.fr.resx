@@ -388,7 +388,7 @@
     <value>Sélectionner le premier résultat</value>
   </data>
   <data name="SettingsHomeEndNavigateResults" xml:space="preserve">
-    <value>Home/End keys navigate results</value>
+    <value>Les touches Accueil/Fin naviguent les résultats</value>
   </data>
   <data name="SettingsDoubleClickToOpen" xml:space="preserve">
     <value>Double-cliquer pour ouvrir</value>
@@ -559,7 +559,7 @@
     <value>Sélectionner automatiquement le premier résultat tout en gardant la barre de recherche mise en avant</value>
   </data>
   <data name="SettingsHomeEndNavigateResultsHelp" xml:space="preserve">
-    <value>Home/End keys will navigate search results instead of moving the cursor</value>
+    <value>Les touches Accueil/Fin afficheront les résultats de recherche au lieu de déplacer le curseur</value>
   </data>
   <data name="SettingsDoubleClickHelp" xml:space="preserve">
     <value>Nécessite un double-clic pour ouvrir les résultats</value>
@@ -641,5 +641,20 @@
   </data>
   <data name="ShortcutOpenSystemContextMenu" xml:space="preserve">
     <value>Ouvrir le menu contextuel du système</value>
+  </data>
+  <data name="SettingsListFocusBehavior" xml:space="preserve">
+    <value>Result list focus</value>
+  </data>
+  <data name="SettingsListFocusBehaviorHelp" xml:space="preserve">
+    <value>Controls how the focus behaves when navigating the result list</value>
+  </data>
+  <data name="FocusBehaviorClamp" xml:space="preserve">
+    <value>Clamp</value>
+  </data>
+  <data name="FocusBehaviorRepeat" xml:space="preserve">
+    <value>Repeat</value>
+  </data>
+  <data name="FocusBehaviorRepeatWithSearch" xml:space="preserve">
+    <value>Repeat with search</value>
   </data>
 </root>

@@ -388,7 +388,7 @@
     <value>Выберите первый результат</value>
   </data>
   <data name="SettingsHomeEndNavigateResults" xml:space="preserve">
-    <value>Home/End keys navigate results</value>
+    <value>Навигация клавишами Home/End</value>
   </data>
   <data name="SettingsDoubleClickToOpen" xml:space="preserve">
     <value>Двойной щелчок - открыть</value>
@@ -559,7 +559,7 @@
     <value>Автоматически выбирать первый результат, сохраняя активной строку поиска</value>
   </data>
   <data name="SettingsHomeEndNavigateResultsHelp" xml:space="preserve">
-    <value>Home/End keys will navigate search results instead of moving the cursor</value>
+    <value>Клавиши Home/End будут перемещать результаты поиска, а не курсор</value>
   </data>
   <data name="SettingsDoubleClickHelp" xml:space="preserve">
     <value>Открывать результаты по двойному щелчку</value>
@@ -641,5 +641,20 @@
   </data>
   <data name="ShortcutOpenSystemContextMenu" xml:space="preserve">
     <value>Открыть системное контекстное меню</value>
+  </data>
+  <data name="SettingsListFocusBehavior" xml:space="preserve">
+    <value>Result list focus</value>
+  </data>
+  <data name="SettingsListFocusBehaviorHelp" xml:space="preserve">
+    <value>Controls how the focus behaves when navigating the result list</value>
+  </data>
+  <data name="FocusBehaviorClamp" xml:space="preserve">
+    <value>Clamp</value>
+  </data>
+  <data name="FocusBehaviorRepeat" xml:space="preserve">
+    <value>Repeat</value>
+  </data>
+  <data name="FocusBehaviorRepeatWithSearch" xml:space="preserve">
+    <value>Repeat with search</value>
   </data>
 </root>
