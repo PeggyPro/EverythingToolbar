@@ -1039,6 +1039,18 @@ namespace CSDeskBand
         {
             switch (msg)
             {
+                // Precision touchpad scrolling uses the Direct Manipulation (DM) API
+                // rather than generating WM_MOUSEWHEEL messages. When the system wants to
+                // use DM for a window, it first sends DM_POINTERHITTEST to check support.
+                // Inside Explorer's process, WPF's internal DM handling conflicts with
+                // Explorer's own DM manager (used for taskbar/Start Menu), causing touchpad
+                // scroll events to be silently consumed without reaching WPF controls.
+                // By rejecting DM_POINTERHITTEST, the system falls back to generating
+                // WM_MOUSEWHEEL messages, which WPF handles correctly.
+                case (int)WindowMessages.DM_POINTERHITTEST:
+                    handled = true;
+                    return IntPtr.Zero;
+
                 // Handle hit testing against transparent areas
                 case (int)WindowMessages.WM_NCHITTEST:
                     var mouseX = LowWord(lparam);
@@ -2484,6 +2496,7 @@ namespace CSDeskBand
     internal enum WindowMessages
     {
         WM_NCHITTEST = 0x0084,
+        DM_POINTERHITTEST = 0x0250,
     }
 
     internal enum HitTestMessageResults
