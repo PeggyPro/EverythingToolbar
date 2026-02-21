@@ -100,8 +100,6 @@ EverythingToolbar在Windows 10和Windows 11上无缝运行，并与[ExplorerPatc
 
 > **Windows 11用户**：安装后搜索图标设置助手会自动启动。如果要使用桌面栏（仅在使用ExplorerPatcher/StartAllBack时推荐），请关闭助手并通过系统托盘结束EverythingToolbar的后台进程。
 
------------------------------
-
 有关故障排除和其他设置帮助，请参阅[常见问题解答](FAQ.md)。
 
 ## 🛠️ 开发

@@ -225,7 +225,13 @@ namespace EverythingToolbar.Controls
             }
         }
 
-        private static IntPtr RejectDirectManipulation(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private static IntPtr RejectDirectManipulation(
+            IntPtr hwnd,
+            int msg,
+            IntPtr wParam,
+            IntPtr lParam,
+            ref bool handled
+        )
         {
             const int DM_POINTERHITTEST = 0x0250;
             if (msg == DM_POINTERHITTEST)

@@ -99,8 +99,6 @@ After installation on Windows 10:
 
 > **Windows 11 users**: The search icon setup assistant starts automatically after installation. To use the deskband instead (only recommended with ExplorerPatcher/StartAllBack), close the assistant and end EverythingToolbar's background process via the system tray.
 
------------------------------
-
 For troubleshooting and additional setup help, see the [FAQ](FAQ.md).
 
 ## 🛠️ Development
