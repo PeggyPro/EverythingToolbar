@@ -326,7 +326,7 @@ namespace EverythingToolbar
         {
             if (ToolbarSettings.User.IsAnimationsDisabled)
             {
-                OnHidden(this, EventArgs.Empty);
+                Dispatcher.BeginInvoke(() => OnHidden(this, EventArgs.Empty));
                 return;
             }
 
@@ -370,7 +370,7 @@ namespace EverythingToolbar
         {
             if (ToolbarSettings.User.IsAnimationsDisabled)
             {
-                OnHidden(this, EventArgs.Empty);
+                Dispatcher.BeginInvoke(() => OnHidden(this, EventArgs.Empty));
                 return;
             }
 
