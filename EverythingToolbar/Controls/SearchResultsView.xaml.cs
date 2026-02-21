@@ -269,70 +269,18 @@ namespace EverythingToolbar.Controls
             }
             else if (e.Key == Key.Up)
             {
-                if (SearchResultsListView.SelectedIndex > 0)
-                {
-                    SelectPreviousSearchResult();
-                }
-                else if (SearchResultsListView.SelectedIndex == 0)
-                {
-                    switch (ToolbarSettings.User.ListFocusBehavior)
-                    {
-                        case FocusBehavior.Repeat:
-                            ForwardKeyPressToControl(SearchResultsListView, Key.End);
-                            break;
-                        case FocusBehavior.RepeatWithSearch:
-                            SearchResultsListView.SelectedIndex = -1;
-                            EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
-                            break;
-                        case FocusBehavior.Clamp:
-                        default:
-                            if (!ToolbarSettings.User.IsAutoSelectFirstResult)
-                            {
-                                SearchResultsListView.SelectedIndex = -1;
-                                EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    if (ToolbarSettings.User.ListFocusBehavior != FocusBehavior.Clamp)
-                    {
-                        SearchResultsListView.Focus();
-                        ForwardKeyPressToControl(SearchResultsListView, Key.End);
-                    }
-                }
-
+                HandleUpNavigation();
                 e.Handled = true;
             }
             else if (e.Key == Key.Down)
             {
-                if (SearchResultsListView.SelectedIndex == SearchResultsListView.Items.Count - 1)
-                {
-                    switch (ToolbarSettings.User.ListFocusBehavior)
-                    {
-                        case FocusBehavior.Repeat:
-                            SelectNthSearchResult(0);
-                            break;
-                        case FocusBehavior.RepeatWithSearch:
-                            SearchResultsListView.SelectedIndex = -1;
-                            EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
-                            break;
-                        case FocusBehavior.Clamp:
-                        default:
-                            // Do nothing
-                            break;
-                    }
-                }
-                else
-                {
-                    SelectNextSearchResult();
-                }
+                HandleDownNavigation();
                 e.Handled = true;
             }
             else if (e.Key == Key.PageUp || e.Key == Key.PageDown || e.Key == Key.Home || e.Key == Key.End)
             {
-                e.Handled = ForwardKeyPressToControl(SearchResultsListView, e.Key);
+                var restoreFocus = e.Key is Key.Home or Key.End && KeepSearchBoxFocused;
+                e.Handled = ForwardKeyPressToControl(SearchResultsListView, e.Key, restoreFocus: restoreFocus);
             }
             else if (e.Key == Key.I && Keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -352,12 +300,20 @@ namespace EverythingToolbar.Controls
             }
         }
 
+        private static bool KeepSearchBoxFocused =>
+            ToolbarSettings.User.IsAutoSelectFirstResult && ToolbarSettings.User.IsSearchAsYouType;
+
+        private static FocusBehavior EffectiveListFocusBehavior =>
+            KeepSearchBoxFocused && ToolbarSettings.User.ListFocusBehavior == FocusBehavior.RepeatWithSearch
+                ? FocusBehavior.Repeat
+                : ToolbarSettings.User.ListFocusBehavior;
+
         private void AutoSelectFirstResult()
         {
-            if (!ToolbarSettings.User.IsAutoSelectFirstResult)
-                return;
-
-            SelectNthSearchResult(0);
+            if (ToolbarSettings.User.IsAutoSelectFirstResult)
+                SelectNthSearchResult(0);
+            else
+                SearchResultsListView.SelectedIndex = -1;
         }
 
         private void SelectNextSearchResult()
@@ -379,19 +335,91 @@ namespace EverythingToolbar.Controls
             if (SelectedItem != null)
                 SearchResultsListView.ScrollIntoView(SelectedItem);
 
-            if (!ToolbarSettings.User.IsAutoSelectFirstResult || !ToolbarSettings.User.IsSearchAsYouType)
+            if (!KeepSearchBoxFocused)
                 FocusSelectedItem();
         }
 
-        private bool ForwardKeyPressToControl(Control control, Key key)
+        private void JumpToEnd()
+        {
+            // Capture focus before calling Focus() on the ListView so we can restore it afterwards.
+            var originalFocus = Keyboard.FocusedElement;
+            SearchResultsListView.Focus();
+            ForwardKeyPressToControl(SearchResultsListView, Key.End, originalFocus, restoreFocus: KeepSearchBoxFocused);
+        }
+
+        private void FocusSearchBox()
+        {
+            SearchResultsListView.SelectedIndex = -1;
+            EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+        }
+
+        private void HandleUpNavigation()
+        {
+            if (SearchResultsListView.SelectedIndex > 0)
+            {
+                SelectPreviousSearchResult();
+            }
+            else if (SearchResultsListView.SelectedIndex == 0)
+            {
+                switch (EffectiveListFocusBehavior)
+                {
+                    case FocusBehavior.Repeat:
+                        JumpToEnd();
+                        break;
+                    case FocusBehavior.RepeatWithSearch:
+                        FocusSearchBox();
+                        break;
+                    case FocusBehavior.Clamp:
+                    default:
+                        if (!ToolbarSettings.User.IsAutoSelectFirstResult)
+                            FocusSearchBox();
+                        break;
+                }
+            }
+            else
+            {
+                if (EffectiveListFocusBehavior != FocusBehavior.Clamp)
+                    JumpToEnd();
+            }
+        }
+
+        private void HandleDownNavigation()
+        {
+            if (SearchResultsListView.SelectedIndex == SearchResultsListView.Items.Count - 1)
+            {
+                switch (EffectiveListFocusBehavior)
+                {
+                    case FocusBehavior.Repeat:
+                        SelectNthSearchResult(0);
+                        break;
+                    case FocusBehavior.RepeatWithSearch:
+                        FocusSearchBox();
+                        break;
+                    case FocusBehavior.Clamp:
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                SelectNextSearchResult();
+            }
+        }
+
+        private bool ForwardKeyPressToControl(
+            Control control,
+            Key key,
+            IInputElement? originalFocus = null,
+            bool restoreFocus = false
+        )
         {
             var presentationSource = PresentationSource.FromVisual(control);
             if (presentationSource == null)
                 return false;
 
-            // We want to be able to restore focus to the text box later
-            var currentFocus = Keyboard.FocusedElement;
-            var caretIndex = currentFocus is TextBox textBox ? textBox.CaretIndex : -1;
+            // Capture focus state before raising the event
+            originalFocus ??= Keyboard.FocusedElement;
+            var caretIndex = originalFocus is TextBox textBox ? textBox.CaretIndex : -1;
 
             var args = new KeyEventArgs(Keyboard.PrimaryDevice, presentationSource, 0, key)
             {
@@ -399,18 +427,14 @@ namespace EverythingToolbar.Controls
             };
             control.RaiseEvent(args);
 
-            // Restore focus to text box
-            if (
-                ToolbarSettings.User.IsHomeEndNavigateResults
-                && currentFocus is TextBox restoredTextBox
-                && caretIndex >= 0
-            )
+            // Restore focus to SearchBox if requested and it was previously focused
+            if (restoreFocus && originalFocus is TextBox restoredTextBox && caretIndex >= 0)
             {
                 Dispatcher.BeginInvoke(
                     (Action)(
                         () =>
                         {
-                            currentFocus.Focus();
+                            originalFocus.Focus();
                             restoredTextBox.CaretIndex = Math.Min(caretIndex, restoredTextBox.Text.Length);
                         }
                     ),
