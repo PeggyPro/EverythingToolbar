@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using NLog;
@@ -23,7 +24,9 @@ namespace EverythingToolbar.Helpers
         private static IntPtr _searchAppHwnd = IntPtr.Zero;
         private static bool _isNativeSearchActive;
         private static bool _isInterceptingKeys;
+        private static bool _isTransitioning;
         private static bool _originalAnimationState;
+        private static CancellationTokenSource? _safetyTimerCts;
 
         private const int WhKeyboardLl = 13;
         private const int WmKeyDown = 0x0100;
@@ -82,21 +85,13 @@ namespace EverythingToolbar.Helpers
             }
             else
             {
-                if (_isInterceptingKeys)
+                if (_isInterceptingKeys && !_isTransitioning)
                 {
                     _isInterceptingKeys = false;
                     TriggerSearchWindow();
-
-                    Task.Run(async () =>
-                    {
-                        // In case something goes wrong we make sure the hook is removed
-                        await Task.Delay(2000);
-                        RecordedInputs.Clear();
-                        UnhookStartMenuInput();
-                        RestoreSystemAnimations();
-                    });
+                    StartSafetyTimer();
                 }
-                else
+                else if (!_isTransitioning)
                 {
                     UnhookStartMenuInput();
                 }
@@ -136,7 +131,6 @@ namespace EverythingToolbar.Helpers
                 }
 
                 // Queue keypress for replay in EverythingToolbar
-                _isInterceptingKeys = true;
                 RecordedInputs.Enqueue(
                     new Input
                     {
@@ -152,8 +146,15 @@ namespace EverythingToolbar.Helpers
                     }
                 );
 
-                DisableSystemAnimations();
-                CloseStartMenu();
+                if (!_isInterceptingKeys)
+                {
+                    _isInterceptingKeys = true;
+                    _isTransitioning = true;
+                    DisableSystemAnimations();
+                    CloseStartMenu();
+                    TriggerSearchWindow();
+                    StartSafetyTimer();
+                }
 
                 return 1;
             }
@@ -171,6 +172,7 @@ namespace EverythingToolbar.Helpers
                 ReplayRecordedInputs();
                 UnhookStartMenuInput();
                 RestoreSystemAnimations();
+                _isTransitioning = false;
             }
             else
             {
@@ -180,6 +182,7 @@ namespace EverythingToolbar.Helpers
                     ReplayRecordedInputs();
                     UnhookStartMenuInput();
                     RestoreSystemAnimations();
+                    _isTransitioning = false;
                 };
             }
         }
@@ -231,12 +234,30 @@ namespace EverythingToolbar.Helpers
 
         private void HookStartMenuInput()
         {
+            _safetyTimerCts?.Cancel();
             UnhookStartMenuInput();
             _startMenuKeyboardHookCallback = StartMenuKeyboardHookCallback;
             _startMenuKeyboardHookId = SetWindowsHookEx(WhKeyboardLl, _startMenuKeyboardHookCallback, IntPtr.Zero, 0);
         }
 
-        private void UnhookStartMenuInput()
+        private static void StartSafetyTimer()
+        {
+            _safetyTimerCts?.Cancel();
+            _safetyTimerCts = new CancellationTokenSource();
+            var token = _safetyTimerCts.Token;
+            Task.Run(async () =>
+            {
+                // In case something goes wrong we make sure the hook is removed
+                await Task.Delay(2000, token);
+                if (token.IsCancellationRequested) return;
+                RecordedInputs.Clear();
+                UnhookStartMenuInput();
+                RestoreSystemAnimations();
+                _isTransitioning = false;
+            }, token);
+        }
+
+        private static void UnhookStartMenuInput()
         {
             UnhookWindowsHookEx(_startMenuKeyboardHookId);
             _startMenuKeyboardHookId = IntPtr.Zero;
