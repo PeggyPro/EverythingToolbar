@@ -23,6 +23,7 @@ namespace EverythingToolbar.Helpers
         private static IntPtr _searchAppHwnd = IntPtr.Zero;
         private static bool _isNativeSearchActive;
         private static bool _isInterceptingKeys;
+        private static bool _originalAnimationState;
 
         private const int WhKeyboardLl = 13;
         private const int WmKeyDown = 0x0100;
@@ -92,6 +93,7 @@ namespace EverythingToolbar.Helpers
                         await Task.Delay(2000);
                         RecordedInputs.Clear();
                         UnhookStartMenuInput();
+                        RestoreSystemAnimations();
                     });
                 }
                 else
@@ -150,6 +152,7 @@ namespace EverythingToolbar.Helpers
                     }
                 );
 
+                DisableSystemAnimations();
                 CloseStartMenu();
 
                 return 1;
@@ -167,6 +170,7 @@ namespace EverythingToolbar.Helpers
                 SearchWindow.Instance.SearchBox.Focus();
                 ReplayRecordedInputs();
                 UnhookStartMenuInput();
+                RestoreSystemAnimations();
             }
             else
             {
@@ -175,6 +179,7 @@ namespace EverythingToolbar.Helpers
                     SearchWindow.Instance.SearchBox.Focus();
                     ReplayRecordedInputs();
                     UnhookStartMenuInput();
+                    RestoreSystemAnimations();
                 };
             }
         }
@@ -203,6 +208,24 @@ namespace EverythingToolbar.Helpers
                 PostMessage(_searchAppHwnd, 0x0010, 0, 0);
                 NativeMethods.FocusTaskbarWindow();
                 _searchAppHwnd = IntPtr.Zero;
+            }
+        }
+
+        private static void DisableSystemAnimations()
+        {
+            _originalAnimationState = Utils.GetSystemAnimationsEnabled();
+            if (_originalAnimationState)
+            {
+                Utils.SetSystemAnimationsEnabled(false);
+            }
+        }
+
+        private static void RestoreSystemAnimations()
+        {
+            if (_originalAnimationState)
+            {
+                Utils.SetSystemAnimationsEnabled(true);
+                _originalAnimationState = false;
             }
         }
 

@@ -163,7 +163,7 @@ namespace EverythingToolbar
 
         private void AnimateShowWin10(double left, double top, Edge taskbarEdge)
         {
-            if (ToolbarSettings.User.IsAnimationsDisabled)
+            if (Utils.IsEffectiveAnimationsDisabled)
             {
                 Opacity = 1;
                 Left = left;
@@ -249,7 +249,7 @@ namespace EverythingToolbar
 
         private void AnimateShowWin11(double left, double top, double width, double height, Edge taskbarEdge)
         {
-            if (ToolbarSettings.User.IsAnimationsDisabled)
+            if (Utils.IsEffectiveAnimationsDisabled)
             {
                 Opacity = 1;
                 Left = left;
@@ -324,7 +324,7 @@ namespace EverythingToolbar
 
         private void AnimateHideWin10(Edge taskbarEdge)
         {
-            if (ToolbarSettings.User.IsAnimationsDisabled)
+            if (Utils.IsEffectiveAnimationsDisabled)
             {
                 Dispatcher.BeginInvoke(() => OnHidden(this, EventArgs.Empty));
                 return;
@@ -368,7 +368,7 @@ namespace EverythingToolbar
 
         private void AnimateHideWin11(Edge taskbarEdge)
         {
-            if (ToolbarSettings.User.IsAnimationsDisabled)
+            if (Utils.IsEffectiveAnimationsDisabled)
             {
                 Dispatcher.BeginInvoke(() => OnHidden(this, EventArgs.Empty));
                 return;

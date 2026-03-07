@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using NLog;
 using Wpf.Ui.Appearance;
@@ -133,5 +134,40 @@ namespace EverythingToolbar.Helpers
 
             return SystemThemeManager.GetCachedSystemTheme() == SystemTheme.Light;
         }
+
+        private const int SpiGetclientareaanimation = 0x1042;
+        private const int SpiSetclientareaanimation = 0x1043;
+        private const int SpifSendchange = 0x0002;
+
+        public static bool IsEffectiveAnimationsDisabled
+        {
+            get
+            {
+                if (ToolbarSettings.User.IsAnimationsDisabled)
+                    return true;
+
+                SystemParametersInfo(SpiGetclientareaanimation, 0, out var animationsEnabled, 0);
+                return !animationsEnabled;
+            }
+        }
+
+        public static bool GetSystemAnimationsEnabled()
+        {
+            SystemParametersInfo(SpiGetclientareaanimation, 0, out var enabled, 0);
+            return enabled;
+        }
+
+        public static void SetSystemAnimationsEnabled(bool enabled)
+        {
+            SystemParametersInfo(SpiSetclientareaanimation, 0, enabled, SpifSendchange);
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SystemParametersInfo(int uiAction, int uiParam, out bool pvParam, int fWinIni);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool SystemParametersInfo(int uiAction, int uiParam, bool pvParam, int fWinIni);
     }
 }
