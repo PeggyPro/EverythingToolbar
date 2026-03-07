@@ -37,29 +37,32 @@
                 <RowDefinition Height="{DynamicResource FourthGridRowHeight}" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="{DynamicResource TabBarGridRow}"
-                  Margin="{DynamicResource TabBarMargin}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <Border Grid.Row="{DynamicResource TabBarGridRow}"
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="{DynamicResource TabBarBottomBorder}">
+                <Grid Margin="{DynamicResource TabBarMargin}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <controls:FilterSelector x:Name="FilterSelector"
-                                         SelectedFilter="{Binding Source={x:Static search:SearchState.Instance}, Path=Filter, Mode=TwoWay}"/>
+                    <controls:FilterSelector x:Name="FilterSelector"
+                                             SelectedFilter="{Binding Source={x:Static search:SearchState.Instance}, Path=Filter, Mode=TwoWay}"/>
 
-                <Border Grid.Column="1">
-                    <Button Style="{DynamicResource TabBarButtonStyle}"
-                            Content="{Binding ElementName=SearchResultsView, Path=TotalResultsCount,
-                                              Converter={c:SearchResultsCountConverter}}"
-                            Visibility="{Binding Source={x:Static local:ToolbarSettings.User},
-                                                 Path=IsShowResultsCount,
-                                                 Converter={c:BoolToVisibilityConverter}}"
-                            Click="OpenSearchInEverything" />
-                </Border>
+                    <Border Grid.Column="1">
+                        <Button Style="{DynamicResource TabBarButtonStyle}"
+                                Content="{Binding ElementName=SearchResultsView, Path=TotalResultsCount,
+                                                  Converter={c:SearchResultsCountConverter}}"
+                                Visibility="{Binding Source={x:Static local:ToolbarSettings.User},
+                                                     Path=IsShowResultsCount,
+                                                     Converter={c:BoolToVisibilityConverter}}"
+                                Click="OpenSearchInEverything" />
+                    </Border>
 
-                <controls:SettingsControl Grid.Column="2" />
-            </Grid>
+                    <controls:SettingsControl Grid.Column="2" />
+                </Grid>
+            </Border>
 
             <controls:UpdateBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
             <controls:UpdateSuccessfulBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
