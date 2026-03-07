@@ -67,6 +67,13 @@
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
+        <Button Content="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsPreviewPaneEnabled, Converter={converters:PreviewPaneToggleIconConverter}}"
+                Click="TogglePreviewPane"
+                ToolTip="{x:Static properties:Resources.SettingsPreviewPaneEnabled}"
+                FontSize="12pt"
+                FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                Style="{DynamicResource TabBarButtonStyle}"
+                Padding="10, 4, 10, 4" />
         <Button Content="&#xE713;"
                 Click="OpenButtonContextMenu"
                 ToolTip="{x:Static properties:Resources.SettingsPreferences}"

@@ -64,8 +64,41 @@
             <controls:UpdateBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
             <controls:UpdateSuccessfulBanner Grid.Row="{DynamicResource UpdateBannerGridRow}" />
 
-            <controls:SearchResultsView x:Name="SearchResultsView"
-                                        Grid.Row="{DynamicResource SearchResultsViewGridRow}" />
+            <Grid Grid.Row="{DynamicResource SearchResultsViewGridRow}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <controls:SearchResultsView x:Name="SearchResultsView"
+                                            Grid.Column="0" />
+
+                <ContentControl Grid.Column="1"
+                                Content="{Binding ElementName=SearchResultsView, Path=SelectedSearchResult}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsPreviewPaneEnabled}"
+                                             Value="True">
+                                    <Setter Property="Visibility"
+                                            Value="Visible" />
+                                    <Setter Property="Width"
+                                            Value="380" />
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <controls:SearchResultPreviewPane SelectedResult="{Binding}" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </Grid>
 
             <controls:SearchBox x:Name="SearchBox"
                                 SearchTerm="{Binding Source={x:Static search:SearchState.Instance}, Path=SearchTerm, Mode=TwoWay}"

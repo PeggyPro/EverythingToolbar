@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -26,6 +27,17 @@ namespace EverythingToolbar.Data
     public class SearchResult : INotifyPropertyChanged
     {
         private static readonly ILogger Logger = ToolbarLogger.GetLogger<SearchResult>();
+        private static readonly HashSet<string> ImageExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".gif",
+            ".bmp",
+            ".tiff",
+            ".ico",
+            ".webp",
+        };
 
         public bool IsFile { get; init; }
 
@@ -64,6 +76,10 @@ namespace EverythingToolbar.Data
         }
 
         private ImageSource? _icon;
+        private ImageSource? _previewImage;
+        private bool _isPreviewImageLoading;
+        private const int PreviewIconSize = 64;
+        private const int PreviewThumbnailSize = 380;
         public ImageSource Icon
         {
             get
@@ -71,13 +87,7 @@ namespace EverythingToolbar.Data
                 if (_icon != null)
                     return _icon;
 
-                string[] imageExtensions = [".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff", ".ico"];
-                string ext = System.IO.Path.GetExtension(FullPathAndFileName).ToLowerInvariant();
-                if (
-                    ToolbarSettings.User.IsThumbnailsEnabled
-                    && imageExtensions.Contains(ext)
-                    && File.Exists(FullPathAndFileName)
-                )
+                if (ToolbarSettings.User.IsThumbnailsEnabled && IsImageFile && File.Exists(FullPathAndFileName))
                 {
                     _icon = IconProvider.GetImage(FullPathAndFileName);
                     Task.Run(() =>
@@ -104,6 +114,46 @@ namespace EverythingToolbar.Data
                 OnPropertyChanged();
             }
         }
+
+        public ImageSource? PreviewImage
+        {
+            get
+            {
+                if (_previewImage != null || _isPreviewImageLoading)
+                    return _previewImage;
+
+                _isPreviewImageLoading = true;
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        ImageSource? image = null;
+
+                        if (IsImageFile && File.Exists(FullPathAndFileName))
+                        {
+                            image = ThumbnailProvider.GetImage(FullPathAndFileName, PreviewThumbnailSize);
+                        }
+
+                        image ??= ThumbnailProvider.GetIcon(FullPathAndFileName, PreviewIconSize);
+                        if (image != null)
+                            PreviewImage = image;
+                    }
+                    finally
+                    {
+                        _isPreviewImageLoading = false;
+                    }
+                });
+
+                return _previewImage;
+            }
+            set
+            {
+                _previewImage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool IsImageFile => ImageExtensions.Contains(System.IO.Path.GetExtension(FullPathAndFileName));
 
         public void Open()
         {

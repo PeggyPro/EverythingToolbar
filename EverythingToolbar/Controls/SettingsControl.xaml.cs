@@ -92,5 +92,10 @@ namespace EverythingToolbar.Controls
             contextMenu.Placement = PlacementMode.Bottom;
             contextMenu.IsOpen = true;
         }
+
+        private void TogglePreviewPane(object sender, RoutedEventArgs e)
+        {
+            ToolbarSettings.User.IsPreviewPaneEnabled = !ToolbarSettings.User.IsPreviewPaneEnabled;
+        }
     }
 }

@@ -100,6 +100,18 @@
                     BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                     BorderThickness="1,1,1,0"
                     CornerRadius="0">
+                <controls:SettingItem Title="{x:Static properties:Resources.SettingsPreviewPaneEnabled}"
+                                      HelpText="{x:Static properties:Resources.SettingsPreviewPaneHelp}">
+                    <controls:SettingItem.SettingContent>
+                        <ui:ToggleSwitch IsChecked="{Binding Source={x:Static local:ToolbarSettings.User}, Path=IsPreviewPaneEnabled, Mode=TwoWay}" />
+                    </controls:SettingItem.SettingContent>
+                </controls:SettingItem>
+            </Border>
+            <Border Padding="16"
+                    Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1,1,1,0"
+                    CornerRadius="0">
                 <controls:SettingItem Title="{x:Static properties:Resources.SettingsShowResultsCount}"
                                       HelpText="{x:Static properties:Resources.SettingsResultsCountHelp}">
                     <controls:SettingItem.SettingContent>

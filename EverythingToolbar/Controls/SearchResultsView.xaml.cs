@@ -20,6 +20,13 @@ namespace EverythingToolbar.Controls
 {
     public partial class SearchResultsView
     {
+        public static readonly DependencyProperty SelectedSearchResultProperty = DependencyProperty.Register(
+            nameof(SelectedSearchResult),
+            typeof(SearchResult),
+            typeof(SearchResultsView),
+            new PropertyMetadata(null)
+        );
+
         public static readonly DependencyProperty TotalResultsCountProperty = DependencyProperty.Register(
             nameof(TotalResultsCount),
             typeof(int),
@@ -33,7 +40,13 @@ namespace EverythingToolbar.Controls
             set => SetValue(TotalResultsCountProperty, value);
         }
 
-        private SearchResult? SelectedItem => SearchResultsListView.SelectedItem as SearchResult;
+        public SearchResult? SelectedSearchResult
+        {
+            get => (SearchResult?)GetValue(SelectedSearchResultProperty);
+            set => SetValue(SelectedSearchResultProperty, value);
+        }
+
+        private SearchResult? SelectedItem => SelectedSearchResult;
         private const int PageSize = 256;
         private Point _dragStart;
         private bool _isScrollBarDragging;

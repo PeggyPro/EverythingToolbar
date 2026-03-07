@@ -131,6 +131,7 @@
     <Grid>
         <ListView Name="SearchResultsListView"
                   SelectionMode="Single"
+                  SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=SelectedSearchResult, Mode=TwoWay}"
                   BorderThickness="0"
                   HorizontalContentAlignment="Stretch"
                   ContextMenuOpening="OnContextMenuOpening"

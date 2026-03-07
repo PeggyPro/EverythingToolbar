@@ -357,6 +357,33 @@ namespace EverythingToolbar.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clamp.
+        /// </summary>
+        public static string FocusBehaviorClamp {
+            get {
+                return ResourceManager.GetString("FocusBehaviorClamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat.
+        /// </summary>
+        public static string FocusBehaviorRepeat {
+            get {
+                return ResourceManager.GetString("FocusBehaviorRepeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat with search.
+        /// </summary>
+        public static string FocusBehaviorRepeatWithSearch {
+            get {
+                return ResourceManager.GetString("FocusBehaviorRepeatWithSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compact.
         /// </summary>
         public static string ItemTemplateCompact {
@@ -587,6 +614,33 @@ namespace EverythingToolbar.Properties {
         public static string MessageBoxUnhandledExceptionTitle {
             get {
                 return ResourceManager.GetString("MessageBoxUnhandledExceptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File path.
+        /// </summary>
+        public static string PreviewPaneFilePath {
+            get {
+                return ResourceManager.GetString("PreviewPaneFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing selected.
+        /// </summary>
+        public static string PreviewPaneSelectResult {
+            get {
+                return ResourceManager.GetString("PreviewPaneSelectResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string PreviewPaneSize {
+            get {
+                return ResourceManager.GetString("PreviewPaneSize", resourceCulture);
             }
         }
         
@@ -915,6 +969,24 @@ namespace EverythingToolbar.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Result list focus.
+        /// </summary>
+        public static string SettingsListFocusBehavior {
+            get {
+                return ResourceManager.GetString("SettingsListFocusBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Controls how the focus behaves when navigating the result list.
+        /// </summary>
+        public static string SettingsListFocusBehaviorHelp {
+            get {
+                return ResourceManager.GetString("SettingsListFocusBehaviorHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Match Case.
         /// </summary>
         public static string SettingsMatchCase {
@@ -1001,6 +1073,24 @@ namespace EverythingToolbar.Properties {
         public static string SettingsPreferences {
             get {
                 return ResourceManager.GetString("SettingsPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show preview pane.
+        /// </summary>
+        public static string SettingsPreviewPaneEnabled {
+            get {
+                return ResourceManager.GetString("SettingsPreviewPaneEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show a Start menu style side pane for the selected result.
+        /// </summary>
+        public static string SettingsPreviewPaneHelp {
+            get {
+                return ResourceManager.GetString("SettingsPreviewPaneHelp", resourceCulture);
             }
         }
         
@@ -1247,51 +1337,6 @@ namespace EverythingToolbar.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Clamp.
-        /// </summary>
-        public static string FocusBehaviorClamp {
-            get {
-                return ResourceManager.GetString("FocusBehaviorClamp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repeat.
-        /// </summary>
-        public static string FocusBehaviorRepeat {
-            get {
-                return ResourceManager.GetString("FocusBehaviorRepeat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Repeat with search.
-        /// </summary>
-        public static string FocusBehaviorRepeatWithSearch {
-            get {
-                return ResourceManager.GetString("FocusBehaviorRepeatWithSearch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Result list focus.
-        /// </summary>
-        public static string SettingsListFocusBehavior {
-            get {
-                return ResourceManager.GetString("SettingsListFocusBehavior", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Controls how the focus behaves when navigating the result list.
-        /// </summary>
-        public static string SettingsListFocusBehaviorHelp {
-            get {
-                return ResourceManager.GetString("SettingsListFocusBehaviorHelp", resourceCulture);
-            }
-        }
-
         /// <summary>
         ///   Looks up a localized string similar to Choose the layout for search results.
         /// </summary>

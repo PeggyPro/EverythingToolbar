@@ -90,6 +90,9 @@ namespace EverythingToolbar
         [Option(DefaultValue = false)]
         bool IsThumbnailsEnabled { get; set; }
 
+        [Option(DefaultValue = false)]
+        bool IsPreviewPaneEnabled { get; set; }
+
         [Option(DefaultValue = "")]
         string InstanceName { get; set; }
 
@@ -475,6 +478,19 @@ namespace EverythingToolbar
                 if (settings.IsThumbnailsEnabled != value)
                 {
                     settings.IsThumbnailsEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsPreviewPaneEnabled
+        {
+            get => settings.IsPreviewPaneEnabled;
+            set
+            {
+                if (settings.IsPreviewPaneEnabled != value)
+                {
+                    settings.IsPreviewPaneEnabled = value;
                     OnPropertyChanged();
                 }
             }
