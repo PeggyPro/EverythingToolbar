@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Threading;
 using System.Windows.Threading;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Search;
@@ -18,6 +19,7 @@ namespace EverythingToolbar
 
         private bool _dwmFlushOnRender;
         private bool _isFirstShow = true;
+        private int _forceAnimationsDisabledOnce;
 
         private SearchWindow()
         {
@@ -121,6 +123,12 @@ namespace EverythingToolbar
             }
         }
 
+        public void InstantShow()
+        {
+            Interlocked.Exchange(ref _forceAnimationsDisabledOnce, 1);
+            Show();
+        }
+
         public void Toggle()
         {
             if (Visibility == Visibility.Visible)
@@ -153,6 +161,14 @@ namespace EverythingToolbar
                 Left = left;
 
             SetTopmostBelowTaskbar();
+
+            if (Interlocked.Exchange(ref _forceAnimationsDisabledOnce, 0) == 1)
+            {
+                Opacity = 1;
+                Left = left;
+                Top = top;
+                return;
+            }
 
             // Animate window along primary axis position
             if (Utils.GetWindowsVersion() >= Utils.WindowsVersion.Windows11)

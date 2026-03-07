@@ -27,6 +27,7 @@ namespace EverythingToolbar.Helpers
         private static bool _isTransitioning;
         private static bool _originalAnimationState;
         private static CancellationTokenSource? _safetyTimerCts;
+        private static int _hookSessionId;
 
         private const int WhKeyboardLl = 13;
         private const int WmKeyDown = 0x0100;
@@ -170,6 +171,7 @@ namespace EverythingToolbar.Helpers
             {
                 SearchWindow.Instance.SearchBox.Focus();
                 ReplayRecordedInputs();
+                StopSafetyTimer();
                 UnhookStartMenuInput();
                 RestoreSystemAnimations();
                 _isTransitioning = false;
@@ -180,6 +182,7 @@ namespace EverythingToolbar.Helpers
                 {
                     SearchWindow.Instance.SearchBox.Focus();
                     ReplayRecordedInputs();
+                    StopSafetyTimer();
                     UnhookStartMenuInput();
                     RestoreSystemAnimations();
                     _isTransitioning = false;
@@ -190,7 +193,7 @@ namespace EverythingToolbar.Helpers
         private void TriggerSearchWindow()
         {
             SearchWindow.Instance.SearchBox.GotKeyboardFocus += OnSearchBoxGotKeyboardFocus;
-            SearchWindow.Instance.Show();
+            SearchWindow.Instance.InstantShow();
         }
 
         private void ReplayRecordedInputs()
@@ -234,7 +237,8 @@ namespace EverythingToolbar.Helpers
 
         private void HookStartMenuInput()
         {
-            _safetyTimerCts?.Cancel();
+            Interlocked.Increment(ref _hookSessionId);
+            StopSafetyTimer();
             UnhookStartMenuInput();
             _startMenuKeyboardHookCallback = StartMenuKeyboardHookCallback;
             _startMenuKeyboardHookId = SetWindowsHookEx(WhKeyboardLl, _startMenuKeyboardHookCallback, IntPtr.Zero, 0);
@@ -242,7 +246,8 @@ namespace EverythingToolbar.Helpers
 
         private static void StartSafetyTimer()
         {
-            _safetyTimerCts?.Cancel();
+            var hookSessionId = Volatile.Read(ref _hookSessionId);
+            StopSafetyTimer();
             _safetyTimerCts = new CancellationTokenSource();
             var token = _safetyTimerCts.Token;
             Task.Run(async () =>
@@ -250,11 +255,18 @@ namespace EverythingToolbar.Helpers
                 // In case something goes wrong we make sure the hook is removed
                 await Task.Delay(2000, token);
                 if (token.IsCancellationRequested) return;
+                if (hookSessionId != Volatile.Read(ref _hookSessionId)) return;
                 RecordedInputs.Clear();
                 UnhookStartMenuInput();
                 RestoreSystemAnimations();
                 _isTransitioning = false;
             }, token);
+        }
+
+        private static void StopSafetyTimer()
+        {
+            _safetyTimerCts?.Cancel();
+            _safetyTimerCts = null;
         }
 
         private static void UnhookStartMenuInput()
