@@ -250,17 +250,22 @@ namespace EverythingToolbar.Helpers
             StopSafetyTimer();
             _safetyTimerCts = new CancellationTokenSource();
             var token = _safetyTimerCts.Token;
-            Task.Run(async () =>
-            {
-                // In case something goes wrong we make sure the hook is removed
-                await Task.Delay(2000, token);
-                if (token.IsCancellationRequested) return;
-                if (hookSessionId != Volatile.Read(ref _hookSessionId)) return;
-                RecordedInputs.Clear();
-                UnhookStartMenuInput();
-                RestoreSystemAnimations();
-                _isTransitioning = false;
-            }, token);
+            Task.Run(
+                async () =>
+                {
+                    // In case something goes wrong we make sure the hook is removed
+                    await Task.Delay(2000, token);
+                    if (token.IsCancellationRequested)
+                        return;
+                    if (hookSessionId != Volatile.Read(ref _hookSessionId))
+                        return;
+                    RecordedInputs.Clear();
+                    UnhookStartMenuInput();
+                    RestoreSystemAnimations();
+                    _isTransitioning = false;
+                },
+                token
+            );
         }
 
         private static void StopSafetyTimer()

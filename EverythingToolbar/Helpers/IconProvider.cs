@@ -59,7 +59,8 @@ namespace EverythingToolbar.Helpers
             try
             {
                 double dpi = GetDpiForSystem();
-                if (dpi < 96) dpi = 96;
+                if (dpi < 96)
+                    dpi = 96;
                 int scaledSize = (int)Math.Ceiling(size * dpi / 96.0);
 
                 Guid shellItemImageFactoryGuid = new("BCC18B79-BA16-442F-80C4-8A59C30C463B");
@@ -107,7 +108,16 @@ namespace EverythingToolbar.Helpers
             int stride = (width * format.BitsPerPixel + 7) / 8;
             byte[] pixels = new byte[stride * height];
             source.CopyPixels(pixels, stride, 0);
-            var result = BitmapSource.Create(width, height, targetDpi, targetDpi, format, source.Palette, pixels, stride);
+            var result = BitmapSource.Create(
+                width,
+                height,
+                targetDpi,
+                targetDpi,
+                format,
+                source.Palette,
+                pixels,
+                stride
+            );
             result.Freeze();
             return result;
         }
@@ -256,7 +266,11 @@ namespace EverythingToolbar.Helpers
 
             try
             {
-                var imageSource = Imaging.CreateBitmapSourceFromHIcon(shfi.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                var imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                    shfi.hIcon,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions()
+                );
                 imageSource.Freeze();
                 return SetLogicalSize(imageSource, iconSize);
             }
@@ -295,7 +309,11 @@ namespace EverythingToolbar.Helpers
 
                 try
                 {
-                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                        hIcon,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions()
+                    );
                     imageSource.Freeze();
                     return SetLogicalSize(imageSource, iconSize);
                 }
@@ -337,7 +355,8 @@ namespace EverythingToolbar.Helpers
         private static int GetScaledSize(int iconSize)
         {
             double dpi = GetDpiForSystem();
-            if (dpi < 96) dpi = 96;
+            if (dpi < 96)
+                dpi = 96;
             return (int)Math.Ceiling(iconSize * dpi / 96.0);
         }
 
@@ -353,7 +372,16 @@ namespace EverythingToolbar.Helpers
             int stride = (width * format.BitsPerPixel + 7) / 8;
             byte[] pixels = new byte[stride * height];
             source.CopyPixels(pixels, stride, 0);
-            var result = BitmapSource.Create(width, height, targetDpi, targetDpi, format, source.Palette, pixels, stride);
+            var result = BitmapSource.Create(
+                width,
+                height,
+                targetDpi,
+                targetDpi,
+                format,
+                source.Palette,
+                pixels,
+                stride
+            );
             result.Freeze();
             return result;
         }

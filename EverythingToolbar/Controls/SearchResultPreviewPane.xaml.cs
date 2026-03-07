@@ -142,7 +142,8 @@ namespace EverythingToolbar.Controls
         private void UpdateFileInfoVisibility()
         {
             var template = ToolbarSettings.User.ItemTemplate ?? "";
-            bool isDetailed = template.Equals("NormalDetailed", StringComparison.OrdinalIgnoreCase)
+            bool isDetailed =
+                template.Equals("NormalDetailed", StringComparison.OrdinalIgnoreCase)
                 || template.Equals("CompactDetailed", StringComparison.OrdinalIgnoreCase);
 
             ShowPathInfo = !isDetailed;
