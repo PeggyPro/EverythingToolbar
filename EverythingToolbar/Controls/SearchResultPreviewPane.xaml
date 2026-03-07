@@ -70,7 +70,7 @@
                    Source="{Binding ElementName=Root, Path=SelectedResult.PreviewImage}"
                    Stretch="Uniform"
                    StretchDirection="DownOnly"
-                   MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualWidth}"
+                   MaxWidth="{Binding RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualWidth}"
                    MaxHeight="280"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
