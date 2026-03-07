@@ -6,45 +6,6 @@
              x:Name="Root">
     <UserControl.Resources>
         <c:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
-        <Style x:Key="PreviewActionButtonStyle"
-               TargetType="{x:Type Button}">
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="BorderBrush"
-                    Value="Transparent" />
-            <Setter Property="BorderThickness"
-                    Value="0" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Stretch" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="ButtonBorder"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="3"
-                                Padding="11, 8">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter TargetName="ButtonBorder"
-                                        Property="Background"
-                                        Value="{DynamicResource SearchResultBackgroundHover}" />
-                            </Trigger>
-                            <Trigger Property="IsPressed"
-                                     Value="True">
-                                <Setter TargetName="ButtonBorder"
-                                        Property="Background"
-                                        Value="{DynamicResource SearchResultBackgroundActive}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
 
     <Border Margin="{DynamicResource SearchResultPreviewPaneMargin}"
@@ -143,7 +104,7 @@
                 <ItemsControl ItemsSource="{Binding ElementName=Root, Path=PreviewActions}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource PreviewActionButtonStyle}"
+                            <Button Style="{DynamicResource PreviewActionButtonStyle}"
                                     Click="OnActionButtonClick">
                                 <Grid>
                                     <Grid.ColumnDefinitions>

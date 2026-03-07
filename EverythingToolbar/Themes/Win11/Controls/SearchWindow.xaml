@@ -3,15 +3,15 @@
                     xmlns:Sys="clr-namespace:System;assembly=mscorlib">
 
     <Thickness x:Key="SearchBoxMargin"
-               Left="23"
-               Top="31"
-               Right="23"
+               Left="33"
+               Top="14"
+               Right="33"
                Bottom="0" />
     <Thickness x:Key="TabBarMargin"
-               Left="23"
-               Top="20"
-               Right="23"
-               Bottom="16" />
+               Left="33"
+               Top="14"
+               Right="33"
+               Bottom="15" />
     <GridLength x:Key="FirstGridRowHeight">Auto</GridLength>
     <GridLength x:Key="SecondGridRowHeight">Auto</GridLength>
     <GridLength x:Key="ThirdGridRowHeight">Auto</GridLength>

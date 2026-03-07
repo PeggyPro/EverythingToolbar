@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Thickness x:Key="SearchResultPreviewPaneMargin"
-               Left="12"
+               Left="2"
                Top="4"
                Right="12"
                Bottom="12" />
@@ -11,5 +11,14 @@
                   BottomRight="6"
                   TopRight="6"
                   TopLeft="6" />
+    <CornerRadius x:Key="PreviewActionButtonCornerRadius"
+                  BottomLeft="3"
+                  BottomRight="3"
+                  TopLeft="3"
+                  TopRight="3" />
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Styles/PreviewActionButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

@@ -3,5 +3,10 @@
 
     <Thickness x:Key="SearchResultPreviewPaneMargin" />
     <CornerRadius x:Key="SearchResultPreviewPaneCornerRadius" />
+    <CornerRadius x:Key="PreviewActionButtonCornerRadius" />
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../../../Styles/PreviewActionButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

@@ -36,6 +36,9 @@
     <Content Include="Styles\QuickSettingsToggle.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Styles\PreviewActionButton.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Styles\Scrollbar.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

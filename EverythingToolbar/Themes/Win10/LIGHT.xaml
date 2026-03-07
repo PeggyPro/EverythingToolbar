@@ -51,6 +51,8 @@
     
     <SolidColorBrush x:Key="SearchResultBackgroundHover" Color="#c7c7c7" />
     <SolidColorBrush x:Key="SearchResultBackgroundActive" Color="#b1b1b1" />
+    <SolidColorBrush x:Key="PreviewActionButtonBackgroundHover" Color="#EFEFEF" />
+    <SolidColorBrush x:Key="PreviewActionButtonBackgroundActive" Color="#EAEAEA" />
     <SolidColorBrush x:Key="SearchResultFileName" Color="#000000" />
     <SolidColorBrush x:Key="SearchResultPath" Color="#454545" />
     <SolidColorBrush x:Key="SearchResultDateModified" Color="#454545" />

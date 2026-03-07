@@ -3,9 +3,11 @@
                     xmlns:Sys="clr-namespace:System;assembly=mscorlib">
 
     <Sys:Double x:Key="ScrollbarWidth">16</Sys:Double>
+    <Sys:Double x:Key="ScrollbarThumbWidthHover">NaN</Sys:Double>
     <Sys:Double x:Key="ScrollbarThumbHeight">18</Sys:Double>
     <Thickness x:Key="ScrollbarThumbPadding" />
     <CornerRadius x:Key="ScrollbarThumbCornerRadius" />
+    <CornerRadius x:Key="ScrollbarThumbCornerRadiusHover" />
     <CornerRadius x:Key="ScrollbarCornerRadius" />
     <Sys:String x:Key="ScrollbarArrowUpCornerRadius">0</Sys:String>
     <Sys:String x:Key="ScrollbarArrowUpContent">M 0 4 L 4 0 L 8 4</Sys:String>

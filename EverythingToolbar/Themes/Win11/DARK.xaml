@@ -12,7 +12,7 @@
     
     <SolidColorBrush x:Key="TextBoxBackground" Color="#11ffffff" />
     <SolidColorBrush x:Key="TextBoxBackgroundHover" Color="#16ffffff" />
-    <SolidColorBrush x:Key="TextBoxBackgroundActive" Color="#a6202020" />
+    <SolidColorBrush x:Key="TextBoxBackgroundActive" Color="#a61b1b1b" />
     <SolidColorBrush x:Key="TextBoxForeground" Color="#dadada" />
     <SolidColorBrush x:Key="TextBoxForegroundHover" Color="#dadada" />
     <SolidColorBrush x:Key="TextBoxForegroundActive" Color="#dadada" />
@@ -36,13 +36,13 @@
     <SolidColorBrush x:Key="SearchResultsViewSpinner" Color="#ffffff" />
 
     <SolidColorBrush x:Key="TabBackground" Color="#11ffffff" />
-    <SolidColorBrush x:Key="TabBackgroundHover" Color="#cc3E3E3E" />
+    <SolidColorBrush x:Key="TabBackgroundHover" Color="#dd3E3E3E" />
     <SolidColorBrush x:Key="TabBorder" Color="#1bffffff" />
-    <SolidColorBrush x:Key="TabForeground" Color="#d1d1d1" />
-    <SolidColorBrush x:Key="TabForegroundHover" Color="#efefef" />
+    <SolidColorBrush x:Key="TabForeground" Color="#ffffff" />
+    <SolidColorBrush x:Key="TabForegroundHover" Color="#ffffff" />
     <SolidColorBrush x:Key="TabForegroundActive" Color="#000000" />
     
-    <SolidColorBrush x:Key="TabBarButtonForeground" Color="#d1d1d1" />
+    <SolidColorBrush x:Key="TabBarButtonForeground" Color="#dfdfdf" />
     <SolidColorBrush x:Key="TabBarButtonForegroundHover" Color="#ffffff" />
     <SolidColorBrush x:Key="TabBarButtonForegroundActive" Color="#ffffff" />
     <SolidColorBrush x:Key="TabBarButtonBackground" Color="Transparent" />
@@ -51,23 +51,25 @@
     
     <SolidColorBrush x:Key="SearchResultBackgroundHover" Color="#0effffff" />
     <SolidColorBrush x:Key="SearchResultBackgroundActive" Color="#12ffffff" />
+    <SolidColorBrush x:Key="PreviewActionButtonBackgroundHover" Color="#0effffff" />
+    <SolidColorBrush x:Key="PreviewActionButtonBackgroundActive" Color="#12ffffff" />
     <SolidColorBrush x:Key="SearchResultFileName" Color="#ffffff" />
     <SolidColorBrush x:Key="SearchResultPath" Color="#7a7a7a" />
     <SolidColorBrush x:Key="SearchResultDateModified" Color="#7a7a7a" />
     <SolidColorBrush x:Key="SearchResultFileSize" Color="#7a7a7a" />
     
-    <SolidColorBrush x:Key="ScrollbarBackground" Color="#992c2c2c" />
-    <SolidColorBrush x:Key="ScrollbarButtonFill" Color="#9f9f9f" />
+    <SolidColorBrush x:Key="ScrollbarBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollbarButtonFill" Color="#A9A9A9" />
     <SolidColorBrush x:Key="ScrollbarButtonFillHover" Color="#cfcfcf" />
     <SolidColorBrush x:Key="ScrollbarButtonFillActive" Color="#cfcfcf" />
     <SolidColorBrush x:Key="ScrollbarButtonStroke" Color="Transparent" />
     <SolidColorBrush x:Key="ScrollbarButtonStrokeHover" Color="Transparent" />
     <SolidColorBrush x:Key="ScrollbarButtonStrokeActive" Color="Transparent" />
-    <SolidColorBrush x:Key="ScrollbarButtonBackground" Color="#992c2c2c" />
-    <SolidColorBrush x:Key="ScrollbarButtonBackgroundHover" Color="#2c2c2c" />
-    <SolidColorBrush x:Key="ScrollbarButtonBackgroundActive" Color="#2c2c2c" />
-    <SolidColorBrush x:Key="ScrollbarThumbBackground" Color="#9f9f9f" />
-    <SolidColorBrush x:Key="ScrollbarThumbBackgroundHover" Color="#cfcfcf" />
-    <SolidColorBrush x:Key="ScrollbarThumbBackgroundActive" Color="#cfcfcf" />
+    <SolidColorBrush x:Key="ScrollbarButtonBackground" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollbarButtonBackgroundHover" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollbarButtonBackgroundActive" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollbarThumbBackground" Color="#A9A9A9" />
+    <SolidColorBrush x:Key="ScrollbarThumbBackgroundHover" Color="#A9A9A9" />
+    <SolidColorBrush x:Key="ScrollbarThumbBackgroundActive" Color="#A9A9A9" />
     
 </ResourceDictionary>

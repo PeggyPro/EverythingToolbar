@@ -93,12 +93,19 @@
                             <Setter Property="Background"
                                     Value="{DynamicResource ScrollbarThumbBackgroundHover}"
                                     TargetName="tb" />
+                            <Setter Property="CornerRadius"
+                                    Value="{DynamicResource ScrollbarThumbCornerRadiusHover}"
+                                    TargetName="tb" />
+                            <Setter Property="Width"
+                                    Value="{DynamicResource ScrollbarThumbWidthHover}" />
                         </Trigger>
                         <Trigger Property="IsMouseCaptureWithin"
                                  Value="True">
                             <Setter Property="Background"
                                     Value="{DynamicResource ScrollbarThumbBackgroundActive}"
                                     TargetName="tb" />
+                            <Setter Property="Width"
+                                    Value="{DynamicResource ScrollbarThumbWidthHover}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
