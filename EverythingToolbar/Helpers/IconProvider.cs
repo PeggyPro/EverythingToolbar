@@ -143,6 +143,9 @@ namespace EverythingToolbar.Helpers
         [DllImport("user32.dll")]
         private static extern bool DestroyIcon(IntPtr hIcon);
 
+        [DllImport("user32.dll")]
+        private static extern uint GetDpiForSystem();
+
         [DllImport("shell32.dll", PreserveSig = true)]
         private static extern int SHGetImageList(
             int iImageList,
@@ -240,8 +243,10 @@ namespace EverythingToolbar.Helpers
 
         private static ImageSource? GetIconByPath(string path, int iconSize)
         {
+            int scaledSize = GetScaledSize(iconSize);
+
             Shfileinfo shfi = new();
-            uint sizeFlag = iconSize <= 16 ? ShgfiSmallicon : ShgfiLargeicon;
+            uint sizeFlag = scaledSize <= 16 ? ShgfiSmallicon : ShgfiLargeicon;
             uint flags = ShgfiIcon | sizeFlag;
             SHGetFileInfo(path, 0, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
 
@@ -250,9 +255,9 @@ namespace EverythingToolbar.Helpers
 
             try
             {
-                var imageSource = Imaging.CreateBitmapSourceFromHIcon(shfi.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(iconSize, iconSize));
+                var imageSource = Imaging.CreateBitmapSourceFromHIcon(shfi.hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                 imageSource.Freeze();
-                return imageSource;
+                return SetLogicalSize(imageSource, iconSize);
             }
             finally
             {
@@ -272,10 +277,12 @@ namespace EverythingToolbar.Helpers
 
         private static ImageSource? GetIconFromSystemImageList(int iconIndex, int iconSize)
         {
+            int scaledSize = GetScaledSize(iconSize);
+
             IImageList? imageList = null;
             try
             {
-                int imageListType = GetImageListType(iconSize);
+                int imageListType = GetImageListType(scaledSize);
                 Guid iImageListGuid = new("46EB5926-582E-4017-9FDF-E8998DAA0950");
                 int hr = SHGetImageList(imageListType, iImageListGuid, out imageList);
                 if (hr != 0)
@@ -287,9 +294,9 @@ namespace EverythingToolbar.Helpers
 
                 try
                 {
-                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(iconSize, iconSize));
+                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(hIcon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
                     imageSource.Freeze();
-                    return imageSource;
+                    return SetLogicalSize(imageSource, iconSize);
                 }
                 finally
                 {
@@ -324,6 +331,30 @@ namespace EverythingToolbar.Helpers
                 _fallbackIconIndex = GetIconIndex("", true);
 
             return _fallbackIconIndex;
+        }
+
+        private static int GetScaledSize(int iconSize)
+        {
+            double dpi = GetDpiForSystem();
+            if (dpi < 96) dpi = 96;
+            return (int)Math.Ceiling(iconSize * dpi / 96.0);
+        }
+
+        private static BitmapSource SetLogicalSize(BitmapSource source, int logicalSize)
+        {
+            double targetDpi = source.PixelWidth * 96.0 / logicalSize;
+            if (Math.Abs(source.DpiX - targetDpi) < 0.1)
+                return source;
+
+            int width = source.PixelWidth;
+            int height = source.PixelHeight;
+            var format = source.Format;
+            int stride = (width * format.BitsPerPixel + 7) / 8;
+            byte[] pixels = new byte[stride * height];
+            source.CopyPixels(pixels, stride, 0);
+            var result = BitmapSource.Create(width, height, targetDpi, targetDpi, format, source.Palette, pixels, stride);
+            result.Freeze();
+            return result;
         }
 
         private static string GetSizeCacheKey(int iconSize)
