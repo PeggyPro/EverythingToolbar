@@ -82,7 +82,7 @@ namespace EverythingToolbar.Helpers
                         BitmapSizeOptions.FromEmptyOptions()
                     );
                     imageSource.Freeze();
-                    return CorrectDpi(imageSource, dpi);
+                    return SetLogicalSize(imageSource, size);
                 }
                 finally
                 {
@@ -95,9 +95,10 @@ namespace EverythingToolbar.Helpers
             }
         }
 
-        private static BitmapSource CorrectDpi(BitmapSource source, double dpi)
+        private static BitmapSource SetLogicalSize(BitmapSource source, int logicalSize)
         {
-            if (Math.Abs(source.DpiX - dpi) < 0.1)
+            double targetDpi = source.PixelWidth * 96.0 / logicalSize;
+            if (Math.Abs(source.DpiX - targetDpi) < 0.1)
                 return source;
 
             int width = source.PixelWidth;
@@ -106,7 +107,7 @@ namespace EverythingToolbar.Helpers
             int stride = (width * format.BitsPerPixel + 7) / 8;
             byte[] pixels = new byte[stride * height];
             source.CopyPixels(pixels, stride, 0);
-            var result = BitmapSource.Create(width, height, dpi, dpi, format, source.Palette, pixels, stride);
+            var result = BitmapSource.Create(width, height, targetDpi, targetDpi, format, source.Palette, pixels, stride);
             result.Freeze();
             return result;
         }
