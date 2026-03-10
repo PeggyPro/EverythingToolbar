@@ -121,7 +121,7 @@
     <value>Versão</value>
   </data>
   <data name="ContextMenuCopy" xml:space="preserve">
-    <value>Cópia</value>
+    <value>Copiar</value>
   </data>
   <data name="ContextMenuCopyFile" xml:space="preserve">
     <value>Cópia</value>
@@ -145,7 +145,7 @@
     <value>Abrir com...</value>
   </data>
   <data name="ContextMenuOpenWithChooseApp" xml:space="preserve">
-    <value>Escolha o aplicativo</value>
+    <value>Escolha a aplicação</value>
   </data>
   <data name="ContextMenuPaste" xml:space="preserve">
     <value>Colar</value>
@@ -220,7 +220,7 @@
     <value>Falha ao executar o comando</value>
   </data>
   <data name="MessageBoxFastSortUnavailable" xml:space="preserve">
-    <value>Para utilizar este método de ordenação precisa ter a classificação rápida habilitada. Pode ser ativado em suas configurações de tudo.</value>
+    <value>Para utilizar este método de ordenação precisa de ter a ordenação rápida ativada. Pode ser ativado nas suas configurações de Tudo.</value>
   </data>
   <data name="MessageBoxFastSortUnavailableTitle" xml:space="preserve">
     <value>A classificação rápida não está ativada</value>
@@ -232,7 +232,7 @@
     <value>Por favor, Selecione Everything.exe...</value>
   </data>
   <data name="MessageBoxSelectFiltersCsv" xml:space="preserve">
-    <value>Por favor, selecione o arquivo Filters.csv. Por padrão pode ser encontrado em %APPDATA%\Everything. Sua localização pode ser diferente, dependendo de sua instalação. Se o arquivo não existir para você, isso significa que você não realizou nenhuma alteração nos filtros padrão de tudo.</value>
+    <value>Por favor, selecione o ficheiro Filters.csv. Por defeito pode ser encontrado em %APPDATA%\Everything. A sua localização pode ser diferente, dependendo da sua instalação. Se o ficheiro não existir para você, isso significa que você não realizou nenhuma alteração nos filtros padrão de Tudo.</value>
   </data>
   <data name="MessageBoxSelectFiltersCsvTitle" xml:space="preserve">
     <value>Filtros.csv não encontrado</value>
@@ -299,6 +299,9 @@
   </data>
   <data name="SettingsShowResultsCount" xml:space="preserve">
     <value>Show results count</value>
+  </data>
+  <data name="SettingsPreviewPaneEnabled" xml:space="preserve">
+    <value>Show preview pane</value>
   </data>
   <data name="SettingsSortBy" xml:space="preserve">
     <value>Sort By</value>
@@ -546,6 +549,18 @@
   <data name="SettingsQuickTogglesHelp" xml:space="preserve">
     <value>Show quick toggle buttons for search options in the search bar</value>
   </data>
+  <data name="SettingsPreviewPaneHelp" xml:space="preserve">
+    <value>Show a Start menu style side pane for the selected result</value>
+  </data>
+  <data name="PreviewPaneFilePath" xml:space="preserve">
+    <value>File path</value>
+  </data>
+  <data name="PreviewPaneSelectResult" xml:space="preserve">
+    <value>Nothing selected</value>
+  </data>
+  <data name="PreviewPaneSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
   <data name="SettingsAnimationsHelp" xml:space="preserve">
     <value>Disable UI animations for improved performance</value>
   </data>
@@ -580,7 +595,7 @@
     <value>Replace the default Windows Start menu search with EverythingToolbar</value>
   </data>
   <data name="MessageBoxOk" xml:space="preserve">
-    <value>Certo</value>
+    <value>OK</value>
   </data>
   <data name="ContextMenuOpenWithNoCustomActions" xml:space="preserve">
     <value>No actions defined</value>
