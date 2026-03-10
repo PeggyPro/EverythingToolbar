@@ -66,6 +66,8 @@ var
   SelectedInstallMode: Integer;
   IsUpgrade: Boolean;
   SkipInstallTypePage: Boolean;
+  ExplorerWasKilled: Boolean;
+  OrigAutoRestartShell: Cardinal;
 
 function IsLauncherSelected: Boolean;
 begin
@@ -87,6 +89,32 @@ var
   ResultCode: Integer;
 begin
   Exec('taskkill.exe', '/F /IM "{#MyAppExeName}"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+end;
+
+procedure KillExplorerForDeskband;
+var
+  ResultCode: Integer;
+begin
+  // Save and disable AutoRestartShell to prevent Windows from auto-restarting Explorer
+  if not RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon', 'AutoRestartShell', OrigAutoRestartShell) then
+    OrigAutoRestartShell := 1;
+  RegWriteDWordValue(HKLM, 'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon', 'AutoRestartShell', 0);
+
+  Exec('taskkill.exe', '/F /IM explorer.exe', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  ExplorerWasKilled := True;
+  Sleep(1000);
+end;
+
+procedure RestartExplorer;
+var
+  ResultCode: Integer;
+begin
+  if not ExplorerWasKilled then
+    Exit;
+
+  RegWriteDWordValue(HKLM, 'SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon', 'AutoRestartShell', OrigAutoRestartShell);
+  Exec(ExpandConstant('{win}\explorer.exe'), '', '', SW_SHOWNORMAL, ewNoWait, ResultCode);
+  ExplorerWasKilled := False;
 end;
 
 function GetInstalledVersion(var sInstalledVersion: String): Boolean;
@@ -129,11 +157,15 @@ begin
   end;
 end;
 
-function SetSelectedModeFromPrevious: Boolean;
+function IsDeskbandInstalled: Boolean;
 begin
   // Detect previous deskband install by presence of the registered CLSID
-  // and store the corresponding selection in SelectedInstallMode (0 = launcher, 1 = deskband)
-  if RegKeyExists(HKCR, 'CLSID\{9D39B79C-E03C-4757-B1B6-ECCE843748F3}') then
+  Result := RegKeyExists(HKCR, 'CLSID\{9D39B79C-E03C-4757-B1B6-ECCE843748F3}');
+end;
+
+function SetSelectedModeFromPrevious: Boolean;
+begin
+  if IsDeskbandInstalled then
     SelectedInstallMode := 1
   else
     SelectedInstallMode := 0;
@@ -144,6 +176,8 @@ end;
 function InitializeUninstall: Boolean;
 begin
   KillAppIfRunning;
+  if IsDeskbandInstalled then
+    KillExplorerForDeskband;
   Result := True;
 end;
 
@@ -267,3 +301,19 @@ begin
   end;
 end;
 
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  Result := '';
+  if IsDeskbandSelected then
+    KillExplorerForDeskband;
+end;
+
+procedure DeinitializeSetup;
+begin
+  RestartExplorer;
+end;
+
+procedure DeinitializeUninstall;
+begin
+  RestartExplorer;
+end;
