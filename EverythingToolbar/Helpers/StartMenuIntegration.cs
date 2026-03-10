@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 using NLog;
 
 namespace EverythingToolbar.Helpers
@@ -24,10 +23,8 @@ namespace EverythingToolbar.Helpers
         private static IntPtr _searchAppHwnd = IntPtr.Zero;
         private static bool _isNativeSearchActive;
         private static bool _isInterceptingKeys;
-        private static bool _isTransitioning;
-        private static bool _originalAnimationState;
-        private static CancellationTokenSource? _safetyTimerCts;
-        private static int _hookSessionId;
+        private static bool _initialAnimationsEnabledState;
+        private readonly DispatcherTimer _cleanupTimer = new() { Interval = TimeSpan.FromSeconds(1) };
 
         private const int WhKeyboardLl = 13;
         private const int WmKeyDown = 0x0100;
@@ -37,6 +34,7 @@ namespace EverythingToolbar.Helpers
 
         private StartMenuIntegration()
         {
+            _cleanupTimer.Tick += OnCleanupTimerElapsed;
             ToolbarSettings.User.PropertyChanged += OnSettingsChanged;
         }
 
@@ -53,13 +51,18 @@ namespace EverythingToolbar.Helpers
 
         public void Enable()
         {
+            _initialAnimationsEnabledState = Utils.GetSystemAnimationsEnabled();
+            UnhookWinEvent(_focusedWindowChangedHookId);
             _focusedWindowChangedCallback = OnFocusedWindowChanged;
             _focusedWindowChangedHookId = SetWinEventHook(3, 3, IntPtr.Zero, _focusedWindowChangedCallback, 0, 0, 0);
+            CancelCleanupTimer();
         }
 
         public void Disable()
         {
             UnhookWinEvent(_focusedWindowChangedHookId);
+            _focusedWindowChangedHookId = IntPtr.Zero;
+            ResetHandoverState();
         }
 
         private void OnFocusedWindowChanged(
@@ -81,34 +84,34 @@ namespace EverythingToolbar.Helpers
                 || foregroundProcessName.EndsWith("SearchHost.exe")
             )
             {
+                if (_isInterceptingKeys)
+                {
+                    Logger.Debug("Native search regained the foreground during handover. Resetting intercepted state.");
+                    ResetHandoverState();
+                }
+                else
+                {
+                    Utils.SetSystemAnimationsEnabled(_initialAnimationsEnabledState);
+                }
+
                 _searchAppHwnd = foregroundHwnd;
+
                 HookStartMenuInput();
+                CancelCleanupTimer();
             }
             else
             {
-                if (_isInterceptingKeys && !_isTransitioning)
+                if (_isInterceptingKeys)
                 {
-                    _isInterceptingKeys = false;
                     TriggerSearchWindow();
-                    StartSafetyTimer();
+                    StartCleanupTimer();
                 }
-                else if (!_isTransitioning)
+                else
                 {
                     UnhookStartMenuInput();
                 }
                 _isNativeSearchActive = false;
             }
-        }
-
-        private static void GetForegroundWindowAndProcess(out IntPtr foregroundHwnd, out string foregroundProcessName)
-        {
-            foregroundHwnd = GetForegroundWindow();
-            GetWindowThreadProcessId(foregroundHwnd, out var processId);
-            var processHandle = OpenProcess(0x0410, false, processId);
-            var processNameBuilder = new StringBuilder(1000);
-            GetModuleFileNameEx(processHandle, IntPtr.Zero, processNameBuilder, processNameBuilder.Capacity);
-            CloseHandle(processHandle);
-            foregroundProcessName = processNameBuilder.ToString();
         }
 
         private IntPtr StartMenuKeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
@@ -118,8 +121,8 @@ namespace EverythingToolbar.Helpers
                 var virtualKeyCode = (uint)Marshal.ReadInt32(lParam);
                 var isKeyDown = wParam is WmKeyDown or WmSyskeyDown;
 
-                // We never want to block the Windows key
-                if (Keyboard.IsKeyDown(Key.LWin) || Keyboard.IsKeyDown(Key.RWin))
+                // We never want to block the Windows keys and Escape
+                if (virtualKeyCode == 0x5B || virtualKeyCode == 0x5C || virtualKeyCode == 0x1B)
                 {
                     return CallNextHookEx(_startMenuKeyboardHookId, nCode, wParam, lParam);
                 }
@@ -132,6 +135,7 @@ namespace EverythingToolbar.Helpers
                 }
 
                 // Queue keypress for replay in EverythingToolbar
+                _isInterceptingKeys = true;
                 RecordedInputs.Enqueue(
                     new Input
                     {
@@ -147,15 +151,7 @@ namespace EverythingToolbar.Helpers
                     }
                 );
 
-                if (!_isInterceptingKeys)
-                {
-                    _isInterceptingKeys = true;
-                    _isTransitioning = true;
-                    DisableSystemAnimations();
-                    CloseStartMenu();
-                    TriggerSearchWindow();
-                    StartSafetyTimer();
-                }
+                CloseStartMenu();
 
                 return 1;
             }
@@ -163,43 +159,54 @@ namespace EverythingToolbar.Helpers
             return CallNextHookEx(_startMenuKeyboardHookId, nCode, wParam, lParam);
         }
 
-        private void OnSearchBoxGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void OnAnySearchBoxGotKeyboardFocus(object? sender, EventArgs e)
         {
-            SearchWindow.Instance.SearchBox.GotKeyboardFocus -= OnSearchBoxGotKeyboardFocus;
+            if (!_isInterceptingKeys)
+                return;
 
-            if (SearchWindow.Instance.SearchBox.TextBox.IsLoaded)
-            {
-                SearchWindow.Instance.SearchBox.Focus();
-                ReplayRecordedInputs();
-                StopSafetyTimer();
-                UnhookStartMenuInput();
-                RestoreSystemAnimations();
-                _isTransitioning = false;
-            }
-            else
-            {
-                SearchWindow.Instance.SearchBox.TextBox.Loaded += (_, _) =>
-                {
-                    SearchWindow.Instance.SearchBox.Focus();
-                    ReplayRecordedInputs();
-                    StopSafetyTimer();
-                    UnhookStartMenuInput();
-                    RestoreSystemAnimations();
-                    _isTransitioning = false;
-                };
-            }
+            EventDispatcher.Instance.SearchBoxFocused -= OnAnySearchBoxGotKeyboardFocus;
+
+            Logger.Debug("Search box got keyboard focus. Replaying recorded inputs...");
+
+            UnhookStartMenuInput();
+            ReplayRecordedInputs();
+            _isInterceptingKeys = false;
+            _searchAppHwnd = IntPtr.Zero;
+        }
+
+        private void StartCleanupTimer()
+        {
+            _cleanupTimer.Stop();
+            _cleanupTimer.Start();
+        }
+
+        private void CancelCleanupTimer()
+        {
+            _cleanupTimer.Stop();
+        }
+
+        private void OnCleanupTimerElapsed(object? sender, EventArgs e)
+        {
+            Logger.Debug("Cleanup timer elapsed. Clearing recorded inputs and unhooking keyboard hook.");
+            ResetHandoverState();
         }
 
         private void TriggerSearchWindow()
         {
-            SearchWindow.Instance.SearchBox.GotKeyboardFocus += OnSearchBoxGotKeyboardFocus;
-            SearchWindow.Instance.InstantShow();
+            EventDispatcher.Instance.SearchBoxFocused -= OnAnySearchBoxGotKeyboardFocus;
+            EventDispatcher.Instance.SearchBoxFocused += OnAnySearchBoxGotKeyboardFocus;
+            SearchWindow.Instance.Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    SearchWindow.Instance.Show();
+                    EventDispatcher.Instance.InvokeSearchBoxFocused(this, EventArgs.Empty);
+                }),
+                DispatcherPriority.Input
+            );
         }
 
         private void ReplayRecordedInputs()
         {
-            UnhookStartMenuInput();
-
             while (RecordedInputs.Count > 0)
             {
                 var input = RecordedInputs.Dequeue();
@@ -207,77 +214,49 @@ namespace EverythingToolbar.Helpers
             }
         }
 
-        private static void CloseStartMenu()
+        private void CloseStartMenu()
         {
             if (_searchAppHwnd != IntPtr.Zero)
             {
+                Utils.SetSystemAnimationsEnabled(false);
                 PostMessage(_searchAppHwnd, 0x0010, 0, 0);
-                NativeMethods.FocusTaskbarWindow();
                 _searchAppHwnd = IntPtr.Zero;
             }
         }
 
-        private static void DisableSystemAnimations()
+        private void ResetHandoverState()
         {
-            _originalAnimationState = Utils.GetSystemAnimationsEnabled();
-            if (_originalAnimationState)
-            {
-                Utils.SetSystemAnimationsEnabled(false);
-            }
-        }
-
-        private static void RestoreSystemAnimations()
-        {
-            if (_originalAnimationState)
-            {
-                Utils.SetSystemAnimationsEnabled(true);
-                _originalAnimationState = false;
-            }
+            CancelCleanupTimer();
+            RecordedInputs.Clear();
+            UnhookStartMenuInput();
+            _searchAppHwnd = IntPtr.Zero;
+            _isInterceptingKeys = false;
+            _isNativeSearchActive = false;
+            Utils.SetSystemAnimationsEnabled(_initialAnimationsEnabledState);
         }
 
         private void HookStartMenuInput()
         {
-            Interlocked.Increment(ref _hookSessionId);
-            StopSafetyTimer();
             UnhookStartMenuInput();
             _startMenuKeyboardHookCallback = StartMenuKeyboardHookCallback;
             _startMenuKeyboardHookId = SetWindowsHookEx(WhKeyboardLl, _startMenuKeyboardHookCallback, IntPtr.Zero, 0);
         }
 
-        private static void StartSafetyTimer()
-        {
-            var hookSessionId = Volatile.Read(ref _hookSessionId);
-            StopSafetyTimer();
-            _safetyTimerCts = new CancellationTokenSource();
-            var token = _safetyTimerCts.Token;
-            Task.Run(
-                async () =>
-                {
-                    // In case something goes wrong we make sure the hook is removed
-                    await Task.Delay(2000, token);
-                    if (token.IsCancellationRequested)
-                        return;
-                    if (hookSessionId != Volatile.Read(ref _hookSessionId))
-                        return;
-                    RecordedInputs.Clear();
-                    UnhookStartMenuInput();
-                    RestoreSystemAnimations();
-                    _isTransitioning = false;
-                },
-                token
-            );
-        }
-
-        private static void StopSafetyTimer()
-        {
-            _safetyTimerCts?.Cancel();
-            _safetyTimerCts = null;
-        }
-
-        private static void UnhookStartMenuInput()
+        private void UnhookStartMenuInput()
         {
             UnhookWindowsHookEx(_startMenuKeyboardHookId);
             _startMenuKeyboardHookId = IntPtr.Zero;
+        }
+
+        private static void GetForegroundWindowAndProcess(out IntPtr foregroundHwnd, out string foregroundProcessName)
+        {
+            foregroundHwnd = GetForegroundWindow();
+            GetWindowThreadProcessId(foregroundHwnd, out var processId);
+            var processHandle = OpenProcess(0x0410, false, processId);
+            var processNameBuilder = new StringBuilder(1000);
+            GetModuleFileNameEx(processHandle, IntPtr.Zero, processNameBuilder, processNameBuilder.Capacity);
+            CloseHandle(processHandle);
+            foregroundProcessName = processNameBuilder.ToString();
         }
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);

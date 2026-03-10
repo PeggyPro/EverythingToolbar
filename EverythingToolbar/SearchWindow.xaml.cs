@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -19,7 +18,6 @@ namespace EverythingToolbar
 
         private bool _dwmFlushOnRender;
         private bool _isFirstShow = true;
-        private int _forceAnimationsDisabledOnce;
 
         private SearchWindow()
         {
@@ -98,11 +96,23 @@ namespace EverythingToolbar
 
         public new void Show()
         {
-            if (Visibility == Visibility.Visible)
-                return;
+            var activate = TaskbarStateManager.Instance.IsIcon;
 
-            ShowActivated = TaskbarStateManager.Instance.IsIcon;
+            if (Visibility == Visibility.Visible)
+            {
+                if (activate)
+                    ActivateAndBringToFront();
+
+                return;
+            }
+
+            ShowActivated = activate;
             base.Show();
+
+            if (activate)
+            {
+                Dispatcher.BeginInvoke(new Action(ActivateAndBringToFront), DispatcherPriority.Input);
+            }
 
             // For first show we ensure the UI is fully rendered
             if (_isFirstShow)
@@ -123,10 +133,12 @@ namespace EverythingToolbar
             }
         }
 
-        public void InstantShow()
+        private void ActivateAndBringToFront()
         {
-            Interlocked.Exchange(ref _forceAnimationsDisabledOnce, 1);
-            Show();
+            var hwnd = new WindowInteropHelper(this).Handle;
+
+            Activate();
+            NativeMethods.ForciblySetForegroundWindow(hwnd);
         }
 
         public void Toggle()
@@ -161,14 +173,6 @@ namespace EverythingToolbar
                 Left = left;
 
             SetTopmostBelowTaskbar();
-
-            if (Interlocked.Exchange(ref _forceAnimationsDisabledOnce, 0) == 1)
-            {
-                Opacity = 1;
-                Left = left;
-                Top = top;
-                return;
-            }
 
             // Animate window along primary axis position
             if (Utils.GetWindowsVersion() >= Utils.WindowsVersion.Windows11)

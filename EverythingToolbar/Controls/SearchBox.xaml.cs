@@ -176,6 +176,7 @@ namespace EverythingToolbar.Controls
         private void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox.SelectAll();
+            EventDispatcher.Instance.InvokeSearchBoxFocusedNotification(this, EventArgs.Empty);
         }
 
         private void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

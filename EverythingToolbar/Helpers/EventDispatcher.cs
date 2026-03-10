@@ -28,6 +28,13 @@ namespace EverythingToolbar.Helpers
             SearchBoxFocusRequested?.Invoke(sender, e);
         }
 
+        public event EventHandler<EventArgs>? SearchBoxFocused;
+
+        public void InvokeSearchBoxFocusedNotification(object sender, EventArgs e)
+        {
+            SearchBoxFocused?.Invoke(sender, e);
+        }
+
         public event EventHandler<KeyEventArgs>? GlobalKeyEvent;
 
         public void InvokeGlobalKeyEvent(object sender, KeyEventArgs e)

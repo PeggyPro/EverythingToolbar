@@ -146,8 +146,7 @@ namespace EverythingToolbar.Helpers
                 if (ToolbarSettings.User.IsAnimationsDisabled)
                     return true;
 
-                SystemParametersInfo(SpiGetclientareaanimation, 0, out var animationsEnabled, 0);
-                return !animationsEnabled;
+                return !GetSystemAnimationsEnabled();
             }
         }
 

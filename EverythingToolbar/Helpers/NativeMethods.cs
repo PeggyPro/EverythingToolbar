@@ -26,20 +26,30 @@ namespace EverythingToolbar.Helpers
         {
             var success = SetForegroundWindow(handle);
             if (success)
+            {
+                SetActiveWindow(handle);
                 return;
+            }
 
             Logger.Debug("SetForegroundWindow failed, trying to force window to front...");
 
             var foregroundWindow = GetForegroundWindow();
             var foregroundThreadId = GetWindowThreadProcessId(foregroundWindow, out _);
-            var currentThreadId = GetCurrentThreadId();
+            var targetThreadId = GetWindowThreadProcessId(handle, out _);
 
-            if (foregroundThreadId == currentThreadId)
-                return;
+            if (foregroundThreadId != targetThreadId)
+                AttachThreadInput(foregroundThreadId, targetThreadId, true);
 
-            AttachThreadInput(foregroundThreadId, currentThreadId, true);
-            SetForegroundWindow(handle);
-            AttachThreadInput(foregroundThreadId, currentThreadId, false);
+            try
+            {
+                SetForegroundWindow(handle);
+                SetActiveWindow(handle);
+            }
+            finally
+            {
+                if (foregroundThreadId != targetThreadId)
+                    AttachThreadInput(foregroundThreadId, targetThreadId, false);
+            }
         }
 
         [DllImport("user32.dll")]
@@ -51,6 +61,12 @@ namespace EverythingToolbar.Helpers
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern bool BringWindowToTop(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr FindWindowEx(
@@ -71,9 +87,6 @@ namespace EverythingToolbar.Helpers
 
         [DllImport("user32.dll")]
         private static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
-
-        [DllImport("kernel32.dll")]
-        private static extern uint GetCurrentThreadId();
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
