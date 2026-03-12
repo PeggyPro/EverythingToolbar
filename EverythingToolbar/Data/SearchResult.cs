@@ -77,10 +77,10 @@ namespace EverythingToolbar.Data
 
         private ImageSource? _icon;
         private ImageSource? _previewImage;
-        private bool _isPreviewImageLoading;
+        private const int IconSize = 16;
         private const int PreviewIconSize = 64;
         private const int PreviewThumbnailSize = 380;
-        public ImageSource Icon
+        public ImageSource? Icon
         {
             get
             {
@@ -89,16 +89,19 @@ namespace EverythingToolbar.Data
 
                 if (ToolbarSettings.User.IsThumbnailsEnabled && IsImageFile && File.Exists(FullPathAndFileName))
                 {
-                    _icon = IconProvider.GetImage(FullPathAndFileName);
+                    _icon = IconProvider.GetImage(FullPathAndFileName, IsFile, IconSize);
+
                     Task.Run(() =>
                     {
-                        Icon = ThumbnailProvider.GetImage(FullPathAndFileName);
+                        Icon = ThumbnailProvider.GetImage(FullPathAndFileName, IconSize);
                     });
                 }
                 else
                 {
                     _icon = IconProvider.GetImage(
                         FullPathAndFileName,
+                        IsFile,
+                        32,
                         source =>
                         {
                             Icon = source;
@@ -119,34 +122,43 @@ namespace EverythingToolbar.Data
         {
             get
             {
-                if (_previewImage != null || _isPreviewImageLoading)
+                if (_previewImage != null)
                     return _previewImage;
 
-                _isPreviewImageLoading = true;
+                var requiresThumbnail = IsImageFile && File.Exists(FullPathAndFileName);
+
+                // We always load the regular icon first, independent of whether the file requires a thumbnail preview
                 Task.Run(() =>
                 {
-                    try
+                    Action<ImageSource>? onExactIconLoaced = null;
+                    if (!requiresThumbnail)
                     {
-                        ImageSource? image = null;
+                        onExactIconLoaced = source => { PreviewImage = source; };
+                    }
 
-                        if (IsImageFile && File.Exists(FullPathAndFileName))
-                        {
-                            image = ThumbnailProvider.GetImage(FullPathAndFileName, PreviewThumbnailSize);
-                        }
+                    ImageSource? image = IconProvider.GetImage(FullPathAndFileName, IsFile, PreviewIconSize, onExactIconLoaced);
+                    if (image != null && _previewImage == null)
+                        PreviewImage = image;
+                });
 
-                        image ??= ThumbnailProvider.GetIcon(FullPathAndFileName, PreviewIconSize);
+                // If needed, update the preview with a thumbnail later
+                if (requiresThumbnail)
+                {
+                    Task.Run(() =>
+                    {
+                        ImageSource? image = ThumbnailProvider.GetImage(
+                            FullPathAndFileName,
+                            PreviewThumbnailSize,
+                            allowUpscaling: false
+                        );
                         if (image != null)
                             PreviewImage = image;
-                    }
-                    finally
-                    {
-                        _isPreviewImageLoading = false;
-                    }
-                });
+                    });
+                }
 
                 return _previewImage;
             }
-            set
+            private set
             {
                 _previewImage = value;
                 OnPropertyChanged();

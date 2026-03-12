@@ -10,6 +10,60 @@ using System.Windows.Media.Imaging;
 
 namespace EverythingToolbar.Helpers
 {
+    internal static class ImageScalingHelper
+    {
+        public static int GetScaledSize(int logicalSize)
+        {
+            double dpi = GetDpiForSystem();
+            if (dpi < 96)
+                dpi = 96;
+            return (int)Math.Ceiling(logicalSize * dpi / 96.0);
+        }
+
+        public static BitmapSource SetLogicalSize(BitmapSource source, int logicalSize, bool downOnly = false)
+        {
+            double targetLogicalSize = logicalSize;
+            if (downOnly)
+            {
+                double systemDpi = GetDpiForSystem();
+                if (systemDpi < 96)
+                    systemDpi = 96;
+
+                double nativeLogicalSize = source.PixelWidth * 96.0 / systemDpi;
+                targetLogicalSize = Math.Min(logicalSize, nativeLogicalSize);
+            }
+
+            if (targetLogicalSize <= 0)
+                return source;
+
+            double targetDpi = source.PixelWidth * 96.0 / targetLogicalSize;
+            if (Math.Abs(source.DpiX - targetDpi) < 0.1)
+                return source;
+
+            int width = source.PixelWidth;
+            int height = source.PixelHeight;
+            var format = source.Format;
+            int stride = (width * format.BitsPerPixel + 7) / 8;
+            byte[] pixels = new byte[stride * height];
+            source.CopyPixels(pixels, stride, 0);
+            var result = BitmapSource.Create(
+                width,
+                height,
+                targetDpi,
+                targetDpi,
+                format,
+                source.Palette,
+                pixels,
+                stride
+            );
+            result.Freeze();
+            return result;
+        }
+
+        [DllImport("user32.dll")]
+        private static extern uint GetDpiForSystem();
+    }
+
     public static class ThumbnailProvider
     {
         [DllImport("shell32.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
@@ -35,44 +89,25 @@ namespace EverythingToolbar.Helpers
             public int cy;
         }
 
-        [DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        [DllImport("user32.dll")]
-        private static extern uint GetDpiForSystem();
-
         private const int SiigbfResizetofit = 0x00;
-        private const int SiigbfIcononly = 0x04;
 
-        public static ImageSource? GetImage(string filePath, int size = 32)
+        public static ImageSource? GetImage(string filePath, int imageSize, bool allowUpscaling = true)
         {
-            return GetShellItemImage(filePath, size, SiigbfResizetofit);
-        }
-
-        public static ImageSource? GetIcon(string filePath, int size = 32)
-        {
-            return GetShellItemImage(filePath, size, SiigbfIcononly);
-        }
-
-        private static ImageSource? GetShellItemImage(string filePath, int size, int flags)
-        {
+            IShellItemImageFactory? imageFactory = null;
             try
             {
-                double dpi = GetDpiForSystem();
-                if (dpi < 96)
-                    dpi = 96;
-                int scaledSize = (int)Math.Ceiling(size * dpi / 96.0);
+                int scaledSize = ImageScalingHelper.GetScaledSize(imageSize);
 
                 Guid shellItemImageFactoryGuid = new("BCC18B79-BA16-442F-80C4-8A59C30C463B");
                 SHCreateItemFromParsingName(
                     filePath,
                     IntPtr.Zero,
                     shellItemImageFactoryGuid,
-                    out IShellItemImageFactory imageFactory
+                    out imageFactory
                 );
 
-                Size imageSize = new() { cx = scaledSize, cy = scaledSize };
-                imageFactory.GetImage(imageSize, flags, out IntPtr hBitmap);
+                Size size = new() { cx = scaledSize, cy = scaledSize };
+                imageFactory.GetImage(size, SiigbfResizetofit, out IntPtr hBitmap);
 
                 try
                 {
@@ -83,7 +118,7 @@ namespace EverythingToolbar.Helpers
                         BitmapSizeOptions.FromEmptyOptions()
                     );
                     imageSource.Freeze();
-                    return SetLogicalSize(imageSource, size);
+                    return ImageScalingHelper.SetLogicalSize(imageSource, imageSize, downOnly: !allowUpscaling);
                 }
                 finally
                 {
@@ -94,39 +129,28 @@ namespace EverythingToolbar.Helpers
             {
                 return null;
             }
+            finally
+            {
+                if (imageFactory != null && Marshal.IsComObject(imageFactory))
+                    Marshal.ReleaseComObject(imageFactory);
+            }
         }
 
-        private static BitmapSource SetLogicalSize(BitmapSource source, int logicalSize)
-        {
-            double targetDpi = source.PixelWidth * 96.0 / logicalSize;
-            if (Math.Abs(source.DpiX - targetDpi) < 0.1)
-                return source;
-
-            int width = source.PixelWidth;
-            int height = source.PixelHeight;
-            var format = source.Format;
-            int stride = (width * format.BitsPerPixel + 7) / 8;
-            byte[] pixels = new byte[stride * height];
-            source.CopyPixels(pixels, stride, 0);
-            var result = BitmapSource.Create(
-                width,
-                height,
-                targetDpi,
-                targetDpi,
-                format,
-                source.Palette,
-                pixels,
-                stride
-            );
-            result.Freeze();
-            return result;
-        }
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
     }
 
     public static class IconProvider
     {
-        private static readonly ConcurrentDictionary<string, ImageSource> IconIndexCache = new();
-        private static readonly ConcurrentDictionary<string, ImageSource> ExtensionCache = new();
+        private static readonly ConcurrentDictionary<string, ImageSource> IconByIndexAndScaleCache = new();
+        private static readonly ConcurrentDictionary<string, int> ExtensionToIndexMap = new();
+
+        private static int _fallbackDirectoryIconIndex;
+
+        static IconProvider()
+        {
+            _fallbackDirectoryIconIndex = GetIconIndex("asdf1234", IconIndexType.DirectoryName);
+        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         private struct Shfileinfo
@@ -154,8 +178,147 @@ namespace EverythingToolbar.Helpers
         [DllImport("user32.dll")]
         private static extern bool DestroyIcon(IntPtr hIcon);
 
-        [DllImport("user32.dll")]
-        private static extern uint GetDpiForSystem();
+        private const uint ShgfiSmallicon = 0x000000001;
+        private const uint ShgfiSysiconindex = 0x000004000;
+        private const uint ShgfiUsefileattributes = 0x000000010;
+        private const uint FileAttributeNormal = 0x00000080;
+        private const uint FileAttributeDirectory = 0x00000010;
+
+        public static ImageSource? GetImage(string path, bool isFile, int iconSize, Action<ImageSource>? onUpdated = null)
+        {
+            int iconIndexByExt;
+            if (isFile)
+            {
+                var extension = Path.GetExtension(path);
+                if (!ExtensionToIndexMap.TryGetValue(extension, out iconIndexByExt))
+                {
+                    iconIndexByExt = GetIconIndex($"asdf1234.{extension}", IconIndexType.ByFileName);
+                    ExtensionToIndexMap.TryAdd(extension, iconIndexByExt);
+                }
+            }
+            else
+            {
+                iconIndexByExt = _fallbackDirectoryIconIndex;
+            }
+
+            var iconByIndexAndScaleCacheKey  = iconIndexByExt + "_" + iconSize;
+            if (!IconByIndexAndScaleCache.TryGetValue(iconByIndexAndScaleCacheKey, out var iconByExtAndScale))
+            {
+                iconByExtAndScale = GetIconFromSystemImageList(iconIndexByExt, iconSize);
+                if (iconByExtAndScale != null)
+                {
+                    IconByIndexAndScaleCache.TryAdd(iconByIndexAndScaleCacheKey, iconByExtAndScale);
+                }
+            }
+
+            if (onUpdated != null)
+            {
+                Task.Run(() =>
+                {
+                    int exactIconIndex = GetIconIndex(path, IconIndexType.ByFilePath);
+                    var exactIconCacheKey = exactIconIndex + "_" + iconSize;
+                    if (IconByIndexAndScaleCache.TryGetValue(exactIconCacheKey, out var cachedExactIcon))
+                    {
+                        onUpdated.Invoke(cachedExactIcon);
+                        return;
+                    }
+
+                    ImageSource? exactIcon = GetIconFromSystemImageList(exactIconIndex, iconSize);
+                    if (exactIcon != null)
+                    {
+                        IconByIndexAndScaleCache.TryAdd(exactIconCacheKey, exactIcon);
+                        onUpdated.Invoke(exactIcon);
+                    }
+                });
+            }
+
+            return iconByExtAndScale;
+        }
+
+        private static int GetIconIndex(string path, IconIndexType indexType)
+        {
+            Shfileinfo shfi = new();
+            uint flags = ShgfiSysiconindex | ShgfiSmallicon;
+            uint fileAttributes = 0;
+            if (indexType == IconIndexType.ByFileName)
+            {
+                fileAttributes = FileAttributeNormal;
+                flags |= ShgfiUsefileattributes;
+            } else if (indexType == IconIndexType.DirectoryName)
+            {
+                fileAttributes = FileAttributeDirectory;
+                flags |= ShgfiUsefileattributes;
+            }
+            SHGetFileInfo(path, fileAttributes, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
+            return shfi.iIcon;
+        }
+
+        enum IconIndexType
+        {
+            ByFileName,
+            ByFilePath,
+            DirectoryName
+        }
+        
+        private const int IldTransparent = 0x00000001;
+        private const int ShilLarge = 0;
+        private const int ShilSmall = 1;
+        private const int ShilExtralarge = 2;
+        private const int ShilJumbo = 4;
+
+        private static ImageSource? GetIconFromSystemImageList(int iconIndex, int iconSize)
+        {
+            int scaledSize = ImageScalingHelper.GetScaledSize(iconSize);
+
+            IImageList? imageList = null;
+            try
+            {
+                int imageListType = GetImageListType(scaledSize);
+                Guid iImageListGuid = new("46EB5926-582E-4017-9FDF-E8998DAA0950");
+                int hr = SHGetImageList(imageListType, iImageListGuid, out imageList);
+                if (hr != 0)
+                    return null;
+
+                hr = imageList.GetIcon(iconIndex, IldTransparent, out IntPtr hIcon);
+                if (hr != 0 || hIcon == IntPtr.Zero)
+                    return null;
+
+                try
+                {
+                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                        hIcon,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions()
+                    );
+                    imageSource.Freeze();
+                    return ImageScalingHelper.SetLogicalSize(imageSource, iconSize);
+                }
+                finally
+                {
+                    DestroyIcon(hIcon);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                if (imageList != null && Marshal.IsComObject(imageList))
+                    Marshal.ReleaseComObject(imageList);
+            }
+        }
+
+        private static int GetImageListType(int iconSize)
+        {
+            if (iconSize <= 16)
+                return ShilSmall;
+            if (iconSize <= 32)
+                return ShilLarge;
+            if (iconSize <= 48)
+                return ShilExtralarge;
+            return ShilJumbo;
+        }
 
         [DllImport("shell32.dll", PreserveSig = true)]
         private static extern int SHGetImageList(
@@ -192,217 +355,6 @@ namespace EverythingToolbar.Helpers
 
             [PreserveSig]
             int GetIcon(int i, int flags, out IntPtr picon);
-        }
-
-        private const uint ShgfiIcon = 0x000000100;
-        private const uint ShgfiLargeicon = 0x000000000;
-        private const uint ShgfiSmallicon = 0x000000001;
-        private const uint ShgfiSysiconindex = 0x000004000;
-        private const uint ShgfiUsefileattributes = 0x000000010;
-        private const uint FileAttributeNormal = 0x00000080;
-        private const int IldTransparent = 0x00000001;
-        private const int ShilSmall = 0;
-        private const int ShilLarge = 1;
-        private const int ShilExtralarge = 2;
-        private const int ShilJumbo = 4;
-
-        private static int _fallbackIconIndex = -1;
-
-        public static ImageSource? GetImage(string path, Action<ImageSource>? onUpdated = null, int iconSize = 16)
-        {
-            string extension = Path.GetExtension(path).ToLowerInvariant();
-            if (string.IsNullOrEmpty(extension))
-                extension = Path.GetFileName(path).ToLowerInvariant();
-            string sizeKey = GetSizeCacheKey(iconSize);
-            string extensionKey = $"{extension}|{sizeKey}";
-
-            if (!ExtensionCache.TryGetValue(extensionKey, out ImageSource? iconByExtension))
-            {
-                iconByExtension = GetIconByPath(path, iconSize);
-                if (iconByExtension != null)
-                {
-                    ExtensionCache.TryAdd(extensionKey, iconByExtension);
-                }
-            }
-
-            if (onUpdated == null)
-                return iconByExtension;
-
-            Task.Run(() =>
-            {
-                int iconIndex = GetIconIndex(path, false);
-                if (iconIndex < 0)
-                    iconIndex = GetFallbackIconIndex();
-                string iconIndexKey = $"{iconIndex}|{sizeKey}";
-
-                if (IconIndexCache.TryGetValue(iconIndexKey, out var cachedIcon))
-                {
-                    onUpdated.Invoke(cachedIcon);
-                    return;
-                }
-
-                ImageSource? exactIcon = GetIconByPath(path, iconSize);
-                if (exactIcon != null)
-                {
-                    IconIndexCache.TryAdd(iconIndexKey, exactIcon);
-                    onUpdated.Invoke(exactIcon);
-                }
-            });
-
-            return iconByExtension;
-        }
-
-        private static ImageSource? GetIconByPath(string path, int iconSize)
-        {
-            int scaledSize = GetScaledSize(iconSize);
-
-            Shfileinfo shfi = new();
-            uint sizeFlag = scaledSize <= 16 ? ShgfiSmallicon : ShgfiLargeicon;
-            uint flags = ShgfiIcon | sizeFlag;
-            SHGetFileInfo(path, 0, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
-
-            if (shfi.hIcon == IntPtr.Zero)
-                return null;
-
-            try
-            {
-                var imageSource = Imaging.CreateBitmapSourceFromHIcon(
-                    shfi.hIcon,
-                    Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions()
-                );
-                imageSource.Freeze();
-                return SetLogicalSize(imageSource, iconSize);
-            }
-            finally
-            {
-                DestroyIcon(shfi.hIcon);
-            }
-        }
-
-        public static ImageSource? GetExactImage(string path, int iconSize = 32)
-        {
-            int iconIndex = GetIconIndex(path, false);
-            if (iconIndex < 0)
-                iconIndex = GetFallbackIconIndex();
-
-            var exactIcon = GetIconFromSystemImageList(iconIndex, iconSize);
-            return exactIcon ?? GetIconByPath(path, iconSize);
-        }
-
-        private static ImageSource? GetIconFromSystemImageList(int iconIndex, int iconSize)
-        {
-            int scaledSize = GetScaledSize(iconSize);
-
-            IImageList? imageList = null;
-            try
-            {
-                int imageListType = GetImageListType(scaledSize);
-                Guid iImageListGuid = new("46EB5926-582E-4017-9FDF-E8998DAA0950");
-                int hr = SHGetImageList(imageListType, iImageListGuid, out imageList);
-                if (hr != 0)
-                    return null;
-
-                hr = imageList.GetIcon(iconIndex, IldTransparent, out IntPtr hIcon);
-                if (hr != 0 || hIcon == IntPtr.Zero)
-                    return null;
-
-                try
-                {
-                    var imageSource = Imaging.CreateBitmapSourceFromHIcon(
-                        hIcon,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions()
-                    );
-                    imageSource.Freeze();
-                    return SetLogicalSize(imageSource, iconSize);
-                }
-                finally
-                {
-                    DestroyIcon(hIcon);
-                }
-            }
-            catch
-            {
-                return null;
-            }
-            finally
-            {
-                if (imageList != null && Marshal.IsComObject(imageList))
-                    Marshal.ReleaseComObject(imageList);
-            }
-        }
-
-        private static int GetImageListType(int iconSize)
-        {
-            if (iconSize <= 16)
-                return ShilSmall;
-            if (iconSize <= 32)
-                return ShilLarge;
-            if (iconSize <= 48)
-                return ShilExtralarge;
-            return ShilJumbo;
-        }
-
-        private static int GetFallbackIconIndex()
-        {
-            if (_fallbackIconIndex < 0)
-                _fallbackIconIndex = GetIconIndex("", true);
-
-            return _fallbackIconIndex;
-        }
-
-        private static int GetScaledSize(int iconSize)
-        {
-            double dpi = GetDpiForSystem();
-            if (dpi < 96)
-                dpi = 96;
-            return (int)Math.Ceiling(iconSize * dpi / 96.0);
-        }
-
-        private static BitmapSource SetLogicalSize(BitmapSource source, int logicalSize)
-        {
-            double targetDpi = source.PixelWidth * 96.0 / logicalSize;
-            if (Math.Abs(source.DpiX - targetDpi) < 0.1)
-                return source;
-
-            int width = source.PixelWidth;
-            int height = source.PixelHeight;
-            var format = source.Format;
-            int stride = (width * format.BitsPerPixel + 7) / 8;
-            byte[] pixels = new byte[stride * height];
-            source.CopyPixels(pixels, stride, 0);
-            var result = BitmapSource.Create(
-                width,
-                height,
-                targetDpi,
-                targetDpi,
-                format,
-                source.Palette,
-                pixels,
-                stride
-            );
-            result.Freeze();
-            return result;
-        }
-
-        private static string GetSizeCacheKey(int iconSize)
-        {
-            return iconSize.ToString();
-        }
-
-        private static int GetIconIndex(string path, bool useFilename)
-        {
-            Shfileinfo shfi = new();
-            uint flags = ShgfiSysiconindex | ShgfiSmallicon;
-            uint fileAttributes = 0;
-            if (useFilename)
-            {
-                fileAttributes = FileAttributeNormal;
-                flags |= ShgfiUsefileattributes;
-            }
-            IntPtr result = SHGetFileInfo(path, fileAttributes, ref shfi, (uint)Marshal.SizeOf(shfi), flags);
-            return result == IntPtr.Zero ? -1 : shfi.iIcon;
         }
     }
 }

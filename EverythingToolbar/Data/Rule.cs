@@ -126,6 +126,8 @@ namespace EverythingToolbar.Data
 
                 _icon = IconProvider.GetImage(
                     executablePath,
+                    true,
+                    16,
                     source =>
                     {
                         Icon = source;
