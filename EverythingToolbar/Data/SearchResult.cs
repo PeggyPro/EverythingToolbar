@@ -133,10 +133,18 @@ namespace EverythingToolbar.Data
                     Action<ImageSource>? onExactIconLoaced = null;
                     if (!requiresThumbnail)
                     {
-                        onExactIconLoaced = source => { PreviewImage = source; };
+                        onExactIconLoaced = source =>
+                        {
+                            PreviewImage = source;
+                        };
                     }
 
-                    ImageSource? image = IconProvider.GetImage(FullPathAndFileName, IsFile, PreviewIconSize, onExactIconLoaced);
+                    ImageSource? image = IconProvider.GetImage(
+                        FullPathAndFileName,
+                        IsFile,
+                        PreviewIconSize,
+                        onExactIconLoaced
+                    );
                     if (image != null && _previewImage == null)
                         PreviewImage = image;
                 });

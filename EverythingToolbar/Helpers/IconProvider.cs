@@ -99,12 +99,7 @@ namespace EverythingToolbar.Helpers
                 int scaledSize = ImageScalingHelper.GetScaledSize(imageSize);
 
                 Guid shellItemImageFactoryGuid = new("BCC18B79-BA16-442F-80C4-8A59C30C463B");
-                SHCreateItemFromParsingName(
-                    filePath,
-                    IntPtr.Zero,
-                    shellItemImageFactoryGuid,
-                    out imageFactory
-                );
+                SHCreateItemFromParsingName(filePath, IntPtr.Zero, shellItemImageFactoryGuid, out imageFactory);
 
                 Size size = new() { cx = scaledSize, cy = scaledSize };
                 imageFactory.GetImage(size, SiigbfResizetofit, out IntPtr hBitmap);
@@ -184,7 +179,12 @@ namespace EverythingToolbar.Helpers
         private const uint FileAttributeNormal = 0x00000080;
         private const uint FileAttributeDirectory = 0x00000010;
 
-        public static ImageSource? GetImage(string path, bool isFile, int iconSize, Action<ImageSource>? onUpdated = null)
+        public static ImageSource? GetImage(
+            string path,
+            bool isFile,
+            int iconSize,
+            Action<ImageSource>? onUpdated = null
+        )
         {
             int iconIndexByExt;
             if (isFile)
@@ -201,7 +201,7 @@ namespace EverythingToolbar.Helpers
                 iconIndexByExt = _fallbackDirectoryIconIndex;
             }
 
-            var iconByIndexAndScaleCacheKey  = iconIndexByExt + "_" + iconSize;
+            var iconByIndexAndScaleCacheKey = iconIndexByExt + "_" + iconSize;
             if (!IconByIndexAndScaleCache.TryGetValue(iconByIndexAndScaleCacheKey, out var iconByExtAndScale))
             {
                 iconByExtAndScale = GetIconFromSystemImageList(iconIndexByExt, iconSize);
@@ -244,7 +244,8 @@ namespace EverythingToolbar.Helpers
             {
                 fileAttributes = FileAttributeNormal;
                 flags |= ShgfiUsefileattributes;
-            } else if (indexType == IconIndexType.DirectoryName)
+            }
+            else if (indexType == IconIndexType.DirectoryName)
             {
                 fileAttributes = FileAttributeDirectory;
                 flags |= ShgfiUsefileattributes;
@@ -257,9 +258,9 @@ namespace EverythingToolbar.Helpers
         {
             ByFileName,
             ByFilePath,
-            DirectoryName
+            DirectoryName,
         }
-        
+
         private const int IldTransparent = 0x00000001;
         private const int ShilLarge = 0;
         private const int ShilSmall = 1;

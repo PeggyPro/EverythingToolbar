@@ -184,8 +184,7 @@ namespace EverythingToolbar.Settings
         {
             HotkeyManager.Current.IsEnabled = true;
             ReleaseKeyboard();
-            if (ToolbarSettings.User.IsReplaceStartMenuSearch)
-                StartMenuIntegration.Instance.Enable();
+            StartMenuIntegration.Instance.Initialize();
 
             if (Key != OriginalKey || Modifiers != OriginalModifiers)
             {

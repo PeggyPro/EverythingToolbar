@@ -20,8 +20,7 @@ namespace EverythingToolbar.Deskband
 
             ShortcutManager.Initialize(FocusSearchBox);
 
-            if (ToolbarSettings.User.IsReplaceStartMenuSearch)
-                StartMenuIntegration.Instance.Enable();
+            StartMenuIntegration.Instance.Initialize();
         }
 
         private void OnSearchWindowHiding(object? sender, EventArgs e)

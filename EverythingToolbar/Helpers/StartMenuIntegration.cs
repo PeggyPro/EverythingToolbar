@@ -38,6 +38,12 @@ namespace EverythingToolbar.Helpers
             ToolbarSettings.User.PropertyChanged += OnSettingsChanged;
         }
 
+        public void Initialize()
+        {
+            if (ToolbarSettings.User.IsReplaceStartMenuSearch)
+                Enable();
+        }
+
         private void OnSettingsChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ToolbarSettings.User.IsReplaceStartMenuSearch))
