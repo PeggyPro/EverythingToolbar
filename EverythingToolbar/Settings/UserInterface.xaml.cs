@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Runtime.CompilerServices;
+using EverythingToolbar.Controls;
 using EverythingToolbar.Data;
 using EverythingToolbar.Helpers;
 using EverythingToolbar.Properties;
-using EverythingToolbar.Controls;
-using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace EverythingToolbar.Settings
 {
@@ -126,10 +126,9 @@ namespace EverythingToolbar.Settings
 
         private async void OnUILanguageChanged()
         {
-            var result = await FluentMessageBox.CreateYesNo(
-                Resources.MessageBoxRestartMessage,
-                Resources.MessageBoxRestartTitle
-            ).ShowDialogAsync();
+            var result = await FluentMessageBox
+                .CreateYesNo(Resources.MessageBoxRestartMessage, Resources.MessageBoxRestartTitle)
+                .ShowDialogAsync();
 
             if (result != MessageBoxResult.Primary)
                 return;
@@ -139,13 +138,15 @@ namespace EverythingToolbar.Settings
             if (IsLauncher && executablePath != null)
             {
                 // Start a new instance with a delay to allow the current one to exit and release the Mutex
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c timeout /t 1 /nobreak && start \"\" \"{executablePath}\"",
-                    WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true
-                });
+                System.Diagnostics.Process.Start(
+                    new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/c timeout /t 1 /nobreak && start \"\" \"{executablePath}\"",
+                        WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                    }
+                );
             }
 
             // Always restart explorer to provide consistent visual feedback/refresh

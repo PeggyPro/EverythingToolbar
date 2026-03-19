@@ -18,15 +18,18 @@ namespace EverythingToolbar.Helpers
             {
                 var assembly = typeof(CultureHelper).Assembly;
                 var baseDir = Path.GetDirectoryName(assembly.Location);
-                if (string.IsNullOrEmpty(baseDir)) return Array.Empty<string>();
+                if (string.IsNullOrEmpty(baseDir))
+                    return Array.Empty<string>();
 
                 var assemblyName = "EverythingToolbar.resources.dll";
 
-                return Directory.GetDirectories(baseDir)
+                return Directory
+                    .GetDirectories(baseDir)
                     .Select(Path.GetFileName)
-                    .Where(name => 
+                    .Where(name =>
                     {
-                        if (name == null) return false;
+                        if (name == null)
+                            return false;
                         try
                         {
                             _ = CultureInfo.GetCultureInfo(name);
@@ -53,7 +56,7 @@ namespace EverythingToolbar.Helpers
         {
             var languages = new List<KeyValuePair<string, string>>
             {
-                new(Properties.Resources.SettingsUseSystemLanguage, "")
+                new(Properties.Resources.SettingsUseSystemLanguage, ""),
             };
 
             // Always include English first
@@ -74,7 +77,13 @@ namespace EverythingToolbar.Helpers
                 {
                     // Display name: "English (English)" or "Deutsch (German)" for non-English
                     var displayName = cultureInfo.NativeName;
-                    if (!string.Equals(cultureInfo.NativeName, cultureInfo.EnglishName, StringComparison.OrdinalIgnoreCase))
+                    if (
+                        !string.Equals(
+                            cultureInfo.NativeName,
+                            cultureInfo.EnglishName,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
                     {
                         displayName = $"{cultureInfo.NativeName} ({cultureInfo.EnglishName})";
                     }
